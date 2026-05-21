@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商用车技术趋势研究报告库</title>
+<style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #080c14;
+  color: #c8d6e5;
+}
+
+/* ===== Background Grid ===== */
+.bg-grid {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    linear-gradient(rgba(0,229,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ===== Particles Canvas ===== */
+#particles {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+}
+
+/* ===== App Shell ===== */
+.app { display: flex; height: 100vh; position: relative; z-index: 1; }
+
+/* ===== Sidebar ===== */
+.sidebar {
+  width: 380px; min-width: 380px; height: 100vh;
+  background: rgba(12,18,30,.92);
+  border-right: 1px solid rgba(0,229,255,.12);
+  display: flex; flex-direction: column;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.sidebar-header {
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid rgba(0,229,255,.08);
+}
+.sidebar-header .logo {
+  display: flex; align-items: center; gap: 10px;
+}
+.sidebar-header .logo-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, #00e5ff, #006c8a);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 700; color: #000;
+}
+.sidebar-header h1 {
+  font-size: 17px; font-weight: 600; color: #e8edf4; letter-spacing: .5px;
+}
+.sidebar-header .subtitle {
+  font-size: 11px; color: #5a7a9a; margin-top: 2px; letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Search */
+.search-wrap {
+  padding: 12px 24px; position: relative;
+}
+.search-wrap input {
+  width: 100%; padding: 9px 12px 9px 36px;
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.06);
+  border-radius: 6px; color: #c8d6e5; font-size: 13px; outline: none;
+  transition: border-color .2s, background .2s;
+}
+.search-wrap input:focus {
+  border-color: rgba(0,229,255,.35); background: rgba(255,255,255,.07);
+}
+.search-wrap input::placeholder { color: #3d5068; }
+.search-wrap .search-icon {
+  position: absolute; left: 36px; top: 50%; transform: translateY(-50%);
+  color: #3d5068; font-size: 14px; pointer-events: none;
+}
+.search-clear {
+  position: absolute; right: 36px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; color: #5a7a9a; cursor: pointer;
+  font-size: 16px; display: none; padding: 2px 6px; border-radius: 3px;
+}
+.search-clear:hover { color: #c8d6e5; background: rgba(255,255,255,.06); }
+
+/* Stats bar */
+.stats-bar {
+  display: flex; gap: 16px; padding: 0 24px 12px;
+  font-size: 11px; color: #3d5068;
+}
+.stats-bar span { display: flex; align-items: center; gap: 4px; }
+.stats-bar .val { color: #00e5ff; font-weight: 600; }
+
+/* Tree */
+.tree-wrap {
+  flex: 1; overflow-y: auto; padding: 0 0 20px;
+  scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.06) transparent;
+}
+.tree-wrap::-webkit-scrollbar { width: 4px; }
+.tree-wrap::-webkit-scrollbar-track { background: transparent; }
+.tree-wrap::-webkit-scrollbar-thumb { background: rgba(255,255,255,.06); border-radius: 2px; }
+
+/* Category */
+.cat-item { border-bottom: 1px solid rgba(255,255,255,.03); }
+.cat-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 14px 24px; cursor: pointer; user-select: none;
+  transition: background .15s;
+}
+.cat-header:hover { background: rgba(0,229,255,.04); }
+.cat-header .arrow {
+  width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;
+  transition: transform .25s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #5a7a9a; font-size: 11px; flex-shrink: 0;
+}
+.cat-header.open .arrow { transform: rotate(90deg); color: #00e5ff; }
+.cat-header .cat-num {
+  width: 24px; height: 24px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; flex-shrink: 0;
+  background: rgba(0,229,255,.08); color: #00b8d4;
+}
+.cat-header .cat-title {
+  font-size: 14px; font-weight: 500; color: #b8ccdf;
+  transition: color .15s;
+}
+.cat-header.open .cat-title { color: #00e5ff; }
+.cat-header .cat-count {
+  margin-left: auto; font-size: 11px; color: #3d5068;
+  background: rgba(255,255,255,.04); padding: 2px 8px; border-radius: 10px;
+}
+
+/* Sub items */
+.sub-list { overflow: hidden; transition: max-height .4s cubic-bezier(0.4, 0, 0.2, 1); }
+.sub-list.collapsed { max-height: 0 !important; }
+.sub-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 24px 10px 44px; cursor: pointer;
+  transition: background .15s; position: relative;
+  border-left: 2px solid transparent;
+}
+.sub-item:hover { background: rgba(0,229,255,.03); }
+.sub-item.active {
+  background: rgba(0,229,255,.07); border-left-color: #00e5ff;
+}
+.sub-item .dot {
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 6px;
+  background: rgba(255,255,255,.2);
+  transition: background .15s;
+}
+.sub-item.active .dot { background: #00e5ff; box-shadow: 0 0 8px rgba(0,229,255,.4); }
+.sub-item .sub-text { flex: 1; min-width: 0; }
+.sub-item .sub-title {
+  font-size: 13px; color: #94a3b8; line-height: 1.5;
+  transition: color .15s;
+}
+.sub-item.active .sub-title { color: #e2e8f0; }
+.sub-item .sub-tags {
+  font-size: 10px; color: #3d5068; margin-top: 3px;
+  line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+}
+.sub-item .pdf-icon {
+  flex-shrink: 0; font-size: 14px; color: #3d5068; margin-top: 2px;
+  transition: color .15s;
+}
+.sub-item:hover .pdf-icon { color: #e74c3c; }
+
+/* No results */
+.no-results {
+  padding: 40px 24px; text-align: center; color: #3d5068; font-size: 13px;
+  display: none;
+}
+
+/* ===== Main Content ===== */
+.content {
+  flex: 1; display: flex; flex-direction: column; height: 100vh;
+  background: rgba(8,12,20,.4);
+}
+
+/* Welcome screen */
+.welcome {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 40px;
+}
+.welcome-icon {
+  width: 80px; height: 80px;
+  background: linear-gradient(135deg, rgba(0,229,255,.1), rgba(0,108,138,.1));
+  border: 1px solid rgba(0,229,255,.15);
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px; margin-bottom: 24px;
+}
+.welcome h2 { font-size: 22px; color: #b8ccdf; font-weight: 500; margin-bottom: 8px; }
+.welcome p { font-size: 14px; color: #3d5068; max-width: 400px; line-height: 1.6; }
+
+/* PDF Toolbar */
+.pdf-toolbar {
+  display: none; align-items: center; gap: 12px;
+  padding: 12px 20px;
+  background: rgba(12,18,30,.85); border-bottom: 1px solid rgba(0,229,255,.08);
+}
+.pdf-toolbar.visible { display: flex; }
+.pdf-toolbar .doc-title {
+  font-size: 14px; font-weight: 500; color: #b8ccdf;
+  flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.pdf-toolbar .btn {
+  padding: 6px 14px; border-radius: 5px; font-size: 12px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.04);
+  color: #c8d6e5; transition: all .15s; display: flex; align-items: center; gap: 6px;
+  white-space: nowrap;
+}
+.pdf-toolbar .btn:hover { background: rgba(0,229,255,.08); border-color: rgba(0,229,255,.25); }
+.pdf-toolbar .btn.download { background: rgba(0,229,255,.1); border-color: rgba(0,229,255,.2); color: #00e5ff; }
+.pdf-toolbar .btn.download:hover { background: rgba(0,229,255,.18); }
+.pdf-toolbar .btn.back { color: #5a7a9a; }
+
+/* PDF iframe */
+.pdf-container { flex: 1; display: none; position: relative; }
+.pdf-container.visible { display: flex; }
+.pdf-container iframe {
+  width: 100%; height: 100%; border: none;
+}
+.pdf-fallback {
+  display: none; flex-direction: column; align-items: center; justify-content: center;
+  flex: 1; padding: 40px; text-align: center;
+}
+.pdf-fallback.visible { display: flex; }
+.pdf-fallback p { color: #3d5068; font-size: 14px; margin-bottom: 16px; }
+
+/* ===== Mobile Toggle ===== */
+.menu-toggle {
+  display: none; position: fixed; top: 16px; left: 16px; z-index: 100;
+  width: 40px; height: 40px; border-radius: 8px;
+  background: rgba(12,18,30,.9); border: 1px solid rgba(0,229,255,.15);
+  color: #00e5ff; font-size: 20px; cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed; left: 0; top: 0; z-index: 99;
+    transform: translateX(-100%); transition: transform .3s;
+    width: 320px; min-width: 320px;
+  }
+  .sidebar.open { transform: translateX(0); }
+  .menu-toggle { display: flex; align-items: center; justify-content: center; }
+  .content { padding-left: 0; }
+  .pdf-toolbar { padding: 12px 12px 12px 56px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Background effects -->
+<div class="bg-grid"></div>
+<canvas id="particles"></canvas>
+
+<!-- Mobile menu toggle -->
+<button class="menu-toggle" onclick="toggleSidebar()" title="目录">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+</button>
+
+<div class="app">
+  <!-- ===== Sidebar ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <div class="logo-icon">R</div>
+        <div>
+          <h1>商用车技术趋势研究报告库</h1>
+          <div class="subtitle">Commercial Vehicle Technology Research</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="search-wrap">
+      <span class="search-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </span>
+      <input type="text" id="searchInput" placeholder="搜索报告标题..." oninput="filterTree()">
+      <button class="search-clear" id="searchClear" onclick="clearSearch()">&times;</button>
+    </div>
+
+    <div class="stats-bar">
+      <span>共 <span class="val" id="totalCount">0</span> 篇报告</span>
+      <span>已选 <span class="val" id="selectedCount">0</span> 篇</span>
+    </div>
+
+    <div class="tree-wrap" id="treeWrap">
+      <div class="no-results" id="noResults">未找到匹配的报告</div>
+    </div>
+  </aside>
+
+  <!-- ===== Main Content ===== -->
+  <main class="content" id="mainContent">
+    <!-- PDF Toolbar -->
+    <div class="pdf-toolbar" id="pdfToolbar">
+      <button class="btn back" onclick="closePdf()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+        返回目录
+      </button>
+      <span class="doc-title" id="docTitle"></span>
+      <a class="btn download" id="btnDownload" href="#" target="_blank" download>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        下载PDF
+      </a>
+    </div>
+
+    <!-- PDF viewer -->
+    <div class="pdf-container" id="pdfContainer">
+      <iframe id="pdfFrame" src="" title="PDF Viewer"></iframe>
+    </div>
+
+    <!-- PDF fallback (when PDF not found) -->
+    <div class="pdf-fallback" id="pdfFallback">
+      <p>PDF 文件尚未上传</p>
+      <button class="btn" onclick="closePdf()" style="padding:8px 20px;">返回目录</button>
+    </div>
+
+    <!-- Welcome screen -->
+    <div class="welcome" id="welcomeScreen">
+      <div class="welcome-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+      </div>
+      <h2>商用车技术趋势研究报告库</h2>
+      <p>左侧目录浏览报告，点击标题即可查阅详细内容。覆盖新能源、智能驾驶、智能底盘、AI应用等七大技术领域。</p>
+    </div>
+  </main>
+</div>
+
+<script>
+// ===== Tree Data =====
+const treeData = [
+  {
+    id: 'cat1',
+    num: '一',
+    title: '宏观综合及市场环境',
+    items: [
+      { id: '1-1', title: '中国商用车十五五法规发展趋势研究', tags: '碳排放、油耗限值、L3准入、碳足迹、循环回收、欧标欧七法规', pdf: '中国商用车十五' },
+      { id: '1-2', title: '2025-2030 中国商用车 TIV 预测与EV渗透率研究', tags: '轻卡/VAN/微卡分市场、技术路线渗透率', pdf: '2025-' },
+      { id: '1-3', title: '分技术路线商用车综合使用成本研究', tags: '购置/能源/维保、末端配送场景成本变化', pdf: '分技术路线商' },
+      { id: '1-4', title: '中国商用车客户需求演变趋势研究', tags: '司机年龄变化、组织客户占比、全生命周期服务需求', pdf: '中国商用车客' },
+      { id: '1-5', title: '中国领先商用车产品路线/平台/战略对比研究', tags: '技术平台、能源/智能驾驶布局', pdf: '中国领先商用' },
+      { id: '1-6', title: '全球领先商用车产品路线/业态/战略对比研究', tags: 'GXA平台架构+电动双路线', pdf: '全球领先商用' },
+      { id: '1-7', title: '中国商用车十大技术趋势展望研究', tags: '能源/动力/智能/AI/电子架构/座舱', pdf: '中国商用车十' }
+    ]
+  },
+  {
+    id: 'cat2',
+    num: '二',
+    title: '新能源及电驱动规划',
+    items: [
+      { id: '2-1', title: '商用车高集成度电驱桥技术发展趋势', tags: '2030效率/功率/重量指标、双电机/分布式驱动拓扑', pdf: '商用车高集成' },
+      { id: '2-2', title: '商用车动力电池关键技术路线演进研究', tags: '磷酸铁锂/半固态/全固态、能量密度/充电倍率/寿命指标', pdf: '商用车动力电' },
+      { id: '2-3', title: '商用车 800V/1000V 高压平台技术发展趋势', tags: 'SiC/GaN电控、配电、热管理、充电匹配', pdf: '商用车 800' },
+      { id: '2-4', title: '商用车高效电驱动系统技术发展趋势', tags: '油冷电机、功率密度/效率指标、直驱/轮边电机', pdf: '商用车高效电' },
+      { id: '2-5', title: '商用车底盘电机控制器MCU/TCU技术发展趋势', tags: '软硬解耦、功能安全、集成度、功率密度', pdf: '商用车底盘电' },
+      { id: '2-6', title: '商用车充电模式标准及接口技术研究', tags: '兆瓦级、大功率安全、车-桩-站协同、TCO影响', pdf: '商用车充电模' },
+      { id: '2-7', title: '氢燃料电池商用车技术发展趋势', tags: '多动力架构、储氢系统、电堆功率密度/耐久指标', pdf: '氢燃料电池商' },
+      { id: '2-8', title: '商用车 48V 双电源系统技术研究', tags: '配电拓扑、转向/制动冗余、负载均衡控制', pdf: '商用车 48V' },
+      { id: '2-9', title: '商用车低压智能电源配电系统技术发展趋势', tags: '电子保险匹配、负载均衡、功耗优化', pdf: '商用车低压智' }
+    ]
+  },
+  {
+    id: 'cat3',
+    num: '三',
+    title: '智能驾驶及用户体验规划',
+    items: [
+      { id: '3-1', title: '商用车 L2.5~L4 自动驾驶技术发展趋势', tags: '高速NOA/城区/匝道、传感器配置/安全指标、端到端大模型', pdf: '商用车 L2.' },
+      { id: '3-2', title: '商用车座舱感知技术发展趋势', tags: '驾驶员识别/疲劳预警指标、座舱一体、司机状态监测', pdf: '商用车座舱感' },
+      { id: '3-3', title: '商用车车路云一体化C-V2X技术应用研究', tags: '协同感知/决策/控制、时延/可靠性指标', pdf: '商用车车路云' },
+      { id: '3-4', title: '商用车全域 OTA 与车云平台技术发展趋势', tags: '数据采集车/传输实时性、远程诊断、SOTA/FOTA', pdf: '商用车全域 O' },
+      { id: '3-5', title: '商用车信息安全与功能安全技术研究', tags: '纵深防御体系设计、预期功能安全、合规要求', pdf: '商用车信息安' },
+      { id: '3-6', title: '末端物流无人配送车/快递车商业模式与技术路径研究', tags: '场景定义、成本控制、运营模式', pdf: '末端物流无人' },
+      { id: '3-7', title: '商用车自动驾驶数据闭环技术研究', tags: '数据资产化、标注模型、场景挖掘、算法迭代', pdf: '商用车自动驾' }
+    ]
+  },
+  {
+    id: 'cat4',
+    num: '四',
+    title: '智能节能技术规划',
+    items: [
+      { id: '4-1', title: '商用车高效动力/混合动力节能总成技术发展趋势', tags: '热效率/发电效率指标、零碳排放、氢发动机', pdf: '商用车高效动' },
+      { id: '4-2', title: '商用车轻量化材料及工艺路线应用研究', tags: '高强钢/铝/复合材料、2030减重目标、能耗贡献', pdf: '商用车轻量化' },
+      { id: '4-3', title: '商用车全生命周期能耗管理与控制技术发展趋势', tags: '能耗降低指标、预见性巡航、智能热管理策略', pdf: '商用车全生命' },
+      { id: '4-4', title: '商用车直接式热泵热管理技术研究', tags: '低温启动、制热/制冷能力衰减指标、AI热管理控制', pdf: '商用车直接式' },
+      { id: '4-5', title: '商用车低风阻/低滚阻/低摩擦技术发展趋势', tags: '风阻系数/滚阻指标、主被动减阻控制', pdf: '商用车低风阻' },
+      { id: '4-6', title: '商用车低排放后处理技术发展趋势', tags: '冷启动排放、N2O控制、耐久成本', pdf: '商用车低排放' },
+      { id: '4-7', title: '商用车全生命周期碳足迹核算及降碳路径技术研究', tags: '材料/生产/使用/回收全链条核算', pdf: '商用车全生命' }
+    ]
+  },
+  {
+    id: 'cat5',
+    num: '五',
+    title: '智能底盘及智能控制',
+    items: [
+      { id: '5-1', title: '商用车 DEA4.0/5.0 跨域集中电子电气架构技术发展趋势', tags: '区域控制/通信带宽/芯片、分布式控制指标', pdf: '商用车 DEA' },
+      { id: '5-2', title: '商用车线控制动技术发展趋势', tags: 'SBW/EHB/EMB，响应时间/制动能量回收指标、安全冗余', pdf: '商用车线控制' },
+      { id: '5-3', title: '商用车空气悬架+半主动/主动控制技术应用研究', tags: '高度调节、平顺性、能耗优化', pdf: '商用车空气悬' },
+      { id: '5-4', title: '商用车底盘域控制平台及执行器集成技术研究', tags: '集成度、执行器响应、协同目标', pdf: '商用车底盘域' },
+      { id: '5-5', title: '商用车健康预测性维护技术研究', tags: '传感器融合、AI故障预测、维修策略', pdf: '商用车健康预' },
+      { id: '5-6', title: '商用车底盘域运动融合控制技术研究', tags: '驱动/制动/转向/悬架一体化、XYZ协同控制', pdf: '商用车底盘域' }
+    ]
+  },
+  {
+    id: 'cat6',
+    num: '六',
+    title: '未来概念及 AI 应用',
+    items: [
+      { id: '6-1', title: 'AI大模型在商用车全价值链应用发展趋势', tags: '研发/制造/运营、2030效率提升指标', pdf: 'AI大模型在商' },
+      { id: '6-2', title: '商用车自动驾驶全价值链仿真验证技术研究', tags: '传感器模型、虚实融合测试、验证通过率', pdf: '商用车自动驾' },
+      { id: '6-3', title: '低空经济与城市空中交通商用化趋势研究', tags: '空地协同控制、物流应用、适航合规', pdf: '低空经济与城' },
+      { id: '6-4', title: '商用车智能机器人产业生态与技术发展研究', tags: '感知-决策-执行闭环、多模态交互', pdf: '商用车智能机' }
+    ]
+  },
+  {
+    id: 'cat7',
+    num: '七',
+    title: '测试验证及开发规划',
+    items: [
+      { id: '7-1', title: '商用车虚拟试验场VPG技术发展趋势', tags: '仿真精度、验证通过率、虚实结合测试', pdf: '商用车虚拟试' },
+      { id: '7-2', title: '商用车 NVH 及声品质前瞻开发技术研究', tags: '声源/路径/贡献量指标、电动化NVH控制', pdf: '商用车 NVH' }
+    ]
+  }
+];
+
+// ===== State =====
+let activeItemId = null;
+const BASE_REPORT_URL = 'reports/';
+
+// ===== Build Tree =====
+function buildTree() {
+  const wrap = document.getElementById('treeWrap');
+  let html = '';
+  let total = 0;
+
+  treeData.forEach(cat => {
+    total += cat.items.length;
+    html += '<div class="cat-item" data-cat="' + cat.id + '">';
+    html += '<div class="cat-header open" data-cat="' + cat.id + '" onclick="toggleCat(this)">';
+    html += '<span class="arrow">▶</span>';
+    html += '<span class="cat-num">' + cat.num + '</span>';
+    html += '<span class="cat-title">' + cat.title + '</span>';
+    html += '<span class="cat-count">' + cat.items.length + '</span>';
+    html += '</div>';
+
+    const subHeight = cat.items.length * 54;
+    html += '<div class="sub-list" style="max-height:' + subHeight + 'px" data-cat="' + cat.id + '">';
+    cat.items.forEach(item => {
+      html += '<div class="sub-item" data-id="' + item.id + '" data-cat="' + cat.id + '" data-pdf="' + escapeHtml(item.pdf) + '" data-title="' + escapeHtml(item.title) + '" data-tags="' + escapeHtml(item.tags || '') + '" onclick="selectReport(this)">';
+      html += '<span class="dot"></span>';
+      html += '<div class="sub-text">';
+      html += '<div class="sub-title">' + escapeHtml(item.title) + '</div>';
+      if (item.tags) html += '<div class="sub-tags">' + escapeHtml(item.tags) + '</div>';
+      html += '</div>';
+      html += '<span class="pdf-icon">PDF</span>';
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '</div>';
+  });
+
+  html += '<div class="no-results" id="noResults">未找到匹配的报告</div>';
+  wrap.innerHTML = html;
+  document.getElementById('totalCount').textContent = total;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ===== Toggle Category =====
+function toggleCat(header) {
+  const catId = header.dataset.cat;
+  const subList = document.querySelector('.sub-list[data-cat="' + catId + '"]');
+  const isOpen = header.classList.contains('open');
+
+  if (isOpen) {
+    header.classList.remove('open');
+    subList.classList.add('collapsed');
+  } else {
+    header.classList.add('open');
+    subList.classList.remove('collapsed');
+    // Recalculate height for dynamic content
+    const items = subList.querySelectorAll('.sub-item:not(.hidden)');
+    subList.style.maxHeight = (items.length * 54) + 'px';
+  }
+}
+
+// ===== Select Report =====
+function selectReport(el) {
+  // Update active state
+  document.querySelectorAll('.sub-item.active').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  activeItemId = el.dataset.id;
+  document.getElementById('selectedCount').textContent = '1';
+
+  const title = el.dataset.title;
+  const pdfName = el.dataset.pdf;
+  const pdfPath = BASE_REPORT_URL + encodeURIComponent(pdfName) + '.pdf';
+
+  // Show PDF viewer
+  document.getElementById('welcomeScreen').style.display = 'none';
+  document.getElementById('pdfContainer').classList.add('visible');
+  document.getElementById('pdfFallback').classList.remove('visible');
+  document.getElementById('pdfToolbar').classList.add('visible');
+  document.getElementById('docTitle').textContent = title;
+  document.getElementById('btnDownload').href = pdfPath;
+  document.getElementById('pdfFrame').src = pdfPath;
+
+  // Close sidebar on mobile
+  if (window.innerWidth <= 768) {
+    document.getElementById('sidebar').classList.remove('open');
+  }
+}
+
+// ===== Close PDF =====
+function closePdf() {
+  document.getElementById('pdfContainer').classList.remove('visible');
+  document.getElementById('pdfFallback').classList.remove('visible');
+  document.getElementById('pdfToolbar').classList.remove('visible');
+  document.getElementById('welcomeScreen').style.display = 'flex';
+  document.getElementById('pdfFrame').src = '';
+  document.getElementById('selectedCount').textContent = '0';
+
+  document.querySelectorAll('.sub-item.active').forEach(e => e.classList.remove('active'));
+  activeItemId = null;
+}
+
+// ===== Search =====
+function filterTree() {
+  const query = document.getElementById('searchInput').value.trim().toLowerCase();
+  const clearBtn = document.getElementById('searchClear');
+  const noResults = document.getElementById('noResults');
+  let visibleCount = 0;
+
+  clearBtn.style.display = query ? 'block' : 'none';
+
+  treeData.forEach(cat => {
+    const subList = document.querySelector('.sub-list[data-cat="' + cat.id + '"]');
+    const header = document.querySelector('.cat-header[data-cat="' + cat.id + '"]');
+    let catVisible = 0;
+
+    subList.querySelectorAll('.sub-item').forEach(el => {
+      const title = (el.dataset.title || '').toLowerCase();
+      const tags = (el.dataset.tags || '').toLowerCase();
+      const match = !query || title.includes(query) || tags.includes(query);
+      el.classList.toggle('hidden', !match);
+      if (match) catVisible++;
+    });
+
+    // Auto expand matching categories
+    if (query && catVisible > 0) {
+      header.classList.add('open');
+      subList.classList.remove('collapsed');
+    }
+    if (!query) {
+      // Restore open state (default all open)
+      header.classList.add('open');
+      subList.classList.remove('collapsed');
+    }
+
+    // Update sublist height
+    subList.style.maxHeight = (catVisible * 54) + 'px';
+
+    // Show/hide category
+    const catItem = document.querySelector('.cat-item[data-cat="' + cat.id + '"]');
+    if (query && catVisible === 0) {
+      catItem.style.display = 'none';
+    } else {
+      catItem.style.display = '';
+    }
+
+    visibleCount += catVisible;
+  });
+
+  noResults.style.display = (query && visibleCount === 0) ? 'block' : 'none';
+  document.getElementById('totalCount').textContent = visibleCount;
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchClear').style.display = 'none';
+  filterTree();
+}
+
+// ===== Sidebar Toggle (Mobile) =====
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ===== Particle Background =====
+function initParticles() {
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  const maxParticles = 50;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  class Particle {
+    constructor() {
+      this.reset();
+      this.y = Math.random() * canvas.height;
+    }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = -10;
+      this.size = Math.random() * 1.5 + 0.5;
+      this.speed = Math.random() * 0.3 + 0.1;
+      this.opacity = Math.random() * 0.4 + 0.1;
+    }
+    update() {
+      this.y += this.speed;
+      if (this.y > canvas.height + 10) this.reset();
+    }
+    draw() {
+      ctx.fillStyle = 'rgba(0,229,255,' + this.opacity + ')';
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < maxParticles; i++) {
+    particles.push(new Particle());
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    // Draw connections
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 100) {
+          ctx.strokeStyle = 'rgba(0,229,255,' + (0.04 * (1 - dist / 100)) + ')';
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+// ===== Keyboard Shortcuts =====
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closePdf();
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    document.getElementById('searchInput').focus();
+  }
+});
+
+// ===== Click outside sidebar to close on mobile =====
+document.addEventListener('click', function(e) {
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.querySelector('.menu-toggle');
+  if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
+    if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+      sidebar.classList.remove('open');
+    }
+  }
+});
+
+// ===== Init =====
+buildTree();
+initParticles();
+</script>
+</body>
+</html>

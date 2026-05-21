@@ -1,0 +1,3 @@
+Place PDF reports in this directory.
+PDF filenames should start with the first 5 characters of the corresponding report title.
+See README.md for details.
