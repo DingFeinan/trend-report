@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>轻型商用车车路云一体化（C-V2X）技术应用研究报告</title>
+<style>
+:root {
+  --primary: #1a3a6b;
+  --secondary: #2563eb;
+  --accent: #0ea5e9;
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --bg: #f0f4f8;
+  --card: #ffffff;
+  --text: #1e293b;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --grade-a: #16a34a;
+  --grade-b: #2563eb;
+  --grade-c: #d97706;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'PingFang SC','Microsoft YaHei',sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+header { background: linear-gradient(135deg, #0f2044 0%, #1a3a6b 50%, #1e4d8c 100%); color: #fff; padding: 2.5rem 2rem 2rem; position: relative; overflow: hidden; }
+header::before { content:''; position:absolute; top:-40px; right:-60px; width:320px; height:320px; border-radius:50%; background:rgba(255,255,255,0.04); }
+header::after { content:''; position:absolute; bottom:-60px; left:40%; width:200px; height:200px; border-radius:50%; background:rgba(14,165,233,0.08); }
+.header-badge { display:inline-block; background:rgba(14,165,233,0.2); border:1px solid rgba(14,165,233,0.4); color:#7dd3fc; font-size:.75rem; padding:.25rem .75rem; border-radius:999px; margin-bottom:.75rem; letter-spacing:.05em; }
+header h1 { font-size:1.9rem; font-weight:700; line-height:1.3; max-width:800px; }
+header h1 span { color:#7dd3fc; }
+.header-meta { margin-top:1rem; display:flex; gap:1.5rem; flex-wrap:wrap; font-size:.82rem; color:#94a3b8; }
+.header-meta span { display:flex; align-items:center; gap:.3rem; }
+nav { background:#fff; border-bottom:2px solid var(--border); padding:.6rem 2rem; display:flex; gap:1.5rem; flex-wrap:wrap; position:sticky; top:0; z-index:100; box-shadow:0 1px 4px rgba(0,0,0,.06); }
+nav a { font-size:.82rem; color:var(--muted); text-decoration:none; padding:.3rem .5rem; border-radius:4px; transition:all .2s; white-space:nowrap; }
+nav a:hover { color:var(--secondary); background:#eff6ff; }
+main { max-width:1200px; margin:0 auto; padding:1.5rem 1.5rem 3rem; }
+section { margin-bottom:2rem; }
+.section-title { font-size:1.25rem; font-weight:700; color:var(--primary); border-left:4px solid var(--secondary); padding-left:.75rem; margin-bottom:1.25rem; display:flex; align-items:center; gap:.5rem; }
+.section-title .num { background:var(--secondary); color:#fff; width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:.75rem; flex-shrink:0; }
+.card { background:var(--card); border-radius:10px; border:1px solid var(--border); padding:1.25rem; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+.card-grid { display:grid; gap:1rem; }
+.card-grid.cols2 { grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
+.card-grid.cols3 { grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); }
+.card-grid.cols4 { grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); }
+.kpi-card { background:var(--card); border-radius:10px; border:1px solid var(--border); padding:1.25rem; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+.kpi-val { font-size:2rem; font-weight:800; color:var(--secondary); }
+.kpi-label { font-size:.8rem; color:var(--muted); margin-top:.25rem; }
+.kpi-sub { font-size:.72rem; color:var(--muted); }
+.badge { display:inline-block; padding:.15rem .55rem; border-radius:999px; font-size:.7rem; font-weight:700; letter-spacing:.03em; }
+.badge-a { background:#dcfce7; color:#15803d; }
+.badge-b { background:#dbeafe; color:#1d4ed8; }
+.badge-c { background:#fef3c7; color:#b45309; }
+.badge-high { background:#dcfce7; color:#15803d; }
+.badge-mid { background:#fef3c7; color:#b45309; }
+table { width:100%; border-collapse:collapse; font-size:.83rem; }
+th { background:#f1f5f9; color:var(--primary); font-weight:700; padding:.6rem .75rem; text-align:left; border-bottom:2px solid var(--border); }
+td { padding:.55rem .75rem; border-bottom:1px solid var(--border); vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:#f8fafc; }
+.check { color:var(--success); font-weight:700; }
+.warn { color:var(--warning); font-weight:700; }
+.tag-p0 { background:#fef2f2; color:#dc2626; border:1px solid #fecaca; padding:.1rem .4rem; border-radius:4px; font-size:.7rem; font-weight:700; }
+.tag-p1 { background:#fff7ed; color:#c2410c; border:1px solid #fed7aa; padding:.1rem .4rem; border-radius:4px; font-size:.7rem; font-weight:700; }
+.tag-p2 { background:#fefce8; color:#a16207; border:1px solid #fde68a; padding:.1rem .4rem; border-radius:4px; font-size:.7rem; font-weight:700; }
+.tag-p3 { background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; padding:.1rem .4rem; border-radius:4px; font-size:.7rem; font-weight:700; }
+.timeline { position:relative; padding-left:2rem; }
+.timeline::before { content:''; position:absolute; left:.6rem; top:0; bottom:0; width:2px; background:linear-gradient(to bottom, var(--secondary), var(--accent)); }
+.tl-item { position:relative; margin-bottom:1.5rem; }
+.tl-dot { position:absolute; left:-1.65rem; top:.3rem; width:14px; height:14px; border-radius:50%; background:var(--secondary); border:2px solid #fff; box-shadow:0 0 0 2px var(--secondary); }
+.tl-year { font-weight:800; color:var(--secondary); font-size:1rem; }
+.tl-body { margin-top:.3rem; font-size:.84rem; color:var(--text); }
+.tl-tag { display:inline-block; background:#eff6ff; color:var(--secondary); font-size:.7rem; padding:.1rem .4rem; border-radius:4px; margin-right:.3rem; font-weight:600; }
+.progress-wrap { margin:.4rem 0; }
+.progress-label { display:flex; justify-content:space-between; font-size:.75rem; color:var(--muted); margin-bottom:.2rem; }
+.progress-bar { height:8px; background:#e2e8f0; border-radius:999px; overflow:hidden; }
+.progress-fill { height:100%; border-radius:999px; transition:width .8s ease; }
+.radar-wrap { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.radar-item { display:flex; align-items:center; gap:.75rem; padding:.5rem 0; border-bottom:1px solid var(--border); }
+.radar-item:last-child { border-bottom:none; }
+.radar-name { flex:0 0 110px; font-size:.8rem; color:var(--text); }
+.radar-bar-wrap { flex:1; }
+.radar-score { flex:0 0 40px; text-align:right; font-size:.8rem; font-weight:700; color:var(--secondary); }
+.alert { padding:.75rem 1rem; border-radius:8px; font-size:.83rem; margin:.5rem 0; display:flex; gap:.6rem; align-items:flex-start; }
+.alert-info { background:#eff6ff; border-left:3px solid var(--secondary); color:#1e40af; }
+.alert-warn { background:#fffbeb; border-left:3px solid var(--warning); color:#92400e; }
+.alert-success { background:#f0fdf4; border-left:3px solid var(--success); color:#14532d; }
+.alert-danger { background:#fef2f2; border-left:3px solid var(--danger); color:#991b1b; }
+.cite { font-size:.72rem; color:var(--secondary); background:#eff6ff; padding:.05rem .3rem; border-radius:3px; cursor:pointer; font-weight:600; }
+.source-list { list-style:none; }
+.source-list li { padding:.5rem .75rem; border-bottom:1px solid var(--border); font-size:.8rem; display:flex; gap:.6rem; align-items:flex-start; }
+.source-list li:last-child { border-bottom:none; }
+.source-id { flex:0 0 50px; font-weight:700; color:var(--secondary); }
+.competitor-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; }
+.comp-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1rem; position:relative; overflow:hidden; }
+.comp-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; }
+.comp-card.tier1::before { background:linear-gradient(90deg,#2563eb,#0ea5e9); }
+.comp-card.tier2::before { background:linear-gradient(90deg,#7c3aed,#a78bfa); }
+.comp-card.tier3::before { background:linear-gradient(90deg,#16a34a,#4ade80); }
+.comp-name { font-size:1rem; font-weight:800; color:var(--primary); }
+.comp-type { font-size:.72rem; color:var(--muted); margin-bottom:.5rem; }
+.comp-stars { color:#f59e0b; font-size:.9rem; }
+.comp-tags { display:flex; flex-wrap:wrap; gap:.3rem; margin-top:.5rem; }
+.comp-tag { background:#f1f5f9; color:var(--muted); font-size:.68rem; padding:.1rem .35rem; border-radius:3px; }
+.phase-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1rem; }
+.phase-card { border-radius:10px; overflow:hidden; border:1px solid var(--border); }
+.phase-header { padding:.75rem 1rem; font-weight:700; color:#fff; font-size:.9rem; }
+.phase-body { background:#fff; padding:1rem; font-size:.82rem; }
+.phase-body ul { padding-left:1.2rem; }
+.phase-body li { margin-bottom:.35rem; color:var(--text); }
+.phase-badge { display:inline-block; padding:.15rem .5rem; border-radius:4px; font-size:.68rem; font-weight:700; margin-left:.3rem; }
+.footer { background:#1e293b; color:#94a3b8; padding:1.5rem 2rem; font-size:.78rem; margin-top:2rem; }
+.footer-inner { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+.toc-box { background:#fff; border:1px solid var(--border); border-radius:10px; padding:1.25rem; margin-bottom:1.5rem; }
+.toc-box h3 { font-size:.9rem; color:var(--primary); margin-bottom:.75rem; font-weight:700; }
+.toc-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:.3rem; }
+.toc-grid a { font-size:.8rem; color:var(--secondary); text-decoration:none; padding:.2rem .3rem; border-radius:3px; }
+.toc-grid a:hover { background:#eff6ff; }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-badge">🛻 深度研究级 · tech-intel-v25 · 2026-05-22</div>
+  <h1>轻型商用车<span>车路云一体化（C-V2X）</span>技术应用研究报告<br>
+  <small style="font-size:1rem;font-weight:400;color:#94a3b8;">协同感知 / 编队 / 调度 · 延迟 / 准确率指标</small></h1>
+  <div class="header-meta">
+    <span>📋 编制：商品研发院·先行平台开发中心</span>
+    <span>📅 日期：2026-05-22</span>
+    <span>🔬 来源：34条（A级15·B级13·C级6）</span>
+    <span>🎯 置信度：中-高</span>
+    <span>📐 覆盖维度：7/7</span>
+  </div>
+</header>
+<nav>
+  <a href="#quality">情报质量</a>
+  <a href="#exec">执行摘要</a>
+  <a href="#baseline">现状基线</a>
+  <a href="#tech">核心技术</a>
+  <a href="#roadmap">指标路线图</a>
+  <a href="#landing">落地路径</a>
+  <a href="#competitor">竞品对标</a>
+  <a href="#policy">政策标准</a>
+  <a href="#gap">技术差距</a>
+  <a href="#synthesis">综合分析</a>
+  <a href="#limit">局限声明</a>
+  <a href="#refs">参考文献</a>
+</nav>
+<main>
+<!-- 目录 -->
+<div class="toc-box">
+  <h3>📑 报告目录</h3>
+  <div class="toc-grid">
+    <a href="#quality">① 情报质量概览</a>
+    <a href="#exec">② 执行摘要</a>
+    <a href="#baseline">③ 现状基线</a>
+    <a href="#tech">④ 核心关键技术</a>
+    <a href="#roadmap">⑤ 分阶段指标路线图</a>
+    <a href="#landing">⑥ 落地路径</a>
+    <a href="#competitor">⑦ 竞品对标</a>
+    <a href="#policy">⑧ 政策法规标准</a>
+    <a href="#gap">⑨ 技术差距评估</a>
+    <a href="#synthesis">⑩ 综合分析</a>
+    <a href="#limit">⑪ 局限声明</a>
+    <a href="#refs">⑫ 参考文献</a>
+  </div>
+</div>
+
+<!-- Section 0: 情报质量 -->
+<section id="quality">
+  <div class="section-title"><span class="num">0</span>情报质量概览</div>
+  <div class="card-grid cols4" style="margin-bottom:1rem;">
+    <div class="kpi-card"><div class="kpi-val">34</div><div class="kpi-label">有效来源总数</div><div class="kpi-sub">去重后</div></div>
+    <div class="kpi-card"><div class="kpi-val" style="color:#16a34a">44%</div><div class="kpi-label">A 级来源占比</div><div class="kpi-sub">15条 · 高置信度</div></div>
+    <div class="kpi-card"><div class="kpi-val" style="color:#2563eb">38%</div><div class="kpi-label">B 级来源占比</div><div class="kpi-sub">13条 · 中置信度</div></div>
+    <div class="kpi-card"><div class="kpi-val" style="color:#d97706">18%</div><div class="kpi-label">C 级来源占比</div><div class="kpi-sub">6条 · 低置信度</div></div>
+  </div>
+  <div class="card-grid cols2">
+    <div class="card">
+      <b style="color:var(--primary)">综合置信度评级</b>
+      <div style="margin-top:.75rem;">
+        <div class="progress-wrap">
+          <div class="progress-label"><span>A级（政策文件·高被引专利）</span><span>44%</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:44%;background:#16a34a;"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>B级（行业报告·媒体深度报道）</span><span>38%</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:38%;background:#2563eb;"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>C级（厂商宣传·预测推算）</span><span>18%</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:18%;background:#d97706;"></div></div>
+        </div>
+      </div>
+      <div class="alert alert-success" style="margin-top:.75rem;">🏆 综合置信度：<b>中-高</b>（A+B级占82%，达深度研究级达标线）</div>
+    </div>
+    <div class="card">
+      <b style="color:var(--primary)">维度覆盖达标情况</b>
+      <div style="margin-top:.75rem;">
+        <div class="radar-item"><span class="radar-name">D1 技术标准基线</span><div class="radar-bar-wrap"><div class="progress-bar"><div class="progress-fill" style="width:100%;background:#16a34a;"></div></div></div><span class="radar-score">8条✅</span></div>
+        <div class="radar-item"><span class="radar-name">D2 协同感知</span><div class="radar-bar-wrap"><div class="progress-bar"><div class="progress-fill" style="width:100%;background:#16a34a;"></div></div></div><span class="radar-score">12条✅</span></div>
+        <div class="radar-item"><span class="radar-name">D3 编队/调度</span><div class="radar-bar-wrap"><div class="progress-bar"><div class="progress-fill" style="width:100%;background:#16a34a;"></div></div></div><span class="radar-score">7条✅</span></div>
+        <div class="radar-item"><span class="radar-name">D4 分阶段指标</span><div class="radar-bar-wrap"><div class="progress-bar"><div class="progress-fill" style="width:100%;background:#16a34a;"></div></div></div><span class="radar-score">7条✅</span></div>
+        <div class="radar-item"><span class="radar-name">D5 落地路径</span><div class="radar-bar-wrap"><div class="progress-bar"><div class="progress-fill" style="width:100%;background:#16a34a;"></div></div></div><span class="radar-score">6条✅</span></div>
+        <div class="radar-item"><span class="radar-name">D6 竞品对标</span><div class="radar-bar-wrap"><div class="progress-bar"><div class="progress-fill" style="width:85%;background:#2563eb;"></div></div></div><span class="radar-score">7条⚠️</span></div>
+        <div class="radar-item"><span class="radar-name">D7 政策法规</span><div class="radar-bar-wrap"><div class="progress-bar"><div class="progress-fill" style="width:100%;background:#16a34a;"></div></div></div><span class="radar-score">6条✅</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 1: 执行摘要 -->
+<section id="exec">
+  <div class="section-title"><span class="num">1</span>执行摘要</div>
+  <div class="alert alert-info">
+    <div>🎯 <b>核心结论</b>：C-V2X正成为中国智能网联交通核心基础设施，轻型商用车是规模化落地的关键载体。<b>2025-2027年是黄金窗口期</b>，兼具政策强制合规（2026年1月GB标准）与商业化率先落地（园区/城配）的双重机遇。</div>
+  </div>
+  <div class="card-grid cols2" style="margin-top:1rem;">
+    <div class="card">
+      <b style="color:var(--primary);display:block;margin-bottom:.75rem;">🔑 五大核心发现</b>
+      <div style="font-size:.83rem;display:flex;flex-direction:column;gap:.6rem;">
+        <div><span class="badge badge-a">A级</span> <b>技术代际跃迁</b>：2025年5G NR-V2X（R17）量产装车，E2E延迟目标从LTE-V2X的20-50ms向&lt;5ms演进 <span class="cite">[S1]</span></div>
+        <div><span class="badge badge-a">A级</span> <b>政策强驱动不可逆</b>：GB44495/44496/44497三项强制性标准2026年1月生效；C-NCAP纳入V2X测评 <span class="cite">[S68]</span><span class="cite">[S14]</span></div>
+        <div><span class="badge badge-a">A级</span> <b>协同感知核心壁垒</b>：特征-结果混合级融合（浙大CN116958763B，被引13次）是当前最成熟工程方案 <span class="cite">[S88]</span></div>
+        <div><span class="badge badge-b">B级</span> <b>编队进入规模化</b>：混合智能编队列为14大典型场景之一，城配无人车在苏州/山东/遂宁已有万辆规划 <span class="cite">[S25]</span><span class="cite">[S39]</span></div>
+        <div><span class="badge badge-b">B级</span> <b>竞品三极格局</b>：华为（全栈）、大唐高鸿（RSU+OBU专家）、高通（芯片平台）三足鼎立 <span class="cite">[S51]</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <b style="color:var(--primary);display:block;margin-bottom:.75rem;">⚡ 关键行动建议</b>
+      <div style="font-size:.83rem;display:flex;flex-direction:column;gap:.6rem;">
+        <div style="background:#fef2f2;border-radius:6px;padding:.6rem .75rem;border-left:3px solid #dc2626;"><b style="color:#dc2626">2026年底前【必须做】</b><br>OBU标准化上车（GB合规）+ 结果级融合SDK集成 + 1-2个封闭场景编队验证</div>
+        <div style="background:#fff7ed;border-radius:6px;padding:.6rem .75rem;border-left:3px solid #d97706;"><b style="color:#d97706">2028年底前【应该做】</b><br>切换5G NR-V2X R17模组 + 混合级融合（E2E≤15ms）+ 城配3-5车编队商业化</div>
+        <div style="background:#f0fdf4;border-radius:6px;padding:.6rem .75rem;border-left:3px solid #16a34a;"><b style="color:#16a34a">2030年底前【建议做】</b><br>自主感知融合专利储备 + C-V2X数据流增值服务 + 开放道路L4编队规模运营</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Section 2: 现状基线 -->
+<section id="baseline">
+  <div class="section-title"><span class="num">2</span>现状基线：C-V2X技术标准与部署（截至2025年）</div>
+  <div class="card-grid cols2" style="margin-bottom:1rem;">
+    <div class="card">
+      <b style="color:var(--primary);display:block;margin-bottom:.75rem;">技术代际格局</b>
+      <table>
+        <thead><tr><th>代际</th><th>标准</th><th>直连延迟</th><th>2025年状态</th></tr></thead>
+        <tbody>
+          <tr><td><b>LTE-V2X</b><br><small style="color:var(--muted)">R14</small></td><td>3GPP R14</td><td>~20ms</td><td><span class="badge badge-a">主流</span> 大规模部署 <span class="cite">[S1]</span></td></tr>
+          <tr><td><b style="color:var(--secondary)">5G NR-V2X</b><br><small style="color:var(--muted)">R17</small></td><td>3GPP R17</td><td>&lt;10ms<br><small>理论&lt;5ms</small></td><td><span class="badge badge-b">新</span> 2025年量产装车 <span class="cite">[S25]</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <b style="color:var(--primary);display:block;margin-bottom:.75rem;">轻型商用车OBU渗透现状</b>
+      <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
+        <div style="text-align:center;flex:1;min-width:100px;">
+          <div style="font-size:2.2rem;font-weight:800;color:var(--secondary)">~3%</div>
+          <div style="font-size:.78rem;color:var(--muted)">2024年底渗透率</div>
+        </div>
+        <div style="text-align:center;flex:1;min-width:100px;">
+          <div style="font-size:2.2rem;font-weight:800;color:#16a34a">7.5%</div>
+          <div style="font-size:.78rem;color:var(--muted)">2026年政策目标</div>
+        </div>
+        <div style="text-align:center;flex:1;min-width:100px;">
+          <div style="font-size:2.2rem;font-weight:800;color:#7c3aed">50%</div>
+          <div style="font-size:.78rem;color:var(--muted)">2030年目标</div>
+        </div>
+      </div>
+      <div class="alert alert-warn" style="margin-top:.75rem;">⚠️ 2026年GB强制性标准实施倒计时：OEM必须完成OBU供应链决策 <span class="cite">[S68]</span><span class="cite">[S34]</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <b style="color:var(--primary);display:block;margin-bottom:.75rem;">首批20个试点城市基础设施建设进展 <span class="cite">[S34]</span></b>
+    <div class="card-grid cols4">
+      <div style="background:#eff6ff;border-radius:8px;padding:.75rem;text-align:center;font-size:.8rem;"><div style="font-size:1.5rem;margin-bottom:.3rem;">📡</div><b>5G全覆盖</b><br><span style="color:var(--muted)">区域通信网络</span></div>
+      <div style="background:#f0fdf4;border-radius:8px;padding:.75rem;text-align:center;font-size:.8rem;"><div style="font-size:1.5rem;margin-bottom:.3rem;">🚦</div><b>LTE-V2X RSU</b><br><span style="color:var(--muted)">主干道部署</span></div>
+      <div style="background:#fef3c7;border-radius:8px;padding:.75rem;text-align:center;font-size:.8rem;"><div style="font-size:1.5rem;margin-bottom:.3rem;">☁️</div><b>MEC边缘节点</b><br><span style="color:var(--muted)">云计算接入</span></div>
+      <div style="background:#fdf4ff;border-radius:8px;padding:.75rem;text-align:center;font-size:.8rem;"><div style="font-size:1.5rem;margin-bottom:.3rem;">🗺️</div><b>高精地图+RTK</b><br><span style="color:var(--muted)">定位服务接入</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 3: 核心关键技术 -->
+<section id="tech">
+  <div class="section-title"><span class="num">3</span>核心关键技术</div>
+
+  <!-- 3.1 协同感知 -->
+  <div class="card" style="margin-bottom:1rem;">
+    <b style="color:var(--primary);font-size:1rem;display:block;margin-bottom:.75rem;">3.1 协同感知技术——融合层次演进（基于20条专利分析）</b>
+    <table>
+      <thead><tr><th>融合层次</th><th>技术特征</th><th>代表方案</th><th>通信带宽</th><th>精度表现</th><th>置信度</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>结果级融合</b></td>
+          <td>传递BBox+置信度</td>
+          <td>东风CN116853284A <span class="cite">[S85]</span></td>
+          <td>低（&lt;1Mbps）</td>
+          <td>基础，受误差积累</td>
+          <td><span class="badge badge-a">A级</span></td>
+        </tr>
+        <tr>
+          <td><b>特征级融合</b></td>
+          <td>传递中间层特征图</td>
+          <td>北理工CN115578709B <span class="cite">[S94]</span></td>
+          <td>高（5-50Mbps）</td>
+          <td>显著提升，受带宽限制</td>
+          <td><span class="badge badge-b">B级</span></td>
+        </tr>
+        <tr style="background:#f0fdf4;">
+          <td><b style="color:#16a34a">特征-结果混合级 ⭐最优</b></td>
+          <td>路端结果级+车端特征级</td>
+          <td><b>浙大CN116958763B</b>（被引13次）<span class="cite">[S88]</span></td>
+          <td>中（&lt;10Mbps）</td>
+          <td><b style="color:#16a34a">最优综合方案</b></td>
+          <td><span class="badge badge-a">A级</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card-grid cols2" style="margin-bottom:1rem;">
+    <div class="card">
+      <b style="color:var(--primary);display:block;margin-bottom:.75rem;">关键性能指标（含置信度）</b>
+      <table>
+        <thead><tr><th>指标</th><th>LTE现状</th><th>5G目标</th><th>置信度</th></tr></thead>
+        <tbody>
+          <tr><td>E2E延迟</td><td>20-50ms</td><td>&lt;10ms</td><td><span class="badge badge-a">A</span></td></tr>
+          <tr><td>PC5直连延迟</td><td>10-20ms</td><td>&lt;3ms</td><td><span class="badge badge-b">B</span></td></tr>
+          <tr><td>目标检测准确率(+RSU)</td><td>~85-90%</td><td>≥95%</td><td><span class="badge badge-b">B</span></td></tr>
+          <tr><td>定位精度(RTK增强)</td><td>0.3-0.5m</td><td>&lt;0.1m</td><td><span class="badge badge-b">B</span></td></tr>
+          <tr><td>感知距离提升（超视距）</td><td>盲区覆盖+40%</td><td>+70%</td><td><span class="badge badge-c">C⚠️</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <b style="color:var(--primary);display:block;margin-bottom:.75rem;">时空对齐核心挑战与解决方案</b>
+      <div style="font-size:.82rem;display:flex;flex-direction:column;gap:.5rem;">
+        <div style="background:#f8fafc;border-radius:6px;padding:.5rem .75rem;border-left:3px solid var(--secondary);">
+          <b>卡尔曼滤波时序对齐</b><br>解决路侧数据异步问题 · 东风 <span class="cite">[S85]</span>
+        </div>
+        <div style="background:#f8fafc;border-radius:6px;padding:.5rem .75rem;border-left:3px solid var(--accent);">
+          <b>Transformer特征对齐</b><br>跨模态异构特征融合 · 浙大 <span class="cite">[S88]</span>
+        </div>
+        <div style="background:#f8fafc;border-radius:6px;padding:.5rem .75rem;border-left:3px solid #7c3aed;">
+          <b>仿射变换雷达标定</b><br>路侧雷达坐标系校正 · 西安电子科大 <span class="cite">[S93]</span>
+        </div>
+        <div style="background:#f8fafc;border-radius:6px;padding:.5rem .75rem;border-left:3px solid #16a34a;">
+          <b>联邦学习个性化聚合</b><br>隐私保护联合训练 · 湘江实验室 <span class="cite">[S86]</span> <span style="font-size:.68rem;color:#16a34a;">2026最新</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.2 编队驾驶 -->
+  <div class="card">
+    <b style="color:var(--primary);font-size:1rem;display:block;margin-bottom:.75rem;">3.2 编队驾驶——场景分类与通信要求</b>
+    <div class="card-grid cols2">
+      <div>
+        <table>
+          <thead><tr><th>场景</th><th>技术需求</th><th>成熟度</th></tr></thead>
+          <tbody>
+            <tr><td>纯CAV编队</td><td>V2V+云端调度</td><td>示范阶段</td></tr>
+            <tr><td>混合编队（人/机）</td><td>V2V+V2I+预测</td><td>技术验证</td></tr>
+            <tr style="background:#f0fdf4;"><td><b style="color:#16a34a">轻型商用车城配 ⭐</b></td><td>低速+停靠协同</td><td><b style="color:#16a34a">试点阶段</b></td></tr>
+            <tr><td>高速物流编队</td><td>高速V2V+主从控制</td><td>商业示范</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <table>
+          <thead><tr><th>指标</th><th>LTE现状</th><th>要求值</th><th>达标</th></tr></thead>
+          <tbody>
+            <tr><td>V2V延迟（城区编队）</td><td>20ms</td><td>≤30ms</td><td class="check">✅</td></tr>
+            <tr><td>V2V延迟（高速编队）</td><td>20ms</td><td>≤10ms</td><td class="warn">⚠️边缘</td></tr>
+            <tr><td>消息频率</td><td>10Hz</td><td>≥10Hz</td><td class="check">✅</td></tr>
+            <tr><td>通信距离</td><td>~300m</td><td>≥200m</td><td class="check">✅</td></tr>
+            <tr><td>定位精度（城区）</td><td>0.3-0.5m</td><td>≤0.5m</td><td class="check">✅</td></tr>
+          </tbody>
+        </table>
+        <div class="alert alert-warn" style="margin-top:.5rem;font-size:.75rem;"><span class="cite">[S25]</span> 高速编队（≤10ms）需升级至5G NR-V2X才能稳定达标</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Section 4: 分阶段指标路线图 -->
+<section id="roadmap">
+  <div class="section-title"><span class="num">4</span>分阶段技术指标路线图（2026 / 2028 / 2030）</div>
+
+  <!-- 可视化指标进度条 -->
+  <div class="card" style="margin-bottom:1rem;">
+    <b style="color:var(--primary);display:block;margin-bottom:1rem;">关键指标演进可视化</b>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;">
+
+      <div>
+        <div style="font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:.5rem;">📡 C-V2X新车渗透率</div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>2025年现状 ~3%</span><span class="badge badge-c">C级估算</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:6%;background:#64748b;"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>2026年目标 ≥7.5%</span><span class="badge badge-a">A级</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:15%;background:#16a34a;"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>2028年目标 ≥25%</span><span class="badge badge-b">B级</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:50%;background:#2563eb;"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>2030年目标 ≥50%</span><span class="badge badge-b">B级</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:100%;background:#7c3aed;"></div></div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:.5rem;">⚡ E2E延迟（越低越好）</div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>2025年 20-50ms</span><span class="badge badge-a">A级</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:100%;background:#dc2626;"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>2026年 ≤30ms</span><span class="badge badge-a">A级</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:60%;background:#d97706;"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>2028年 ≤10ms</span><span class="badge badge-b">B级</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:20%;background:#2563eb;"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>2030年 ≤5ms</span><span class="badge badge-b">B级</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:10%;background:#16a34a;"></div></div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:.5rem;">🎯 目标检测准确率</div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>2025年 ~85%</span><span class="badge badge-b">B级</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:85%;background:#64748b;"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>2026年 ≥90%</span><span class="badge badge-b">B级</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:90%;background:#d97706;"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>2028年 ≥95%</span><span class="badge badge-b">B级</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:95%;background:#2563eb;"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>2030年 ≥99%</span><span class="badge badge-b">B级</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:99%;background:#16a34a;"></div></div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:.5rem;">🚛 编队车间距（80km/h）</div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>2025年 30-50m</span><span class="badge badge-c">C级</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:100%;background:#64748b;"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>2026年 20-30m</span><span class="badge badge-b">B级</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:60%;background:#d97706;"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>2028年 15-20m</span><span class="badge badge-b">B级</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:40%;background:#2563eb;"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>2030年 8-15m</span><span class="badge badge-b">B级</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:20%;background:#16a34a;"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 三阶段卡片 -->
+  <div class="phase-grid">
+    <div class="phase-card">
+      <div class="phase-header" style="background:linear-gradient(135deg,#1e40af,#3b82f6);">🚀 2026年 — 规模示范期 <span class="phase-badge" style="background:rgba(255,255,255,.2);color:#fff;">A级</span></div>
+      <div class="phase-body">
+        <ul>
+          <li>LTE-V2X为主，5G NR-V2X新车开始搭载</li>
+          <li>GB强制性标准（44495/44496/44497）落地 <span class="cite">[S68]</span></li>
+          <li>协同预警/GLOSA全量上线</li>
+          <li>城配低速编队（≤3车）试点 <span class="cite">[S34]</span></li>
+          <li>渗透率：≥7.5% · 延迟：≤30ms · 准确率：≥90%</li>
+        </ul>
+      </div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-header" style="background:linear-gradient(135deg,#0369a1,#0ea5e9);">📈 2028年 — 规模应用期 <span class="phase-badge" style="background:rgba(255,255,255,.2);color:#fff;">B级</span></div>
+      <div class="phase-body">
+        <ul>
+          <li>5G NR-V2X成为新车主流通信模式</li>
+          <li>混合智能编队商业运营（城配3-5车、高速2-4车）</li>
+          <li>园区/港口L4编队（封闭区域）规模化</li>
+          <li>云端调度接管30%+城配运力 <span class="cite">[S34]</span></li>
+          <li>渗透率：≥25% · 延迟：≤10ms · 准确率：≥95%</li>
+        </ul>
+      </div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-header" style="background:linear-gradient(135deg,#065f46,#10b981);">🌟 2030年 — 全面普及期 <span class="phase-badge" style="background:rgba(255,255,255,.2);color:#fff;">B级</span></div>
+      <div class="phase-body">
+        <ul>
+          <li>5G-V2X新车渗透≥50%（商用车率先≥60%）</li>
+          <li>L4商用车队开放道路规模运营</li>
+          <li>城市级物流协同调度（覆盖10万+辆）</li>
+          <li>全国主要城市V2X基础设施全覆盖 <span class="cite">[S35]</span></li>
+          <li>渗透率：≥50% · 延迟：≤5ms · 准确率：≥99%</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 5: 落地路径 -->
+<section id="landing">
+  <div class="section-title"><span class="num">5</span>落地路径与商业化场景</div>
+
+  <div class="card" style="margin-bottom:1rem;">
+    <b style="color:var(--primary);display:block;margin-bottom:.75rem;">场景优先级矩阵</b>
+    <table>
+      <thead><tr><th>场景</th><th>成熟度</th><th>技术难度</th><th>政策支持</th><th>优先级</th></tr></thead>
+      <tbody>
+        <tr style="background:#fef2f2;"><td><b>城配物流无人配送</b></td><td>★★★★☆</td><td>★★☆☆☆</td><td>★★★★★</td><td><span class="tag-p0">P0 最高</span></td></tr>
+        <tr style="background:#fef2f2;"><td><b>园区/港口封闭编队</b></td><td>★★★★☆</td><td>★★★☆☆</td><td>★★★★☆</td><td><span class="tag-p0">P0 最高</span></td></tr>
+        <tr style="background:#fff7ed;"><td>城区协同调度</td><td>★★★☆☆</td><td>★★★☆☆</td><td>★★★★☆</td><td><span class="tag-p1">P1 高</span></td></tr>
+        <tr style="background:#fff7ed;"><td>V2I优先通行（GLOSA）</td><td>★★★☆☆</td><td>★★☆☆☆</td><td>★★★★★</td><td><span class="tag-p1">P1 高</span></td></tr>
+        <tr style="background:#fefce8;"><td>高速混合智能编队</td><td>★★☆☆☆</td><td>★★★★☆</td><td>★★★☆☆</td><td><span class="tag-p2">P2 中</span></td></tr>
+        <tr><td>开放道路L4编队</td><td>★☆☆☆☆</td><td>★★★★★</td><td>★★★☆☆</td><td><span class="tag-p3">P3 低</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card-grid cols2" style="margin-bottom:1rem;">
+    <div class="card">
+      <b style="color:var(--primary);display:block;margin-bottom:.75rem;">典型落地案例（2024-2025）</b>
+      <div style="display:flex;flex-direction:column;gap:.5rem;font-size:.82rem;">
+        <div style="background:#eff6ff;border-radius:6px;padding:.5rem .75rem;">🗺️ <b>山东省</b>：2027年前部署&gt;1.5万辆低速无人配送车 <span class="cite">[S39]</span></div>
+        <div style="background:#f0fdf4;border-radius:6px;padding:.5rem .75rem;">🌆 <b>苏州市</b>：2026年前≥1,600辆无人配送车，覆盖全市 <span class="cite">[S39]</span></div>
+        <div style="background:#fef3c7;border-radius:6px;padding:.5rem .75rem;">🏙️ <b>遂宁市</b>：2025年底200辆冷藏/快递无人配送车 <span class="cite">[S40]</span></div>
+        <div style="background:#fdf4ff;border-radius:6px;padding:.5rem .75rem;">⚓ <b>天津/上海洋山港口</b>：C-V2X RSU已部署，无人集卡商业运营 <span class="cite">[S39]</span></div>
+        <div style="background:#fef2f2;border-radius:6px;padding:.5rem .75rem;">🏭 <b>钢铁/矿山园区</b>：工厂狭长道路双端对射协同感知 <span class="cite">[S86]</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <b style="color:var(--primary);display:block;margin-bottom:.75rem;">商业化三步走路径</b>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2025-2026 · 基础层</div>
+          <div class="tl-body">
+            <span class="tl-tag">OBU上车</span><span class="tl-tag">RSU部署</span><span class="tl-tag">数据闭环</span><br>
+            OBU标准化上车+RSU规模部署+车路云数据闭环建立
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2026-2028 · 应用层</div>
+          <div class="tl-body">
+            <span class="tl-tag">园区商业运营</span><span class="tl-tag">城配低速编队</span><br>
+            园区/港口/低速城配商业运营，形成ROI正循环
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2028-2030 · 规模层</div>
+          <div class="tl-body">
+            <span class="tl-tag">城市级调度</span><span class="tl-tag">开放道路L4</span><br>
+            城市级协同调度平台，开放道路L4编队规模落地
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Section 6: 竞品对标 -->
+<section id="competitor">
+  <div class="section-title"><span class="num">6</span>竞品对标分析</div>
+  <div class="competitor-grid" style="margin-bottom:1rem;">
+    <div class="comp-card tier1">
+      <div class="comp-name">华为</div>
+      <div class="comp-type">通信设备商 · 全栈方案</div>
+      <div class="comp-stars">★★★★★</div>
+      <div style="font-size:.8rem;margin-top:.5rem;color:var(--text);">全栈5G+C-V2X端云一体，华为iRSU（AI增强），智慧物流（轻卡+配送车）</div>
+      <div class="comp-tags">
+        <span class="comp-tag">5G全栈</span><span class="comp-tag">iRSU</span><span class="comp-tag">MDC系列</span><span class="comp-tag">云平台</span>
+      </div>
+    </div>
+    <div class="comp-card tier1">
+      <div class="comp-name">大唐高鸿</div>
+      <div class="comp-type">通信设备商 · RSU+OBU专家</div>
+      <div class="comp-stars">★★★★☆</div>
+      <div style="font-size:.8rem;margin-top:.5rem;color:var(--text);">国内RSU最大供应商，PC5直连专家，轻型商用车OBU模组量产</div>
+      <div class="comp-tags">
+        <span class="comp-tag">PC5直连</span><span class="comp-tag">RSU Pro</span><span class="comp-tag">OBU量产</span>
+      </div>
+    </div>
+    <div class="comp-card tier1">
+      <div class="comp-name">高通</div>
+      <div class="comp-type">芯片商 · 平台赋能</div>
+      <div class="comp-stars">★★★★☆</div>
+      <div style="font-size:.8rem;margin-top:.5rem;color:var(--text);">9150 C-V2X芯片平台，全球覆盖，通过Tier1间接供货商用车市场</div>
+      <div class="comp-tags">
+        <span class="comp-tag">9150芯片</span><span class="comp-tag">全球覆盖</span><span class="comp-tag">Tier1生态</span>
+      </div>
+    </div>
+    <div class="comp-card tier2">
+      <div class="comp-name">东风汽车</div>
+      <div class="comp-type">整车OEM · 自研方案</div>
+      <div class="comp-stars">★★★☆☆</div>
+      <div style="font-size:.8rem;margin-top:.5rem;color:var(--text);">自主协同感知专利（CN116853284A），轻型商用车自有平台集成</div>
+      <div class="comp-tags">
+        <span class="comp-tag">自主专利</span><span class="comp-tag">协同感知</span><span class="comp-tag">卡尔曼对齐</span>
+      </div>
+    </div>
+    <div class="comp-card tier2">
+      <div class="comp-name">浙江大学</div>
+      <div class="comp-type">科研机构 · 技术授权</div>
+      <div class="comp-stars">★★★★☆</div>
+      <div style="font-size:.8rem;margin-top:.5rem;color:var(--text);">特征-结果融合专利（CN116958763B，被引13次），技术授权商业化路径</div>
+      <div class="comp-tags">
+        <span class="comp-tag">混合融合</span><span class="comp-tag">被引13次</span><span class="comp-tag">授权</span>
+      </div>
+    </div>
+    <div class="comp-card tier3">
+      <div class="comp-name">一汽集团</div>
+      <div class="comp-type">整车OEM · 试点部署</div>
+      <div class="comp-stars">★★★☆☆</div>
+      <div style="font-size:.8rem;margin-top:.5rem;color:var(--text);">车路协同数据处理专利，商用车C-V2X试点项目布局</div>
+      <div class="comp-tags">
+        <span class="comp-tag">数据处理</span><span class="comp-tag">C-V2X试点</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <b style="color:var(--primary);display:block;margin-bottom:.75rem;">华为 vs 大唐高鸿 vs 高通 深度对标 <span class="cite">[S51]</span><span class="cite">[S52]</span></b>
+    <table>
+      <thead><tr><th>维度</th><th>🔵 华为</th><th>🟣 大唐高鸿</th><th>🟢 高通</th></tr></thead>
+      <tbody>
+        <tr><td>技术路线</td><td>全栈5G+C-V2X</td><td>PC5直连专注+RSU生态</td><td>芯片平台赋能生态</td></tr>
+        <tr><td>OBU产品</td><td>MDC系列（含C-V2X）</td><td>V2X-OBU T-BOX</td><td>9150芯片→Tier1集成</td></tr>
+        <tr><td>RSU产品</td><td>华为iRSU（AI增强）</td><td>RSU Pro系列</td><td>不直接生产</td></tr>
+        <tr><td>云平台</td><td>车路协同云管理平台</td><td>V2X运营管理系统</td><td>无独立云平台</td></tr>
+        <tr><td>商用车覆盖</td><td>华为智慧物流</td><td>大量OBU改装项目</td><td>通过合作伙伴</td></tr>
+        <tr><td>综合评级</td><td><span class="badge badge-a">★★★★★</span></td><td><span class="badge badge-b">★★★★☆</span></td><td><span class="badge badge-b">★★★★☆</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:1rem;">
+    <b style="color:var(--primary);display:block;margin-bottom:.75rem;">专利技术竞争格局（基于本次20条专利样本）</b>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;">
+      <div style="text-align:center;background:#eff6ff;border-radius:8px;padding:.75rem;">
+        <div style="font-size:1.8rem;font-weight:800;color:var(--secondary);">14</div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:.2rem;">高校/科研院所<br><small>浙大/北理工/华中科大/上交大</small></div>
+        <div style="font-size:.72rem;color:var(--secondary);margin-top:.3rem;">主导算法创新</div>
+      </div>
+      <div style="text-align:center;background:#f0fdf4;border-radius:8px;padding:.75rem;">
+        <div style="font-size:1.8rem;font-weight:800;color:#16a34a;">2</div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:.2rem;">整车OEM<br><small>东风/一汽</small></div>
+        <div style="font-size:.72rem;color:#16a34a;margin-top:.3rem;">车端集成应用</div>
+      </div>
+      <div style="text-align:center;background:#fef3c7;border-radius:8px;padding:.75rem;">
+        <div style="font-size:1.8rem;font-weight:800;color:#d97706;">2</div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:.2rem;">系统集成商<br><small>理工雷科智途等</small></div>
+        <div style="font-size:.72rem;color:#d97706;margin-top:.3rem;">行业场景应用</div>
+      </div>
+      <div style="text-align:center;background:#fdf4ff;border-radius:8px;padding:.75rem;">
+        <div style="font-size:1.8rem;font-weight:800;color:#7c3aed;">2</div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:.2rem;">科技企业<br><small>深圳新创中天等</small></div>
+        <div style="font-size:.72rem;color:#7c3aed;margin-top:.3rem;">设备系统</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 7: 政策法规 -->
+<section id="policy">
+  <div class="section-title"><span class="num">7</span>政策法规与标准体系</div>
+  <div class="card" style="margin-bottom:1rem;">
+    <b style="color:var(--primary);display:block;margin-bottom:.75rem;">核心政策文件（按置信度排序）</b>
+    <table>
+      <thead><tr><th>文件</th><th>发布机构</th><th>时间</th><th>核心内容</th><th>置信度</th></tr></thead>
+      <tbody>
+        <tr><td>车路云一体化应用试点通知</td><td>工信部等五部委</td><td>2024.01</td><td>20城试点，公共领域车辆OBU要求 <span class="cite">[S14]</span></td><td><span class="badge badge-a">A级</span></td></tr>
+        <tr><td>5G/C-V2X高质量发展行动计划</td><td>工信部</td><td>2024-2025</td><td>2026年7.5%渗透率，2030年50%目标 <span class="cite">[S34]</span></td><td><span class="badge badge-a">A级</span></td></tr>
+        <tr style="background:#fef2f2;"><td><b>GB 44495/44496/44497-2024</b></td><td>国标委</td><td>2024.08<br>（2026.01实施）</td><td>信息安全、OTA、数据记录强制要求 <span class="cite">[S68]</span></td><td><span class="badge badge-a">A级 🚨</span></td></tr>
+        <tr><td>2024版C-NCAP纳入C-V2X</td><td>中汽研</td><td>2024.07</td><td>市场驱动OEM主动上车 <span class="cite">[S14]</span></td><td><span class="badge badge-a">A级</span></td></tr>
+        <tr><td>C-V2X直连通信国家标准</td><td>国标委</td><td>2025.02</td><td>规范PC5直连通信技术要求 <span class="cite">[S1]</span></td><td><span class="badge badge-b">B级</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="alert alert-danger">🚨 <b>2026年1月1日</b>：GB44495/44496/44497三项强制性国标正式实施，OEM必须完成OBU供应链决策——<b>窗口仅剩约7个月</b> <span class="cite">[S68]</span></div>
+</section>
+
+<!-- Section 8: 技术差距 -->
+<section id="gap">
+  <div class="section-title"><span class="num">8</span>技术差距评估与行业布局建议</div>
+  <div class="card">
+    <b style="color:var(--primary);display:block;margin-bottom:.75rem;">轻型商用车OEM技术差距矩阵</b>
+    <table>
+      <thead><tr><th>领域</th><th>行业前沿</th><th>轻型商用车OEM通用现状</th><th>差距</th></tr></thead>
+      <tbody>
+        <tr><td>V2X通信模组</td><td>5G NR-V2X R17量产 <span class="cite">[S1]</span></td><td>LTE-V2X试点搭载</td><td><span style="color:#d97706;font-weight:700;">落后1代</span></td></tr>
+        <tr><td>协同感知算法</td><td>特征-结果混合级融合 <span class="cite">[S88]</span></td><td>结果级融合为主</td><td><span style="color:#d97706;font-weight:700;">落后1-1.5代</span></td></tr>
+        <tr><td>编队控制</td><td>混合智能编队5车 <span class="cite">[S25]</span></td><td>2-3车低速示范</td><td><span style="color:#d97706;font-weight:700;">落后1代</span></td></tr>
+        <tr><td>云端协同调度</td><td>城市级万辆平台 <span class="cite">[S39]</span></td><td>单园区试点</td><td><span style="color:#dc2626;font-weight:700;">落后1-2代</span></td></tr>
+        <tr><td>专利储备</td><td>系统性感知融合专利组合</td><td>少量/跟随布局</td><td><span style="color:#dc2626;font-weight:700;">明显不足</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<!-- Section 9: 综合分析 -->
+<section id="synthesis">
+  <div class="section-title"><span class="num">9</span>综合分析</div>
+  <div class="card-grid cols2" style="margin-bottom:1rem;">
+    <div class="card">
+      <b style="color:var(--primary);display:block;margin-bottom:.75rem;">政策-技术-场景三角驱动模型</b>
+      <div style="display:flex;justify-content:center;align-items:center;padding:1rem 0;">
+        <div style="position:relative;width:260px;height:220px;">
+          <!-- 三角顶点 -->
+          <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1a3a6b,#2563eb);color:#fff;padding:.5rem .9rem;border-radius:8px;font-size:.78rem;font-weight:700;text-align:center;white-space:nowrap;">
+            🏛️ 政策层（D7）<br><small style="font-weight:400;">GB标准·五部委试点</small>
+          </div>
+          <div style="position:absolute;bottom:0;left:0;background:linear-gradient(135deg,#065f46,#10b981);color:#fff;padding:.5rem .75rem;border-radius:8px;font-size:.78rem;font-weight:700;text-align:center;">
+            ⚡ 技术层（D1+D2）<br><small style="font-weight:400;">5G NR·混合融合</small>
+          </div>
+          <div style="position:absolute;bottom:0;right:0;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;padding:.5rem .75rem;border-radius:8px;font-size:.78rem;font-weight:700;text-align:center;">
+            🏭 场景层（D5）<br><small style="font-weight:400;">城配·园区·港口</small>
+          </div>
+          <!-- 中心 -->
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-30%);background:#fff;border:2px solid var(--secondary);border-radius:50%;width:56px;height:56px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:var(--secondary);text-align:center;">共振<br>驱动</div>
+        </div>
+      </div>
+      <div class="alert alert-success" style="margin-top:.5rem;font-size:.8rem;">三角同步共振强度高，<b>2025-2027年是黄金窗口期</b></div>
+    </div>
+    <div class="card">
+      <b style="color:var(--primary);display:block;margin-bottom:.75rem;">五大核心结论</b>
+      <div style="display:flex;flex-direction:column;gap:.55rem;font-size:.82rem;">
+        <div style="background:#fef2f2;border-radius:6px;padding:.55rem .75rem;border-left:3px solid #dc2626;">
+          <b style="color:#dc2626;">① OBU上车是必选项</b><br>2026年强制标准+C-NCAP双驱动，OEM必须完成供应链决策 <span class="cite">[S68]</span>
+        </div>
+        <div style="background:#eff6ff;border-radius:6px;padding:.55rem .75rem;border-left:3px solid var(--secondary);">
+          <b style="color:var(--secondary);">② 协同感知算法是护城河</b><br>融合层次和延迟指标是系统竞争力核心 <span class="cite">[S88]</span>
+        </div>
+        <div style="background:#fef3c7;border-radius:6px;padding:.55rem .75rem;border-left:3px solid #d97706;">
+          <b style="color:#d97706;">③ 编队需生态协同</b><br>单一OEM无法独立推进，需与RSU供应商+货运平台建立联盟 <span class="cite">[S25]</span>
+        </div>
+        <div style="background:#f0fdf4;border-radius:6px;padding:.55rem .75rem;border-left:3px solid #16a34a;">
+          <b style="color:#16a34a;">④ 轻商比乘用车ROI逻辑更强</b><br>运营高频、路线固定、降本增效刚需 <span class="cite">[S25]</span>
+        </div>
+        <div style="background:#fdf4ff;border-radius:6px;padding:.55rem .75rem;border-left:3px solid #7c3aed;">
+          <b style="color:#7c3aed;">⑤ 专利布局窗口关闭在即</b><br>2022-2026年申请密集期，应尽快在感知融合算法领域完成自主专利申请
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <b style="color:var(--primary);display:block;margin-bottom:.75rem;">战略建议总结</b>
+    <div style="font-size:.84rem;color:var(--text);line-height:1.8;padding:.5rem;background:#f8fafc;border-radius:8px;border:1px solid var(--border);">
+      以<b>「场景定技术路线、技术护生态位」</b>为逻辑：
+      <br>• <b>2026年前</b>：完成标准合规（GB强制）+ 封闭场景落地 + 专利布局
+      <br>• <b>2028年前</b>：演进至城市开放场景混合编队，确立细分市场技术标准制定权
+      <br>• <b>2030年前</b>：构建基于C-V2X数据流的运营智能服务能力，形成差异化竞争壁垒
+    </div>
+  </div>
+</section>
+
+<!-- Section 10: 局限声明 -->
+<section id="limit">
+  <div class="section-title"><span class="num">10</span>局限声明</div>
+  <div class="card">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.75rem;">
+      <div class="alert alert-warn">
+        <div>⚠️ <b>覆盖度局限</b><br>竞品对标缺乏国际企业官方技术白皮书；编队驾驶缺乏实测商业运营数据。D6置信度相对较低。</div>
+      </div>
+      <div class="alert alert-warn">
+        <div>⚠️ <b>时效性局限</b><br>数据截止2026年5月22日；C-V2X标准更新频繁，部分参数可能已被最新版本更新。</div>
+      </div>
+      <div class="alert alert-warn">
+        <div>⚠️ <b>来源可信度局限</b><br>6条C级来源中的感知精度/调度时延数字未经独立验证，文中已逐项标注置信度等级。</div>
+      </div>
+      <div class="alert alert-warn">
+        <div>⚠️ <b>偏见风险</b><br>中文来源占比&gt;80%，欧洲ETSI/美国DSRC视角覆盖不足；专利检索仅覆盖CN管辖。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 11: 参考文献 -->
+<section id="refs">
+  <div class="section-title"><span class="num">11</span>参考文献</div>
+  <div class="card">
+    <div style="font-size:.82rem;font-weight:700;color:var(--primary);margin-bottom:.75rem;">🟢 A级来源（高置信度）</div>
+    <ul class="source-list">
+      <li><span class="source-id">[S1]</span><div>工信部/国标委. <i>GB/T C-V2X直连通信国家标准</i>. 2025-02-28 · rngstrategyconsulting.com</div></li>
+      <li><span class="source-id">[S14]</span><div>工信部等五部委. <i>「车路云一体化」应用试点通知</i>. 2024-01 · pday.com.cn</div></li>
+      <li><span class="source-id">[S34]</span><div>工信部. <i>智能网联汽车5G/C-V2X高质量发展行动计划（2026-2030）</i>. 2024-2025 · cictci.com</div></li>
+      <li><span class="source-id">[S68]</span><div>国标委. <i>GB44495/44496/44497-2024三项强制性标准</i>. 2024-08-23（2026年1月实施）· news.cn</div></li>
+      <li><span class="source-id">[S88]</span><div>浙江大学. <i>CN116958763B 特征-结果级融合的车路协同感知方法</i>. 申请2023-05-04，授权2024-06-18，被引13次 · <a href="https://eureka.zhihuiya.com/view/#/fullText?patentId=dda08dbf-ca95-4df3-ba4d-8cdd88c40fd9" target="_blank" style="color:var(--secondary);">查看专利</a></div></li>
+    </ul>
+
+    <div style="font-size:.82rem;font-weight:700;color:var(--primary);margin:.75rem 0 .5rem;">🔵 B级来源（中置信度）</div>
+    <ul class="source-list">
+      <li><span class="source-id">[S25]</span><div>CICTCI. <i>2024车路云一体化C-V2X典型应用场景及实施参考报告</i>. 2024 · cictci.com</div></li>
+      <li><span class="source-id">[S26]</span><div>佐思汽研. <i>2025年车路云一体化和C-V2X行业研究报告</i>. 2025 · sina.cn</div></li>
+      <li><span class="source-id">[S35]</span><div>行业研究. <i>车路云一体化C-V2X分阶段发展规划解读</i>. 2024 · dfcfw.com</div></li>
+      <li><span class="source-id">[S39]</span><div>新华社. <i>C-V2X无人配送/港口商业落地案例汇编</i>. 2024-2025 · news.cn</div></li>
+      <li><span class="source-id">[S51]</span><div>中国信通院. <i>2024年中国C-V2X市场竞争格局</i>. 2024 · china-cic.cn</div></li>
+      <li><span class="source-id">[S85]</span><div>东风汽车. <i>CN116853284A 一种车路协同感知融合方法及系统</i>. 申请2023-05-23 · <a href="https://eureka.zhihuiya.com/view/#/fullText?patentId=a4081cba-31fe-438a-8b20-faf04353060e" target="_blank" style="color:var(--secondary);">查看专利</a></div></li>
+      <li><span class="source-id">[S86]</span><div>湘江实验室. <i>CN121786419A 车路协同感知方法（联邦学习）</i>. 2026最新 · <a href="https://eureka.zhihuiya.com/view/#/fullText?patentId=4b1a7994-51ea-455a-b5e7-a0df54c55755" target="_blank" style="color:var(--secondary);">查看专利</a></div></li>
+      <li><span class="source-id">[S94]</span><div>北京理工大学. <i>CN115578709B 车路协同的特征级协同感知融合方法</i>. · <a href="https://eureka.zhihuiya.com/view/#/fullText?patentId=3b0ea24b-5627-4c6e-b2a1-bc357c210e5f" target="_blank" style="color:var(--secondary);">查看专利</a></div></li>
+      <li><span class="source-id">[S93]</span><div>西安电子科技大学. <i>CN118330583A 基于仿射变换的车路协同感知雷达标定系统</i>. · <a href="https://eureka.zhihuiya.com/view/#/fullText?patentId=a818c210-532b-48f8-9210-6383f51dcec3" target="_blank" style="color:var(--secondary);">查看专利</a></div></li>
+    </ul>
+
+    <div style="font-size:.82rem;font-weight:700;color:var(--primary);margin:.75rem 0 .5rem;">🟡 C级来源（低置信度·已标注）</div>
+    <ul class="source-list">
+      <li><span class="source-id">[S2]</span><div>auto-talks.com. <i>C-V2X技术进展综述</i>. 2024（部分数据未核实）</div></li>
+      <li><span class="source-id">[S40]</span><div>shujubang.com. <i>2024-2025无人配送车市场规模统计</i>. 2024（汇总统计，来源未列明）</div></li>
+      <li><span class="source-id">[S52]</span><div>cictci.com. <i>车路云竞品技术方案汇总</i>. 2024（含厂商宣传口径数据）</div></li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <b style="color:#e2e8f0;">轻型商用车车路云一体化（C-V2X）技术应用研究报告</b><br>
+      编制：商品研发院·先行平台开发中心 · 2026-05-22<br>
+      情报框架：tech-intel-v25 · 置信度：中-高 · 专利来源：智慧芽 PatSnap
+    </div>
+    <div style="font-size:.72rem;color:#64748b;max-width:400px;">
+      ⚠️ 本报告基于公开情报综合分析，仅供内部研究参考。C级来源数据未经独立验证，引用时请注意置信度标注。数据截止2026年5月22日。
+    </div>
+  </div>
+</footer>
+</body>
+</html>

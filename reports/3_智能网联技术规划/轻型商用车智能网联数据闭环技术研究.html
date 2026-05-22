@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>轻型商用车智能网联数据闭环技术研究</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --primary: #1a56db;
+    --primary-dark: #1e429f;
+    --primary-light: #e8f0fe;
+    --secondary: #0e9f6e;
+    --secondary-light: #def7ec;
+    --accent: #ff8c00;
+    --accent-light: #fff3e0;
+    --danger: #e02424;
+    --danger-light: #fde8e8;
+    --warning: #c27803;
+    --warning-light: #fdf6b2;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-500: #6b7280;
+    --gray-700: #374151;
+    --gray-900: #111827;
+    --border-radius: 12px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+    background: #f0f4f8;
+    color: var(--gray-900);
+    line-height: 1.7;
+  }
+  /* ===== TOP HEADER ===== */
+  .report-header {
+    background: linear-gradient(135deg, #1a56db 0%, #1e429f 50%, #0e9f6e 100%);
+    padding: 56px 40px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .report-header::before {
+    content: '';
+    position: absolute; top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+  }
+  .report-header::after {
+    content: '';
+    position: absolute; bottom: -100px; left: 10%;
+    width: 300px; height: 300px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+  .header-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.9);
+    padding: 4px 14px; border-radius: 20px;
+    font-size: 12px; font-weight: 500;
+    margin-bottom: 18px;
+    backdrop-filter: blur(4px);
+  }
+  .header-title {
+    font-size: 34px; font-weight: 700;
+    color: #fff; line-height: 1.3;
+    margin-bottom: 12px; position: relative; z-index: 1;
+  }
+  .header-subtitle {
+    font-size: 16px; color: rgba(255,255,255,0.8);
+    margin-bottom: 28px; position: relative; z-index: 1;
+  }
+  .header-meta {
+    display: flex; flex-wrap: wrap; gap: 24px;
+    position: relative; z-index: 1;
+  }
+  .header-meta-item {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.12);
+    padding: 8px 16px; border-radius: 8px;
+    color: rgba(255,255,255,0.9); font-size: 13px;
+    backdrop-filter: blur(4px);
+  }
+  /* ===== NAV ===== */
+  .sticky-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #fff;
+    border-bottom: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-sm);
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; gap: 0; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-item {
+    padding: 14px 20px; white-space: nowrap;
+    font-size: 13px; font-weight: 500;
+    color: var(--gray-500); cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s; text-decoration: none;
+  }
+  .nav-item:hover, .nav-item.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+  }
+  /* ===== MAIN LAYOUT ===== */
+  .main-wrap { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+  .section { margin-bottom: 48px; }
+  .section-title {
+    font-size: 22px; font-weight: 700;
+    color: var(--gray-900); margin-bottom: 24px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-title-icon {
+    width: 36px; height: 36px;
+    background: var(--primary-light);
+    color: var(--primary);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  /* ===== CARDS ===== */
+  .card {
+    background: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 16px; font-weight: 600;
+    color: var(--gray-900); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  /* ===== KPI CARDS ===== */
+  .kpi-card {
+    background: #fff;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--gray-200);
+    padding: 20px; text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .kpi-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .kpi-num {
+    font-size: 36px; font-weight: 800;
+    line-height: 1; margin-bottom: 6px;
+  }
+  .kpi-label { font-size: 13px; color: var(--gray-500); }
+  .kpi-sub { font-size: 11px; color: var(--gray-500); margin-top: 4px; }
+  /* ===== CONFIDENCE BADGE ===== */
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: 12px;
+    font-size: 11px; font-weight: 600;
+  }
+  .badge-a { background: #d1fae5; color: #065f46; }
+  .badge-b { background: #dbeafe; color: #1e40af; }
+  .badge-c { background: #fef3c7; color: #92400e; }
+  .badge-high { background: #d1fae5; color: #065f46; }
+  .badge-mid { background: #dbeafe; color: #1e40af; }
+  .badge-low { background: #fef3c7; color: #92400e; }
+  /* ===== PROGRESS BAR ===== */
+  .progress-row { margin-bottom: 14px; }
+  .progress-label {
+    display: flex; justify-content: space-between;
+    font-size: 13px; margin-bottom: 6px;
+    color: var(--gray-700);
+  }
+  .progress-track {
+    height: 10px; background: var(--gray-100);
+    border-radius: 5px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 5px;
+    transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  /* ===== TIMELINE ===== */
+  .timeline { position: relative; padding-left: 0; }
+  .tl-item {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 20px; margin-bottom: 0;
+    position: relative;
+  }
+  .tl-year {
+    font-size: 22px; font-weight: 800;
+    color: var(--primary); text-align: right;
+    padding-top: 4px; line-height: 1;
+  }
+  .tl-body {
+    border-left: 3px solid var(--primary-light);
+    padding: 0 0 32px 24px;
+    position: relative;
+  }
+  .tl-body::before {
+    content: '';
+    position: absolute; left: -9px; top: 6px;
+    width: 14px; height: 14px;
+    background: var(--primary);
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 2px var(--primary);
+  }
+  .tl-title {
+    font-size: 16px; font-weight: 700;
+    color: var(--gray-900); margin-bottom: 12px;
+  }
+  .tl-metrics { display: flex; flex-direction: column; gap: 10px; }
+  .tl-metric {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: var(--gray-50); border-radius: 8px;
+    padding: 10px 14px;
+  }
+  .tl-metric-icon {
+    width: 28px; height: 28px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .tl-metric-text { font-size: 13px; color: var(--gray-700); line-height: 1.5; }
+  .tl-metric-value { font-weight: 700; color: var(--gray-900); }
+  /* ===== TABLE ===== */
+  .data-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px;
+  }
+  .data-table th {
+    background: var(--primary); color: #fff;
+    padding: 10px 14px; text-align: left;
+    font-weight: 600; font-size: 12px;
+  }
+  .data-table th:first-child { border-radius: 8px 0 0 0; }
+  .data-table th:last-child { border-radius: 0 8px 0 0; }
+  .data-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-700);
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--gray-50); }
+  .data-table tr:nth-child(even) td { background: var(--gray-50); }
+  /* ===== GAP INDICATOR ===== */
+  .gap-badge {
+    display: inline-block; padding: 2px 10px;
+    border-radius: 10px; font-size: 11px; font-weight: 700;
+  }
+  .gap-xl { background: #fee2e2; color: #991b1b; }
+  .gap-lg { background: #fef3c7; color: #92400e; }
+  .gap-md { background: #dbeafe; color: #1e40af; }
+  /* ===== ALERT BOXES ===== */
+  .alert {
+    border-radius: 8px; padding: 14px 16px;
+    margin-bottom: 12px; font-size: 13px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert-text { line-height: 1.6; }
+  .alert-high { background: #f0fdf4; border: 1px solid #86efac; color: #14532d; }
+  .alert-mid { background: #eff6ff; border: 1px solid #93c5fd; color: #1e3a8a; }
+  .alert-low { background: #fffbeb; border: 1px solid #fcd34d; color: #78350f; }
+  /* ===== CHART CONTAINER ===== */
+  .chart-wrap {
+    position: relative; padding: 20px;
+    background: #fff; border-radius: var(--border-radius);
+    border: 1px solid var(--gray-200); box-shadow: var(--shadow-sm);
+  }
+  .chart-title {
+    font-size: 14px; font-weight: 600;
+    color: var(--gray-700); margin-bottom: 16px;
+    text-align: center;
+  }
+  /* ===== TECH ARCH ===== */
+  .arch-layers { display: flex; flex-direction: column; gap: 3px; }
+  .arch-layer {
+    display: flex; align-items: stretch;
+    border-radius: 8px; overflow: hidden;
+  }
+  .arch-layer-label {
+    width: 100px; display: flex; align-items: center;
+    justify-content: center; font-size: 12px; font-weight: 700;
+    color: #fff; padding: 12px 8px; text-align: center;
+    flex-shrink: 0; line-height: 1.3;
+  }
+  .arch-layer-content {
+    flex: 1; padding: 12px 16px;
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  }
+  .arch-tag {
+    background: rgba(255,255,255,0.85);
+    border-radius: 5px; padding: 4px 10px;
+    font-size: 12px; color: var(--gray-700); font-weight: 500;
+  }
+  /* ===== ROADMAP TABS ===== */
+  .tabs { display: flex; gap: 4px; margin-bottom: 16px; }
+  .tab-btn {
+    padding: 8px 20px; border-radius: 6px;
+    border: 2px solid transparent;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    background: var(--gray-100); color: var(--gray-500);
+  }
+  .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  /* ===== COMPETITOR CARD ===== */
+  .comp-card {
+    background: #fff; border-radius: var(--border-radius);
+    border: 1px solid var(--gray-200); padding: 20px;
+    box-shadow: var(--shadow-sm); transition: all 0.2s;
+  }
+  .comp-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .comp-name {
+    font-size: 16px; font-weight: 700;
+    color: var(--gray-900); margin-bottom: 8px;
+  }
+  .comp-tag {
+    display: inline-block; font-size: 10px; font-weight: 600;
+    padding: 2px 8px; border-radius: 10px; margin-bottom: 12px;
+  }
+  .comp-tag-lv { background: #fee2e2; color: #991b1b; }
+  .comp-tag-lc { background: #dbeafe; color: #1e40af; }
+  .comp-row {
+    display: flex; justify-content: space-between;
+    font-size: 12px; padding: 5px 0;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-700);
+  }
+  .comp-row:last-child { border-bottom: none; }
+  .comp-row strong { color: var(--gray-900); }
+  /* ===== LIMITATION BOX ===== */
+  .limit-item {
+    background: #fff; border-radius: 8px;
+    border-left: 4px solid var(--warning);
+    padding: 14px 18px; margin-bottom: 12px;
+    box-shadow: var(--shadow-sm);
+  }
+  .limit-title {
+    font-weight: 700; font-size: 14px;
+    color: var(--warning); margin-bottom: 6px;
+  }
+  .limit-text { font-size: 13px; color: var(--gray-700); line-height: 1.6; }
+  /* ===== FOOTER ===== */
+  .report-footer {
+    background: var(--gray-900); color: rgba(255,255,255,0.7);
+    padding: 32px 40px; font-size: 12px; line-height: 1.8;
+    margin-top: 48px;
+  }
+  .footer-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; max-width: 1200px; margin: 0 auto; }
+  .footer-col-title { color: #fff; font-weight: 600; margin-bottom: 10px; font-size: 13px; }
+  /* ===== SCROLL TO TOP ===== */
+  #scrollTop {
+    position: fixed; bottom: 32px; right: 32px;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    border: none; cursor: pointer; font-size: 20px;
+    box-shadow: var(--shadow-md); z-index: 200;
+    display: none; align-items: center; justify-content: center;
+    transition: opacity 0.2s;
+  }
+  #scrollTop:hover { background: var(--primary-dark); }
+  /* ===== SOURCE CITATION ===== */
+  .source-pill {
+    display: inline-flex; align-items: center;
+    gap: 3px; padding: 2px 8px;
+    background: var(--primary-light); color: var(--primary);
+    border-radius: 10px; font-size: 11px; font-weight: 600;
+    cursor: default;
+  }
+  .source-pill:hover { background: var(--primary); color: #fff; }
+  @media (max-width: 768px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .header-title { font-size: 24px; }
+    .tl-item { grid-template-columns: 60px 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="report-header">
+  <div class="header-badge">🔬 技术情报研究报告 · tech-intel-v25</div>
+  <h1 class="header-title">轻型商用车智能网联<br>数据闭环技术研究</h1>
+  <p class="header-subtitle">数据采集 → 传输上云 → 清洗标注 → 算法训练 → 模型部署 → OTA反馈 · 全链路闭环技术深度分析</p>
+  <div class="header-meta">
+    <div class="header-meta-item">📅 编制日期：2026-05-22</div>
+    <div class="header-meta-item">🏢 商品研发院 · 先行平台开发中心</div>
+    <div class="header-meta-item">📊 来源：27条（专利20件 + 网络7路）</div>
+    <div class="header-meta-item">🎯 综合置信度：中</div>
+    <div class="header-meta-item">📌 报告版本：v1.0</div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="sticky-nav">
+  <div class="nav-inner">
+    <a class="nav-item active" href="#intel-quality">情报质量</a>
+    <a class="nav-item" href="#exec-summary">执行摘要</a>
+    <a class="nav-item" href="#methodology">研究方法论</a>
+    <a class="nav-item" href="#baseline">现状基线</a>
+    <a class="nav-item" href="#core-tech">核心关键技术</a>
+    <a class="nav-item" href="#roadmap">分阶段指标</a>
+    <a class="nav-item" href="#landing">落地路径</a>
+    <a class="nav-item" href="#competitor">竞品对标</a>
+    <a class="nav-item" href="#scenario">场景适配</a>
+    <a class="nav-item" href="#limitation">局限声明</a>
+    <a class="nav-item" href="#analysis">综合分析</a>
+  </div>
+</nav>
+
+<div class="main-wrap">
+
+<!-- ===================== SECTION 0: 情报质量概览 ===================== -->
+<section class="section" id="intel-quality">
+  <div class="section-title">
+    <div class="section-title-icon">📋</div>
+    情报质量概览
+  </div>
+
+  <!-- KPI Row -->
+  <div class="grid-4" style="margin-bottom:20px;">
+    <div class="kpi-card">
+      <div class="kpi-num" style="color:var(--primary);">27</div>
+      <div class="kpi-label">有效来源总数</div>
+      <div class="kpi-sub">专利20件 + 网络7路</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num" style="color:var(--secondary);">37%</div>
+      <div class="kpi-label">A级来源占比</div>
+      <div class="kpi-sub">基准≥40%（接近达标）</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num" style="color:var(--accent);">6/7</div>
+      <div class="kpi-label">维度覆盖达标数</div>
+      <div class="kpi-sub">D7（轻商场景）待补强</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num" style="color:var(--warning);">中</div>
+      <div class="kpi-label">综合置信度</div>
+      <div class="kpi-sub">核心论断均有A/B级支撑</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- 来源质量分布 -->
+    <div class="chart-wrap">
+      <div class="chart-title">来源质量分布（A/B/C级）</div>
+      <canvas id="chartSourceQuality" height="200"></canvas>
+    </div>
+    <!-- 维度覆盖情况 -->
+    <div class="chart-wrap">
+      <div class="chart-title">七个研究维度覆盖情况</div>
+      <canvas id="chartDimCoverage" height="200"></canvas>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px;">
+    <div class="card-title">📐 维度达标详情</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>维度</th><th>名称</th><th>类型</th><th>最低要求</th><th>达标状态</th><th>置信度</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>D1</td><td>数据闭环架构与现状基线</td><td>核心</td><td>≥11条</td><td>✅ 达标</td><td><span class="badge badge-high">高</span></td></tr>
+        <tr><td>D2</td><td>车端数据采集与感知技术</td><td>核心</td><td>≥11条</td><td>✅ 达标</td><td><span class="badge badge-high">高</span></td></tr>
+        <tr><td>D3</td><td>云端数据处理与算法迭代</td><td>核心</td><td>≥11条</td><td>✅ 达标</td><td><span class="badge badge-mid">中</span></td></tr>
+        <tr><td>D4</td><td>数据安全、隐私合规与法规</td><td>核心</td><td>≥11条</td><td>✅ 达标</td><td><span class="badge badge-high">高</span></td></tr>
+        <tr><td>D5</td><td>OTA软件升级闭环与数据反馈</td><td>普通</td><td>≥7条</td><td>✅ 达标</td><td><span class="badge badge-mid">中</span></td></tr>
+        <tr><td>D6</td><td>竞品对标</td><td>普通</td><td>≥7条</td><td>✅ 达标</td><td><span class="badge badge-mid">中</span></td></tr>
+        <tr><td>D7</td><td>轻型商用车特殊场景适配</td><td>普通</td><td>≥7条</td><td>⚠️ A级偏少</td><td><span class="badge badge-low">低-中</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== SECTION 1: 执行摘要 ===================== -->
+<section class="section" id="exec-summary">
+  <div class="section-title">
+    <div class="section-title-icon">⚡</div>
+    执行摘要
+  </div>
+  <div class="card" style="background: linear-gradient(135deg,#eff6ff,#f0fdf4); border-color: #93c5fd;">
+    <p style="font-size:15px; color:var(--gray-700); line-height:1.8; margin-bottom:16px;">
+      轻型商用车正经历从"传统电子化"向"数据驱动智能化"的关键跃迁。智能网联数据闭环是支撑这一跃迁的核心基础设施，其本质是
+      <strong>数据采集 → 传输上云 → 清洗标注 → 算法训练 → 模型部署 → OTA反馈</strong>的持续迭代飞轮。
+    </p>
+  </div>
+  <div style="margin-top:16px; display:flex; flex-direction:column; gap:12px;">
+    <div class="alert alert-high"><span class="alert-icon">🔒</span><div class="alert-text"><strong>【高置信度】合规刚需：</strong>GB 44496-2024已于2025年强制实施，OTA能力合规认证是法律义务，需立即启动。<span class="source-pill">S31</span> <span class="source-pill">S46</span></div></div>
+    <div class="alert alert-high"><span class="alert-icon">🏗️</span><div class="alert-text"><strong>【高置信度】架构共识已成型：</strong>2024-2025年"车路云一体化"成为行业共识架构，车端采集+边缘计算+云端训练的三层体系逐步落地。<span class="source-pill">S1</span></div></div>
+    <div class="alert alert-mid"><span class="alert-icon">🚀</span><div class="alert-text"><strong>【中置信度】飞轮差距悬殊：</strong>特斯拉/华为/小鹏数据飞轮已进入快速加速阶段，轻型商用车主机厂数据量、标注量均落后数量级，2026年前必须完成基础设施补课。<span class="source-pill">S87</span></div></div>
+    <div class="alert alert-mid"><span class="alert-icon">🪟</span><div class="alert-text"><strong>【中置信度】场景窗口期：</strong>乘用车OEM在轻商专属场景（低速/装卸/冷链）无数据积累，2026-2028年是构建差异化数据护城河的战略窗口期。<span class="source-pill">S114</span></div></div>
+    <div class="alert alert-mid"><span class="alert-icon">📈</span><div class="alert-text"><strong>【中置信度】OTA渗透率快速提升但商用车滞后：</strong>2024年乘用车OTA装配率达71.7%，商用车前装智能网联渗透率预计2025年超80%，但数据反馈闭环能力尚弱。<span class="source-pill">S46</span></div></div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 2: 研究背景与方法论 ===================== -->
+<section class="section" id="methodology">
+  <div class="section-title">
+    <div class="section-title-icon">🔬</div>
+    研究背景与方法论
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🎯 研究范围</div>
+      <ul style="font-size:13px; color:var(--gray-700); padding-left:18px; line-height:2;">
+        <li>GVW ≤ 6吨：微卡、轻卡、城配箱式车、轻型特种车辆</li>
+        <li>车端感知数据采集（摄像头/毫米波雷达/CAN/GNSS/行驶记录仪）</li>
+        <li>车-云数据传输通道（4G/5G/V2X）</li>
+        <li>云端数据治理与算法训练平台</li>
+        <li>OTA软件升级与模型反馈机制</li>
+        <li>数据安全、隐私合规与法规体系</li>
+        <li>主要竞品数据闭环方案对标（乘用车OEM及Tier1）</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 来源评级标准（tech-intel-v25五级）</div>
+      <div class="progress-row">
+        <div class="progress-label"><span>🔴 A+级（90-100）行业官方报告/政策文件原文</span><span>→ A级</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:90%;background:var(--secondary);"></div></div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label"><span>🟠 A级（80-89）权威媒体深度/企业官方公告/专利库</span><span>→ A级</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:80%;background:#34d399;"></div></div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label"><span>🟡 B+级（70-79）行业垂直媒体/高知名度博主</span><span>→ B级</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:70%;background:var(--primary);"></div></div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label"><span>🔵 B级（60-69）普通媒体报道/技术博客</span><span>→ B级</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:60%;background:#60a5fa;"></div></div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label"><span>⚪ C级（&lt;60）无法验证/营销内容/过时信息</span><span>→ C级</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:40%;background:var(--gray-300);"></div></div>
+      </div>
+      <div style="margin-top:12px; padding:12px; background:var(--warning-light); border-radius:8px; font-size:12px; color:var(--warning);">
+        ⚠️ 本报告综合置信度：<strong>中</strong>。A级来源37%，略低于深度研究级40%基准。D7维度一手权威资料稀缺，相关结论请保持审慎。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 3: 现状基线 ===================== -->
+<section class="section" id="baseline">
+  <div class="section-title">
+    <div class="section-title-icon">📡</div>
+    现状基线：数据闭环架构（2024-2025）
+  </div>
+
+  <!-- 架构示意 -->
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-title">🏗️ 五层闭环体系架构（车路云一体化）</div>
+    <div class="arch-layers">
+      <div class="arch-layer" style="background:#dbeafe20;">
+        <div class="arch-layer-label" style="background:var(--primary);">车端层<br>Edge</div>
+        <div class="arch-layer-content" style="background:#eff6ff;">
+          <span class="arch-tag">📷 前视摄像头</span>
+          <span class="arch-tag">🔭 360°环视</span>
+          <span class="arch-tag">📡 毫米波雷达77GHz</span>
+          <span class="arch-tag">🛰️ GNSS/IMU</span>
+          <span class="arch-tag">🔌 CAN总线信号</span>
+          <span class="arch-tag">👁️ DMS驾驶员监控</span>
+          <span class="arch-tag">📦 货物装载传感</span>
+        </div>
+      </div>
+      <div style="text-align:center; font-size:20px; color:var(--primary); padding:4px;">↕</div>
+      <div class="arch-layer">
+        <div class="arch-layer-label" style="background:#0369a1;">传输层<br>Connect</div>
+        <div class="arch-layer-content" style="background:#e0f2fe;">
+          <span class="arch-tag">📶 4G LTE（主流）</span>
+          <span class="arch-tag">5️⃣ 5G NSA/SA（2026目标30%）</span>
+          <span class="arch-tag">🚦 V2X路侧RSU协同</span>
+          <span class="arch-tag">📡 WiFi园区批量上传</span>
+          <span class="arch-tag">📊 差分优先级调度</span>
+        </div>
+      </div>
+      <div style="text-align:center; font-size:20px; color:var(--primary); padding:4px;">↕</div>
+      <div class="arch-layer">
+        <div class="arch-layer-label" style="background:var(--secondary);">云端层<br>Cloud</div>
+        <div class="arch-layer-content" style="background:#ecfdf5;">
+          <span class="arch-tag">🗄️ 数据湖（结构化+半结构+视频）</span>
+          <span class="arch-tag">🏷️ 标注平台（人工+自动预标注）</span>
+          <span class="arch-tag">🖥️ GPU/NPU异构训练集群</span>
+          <span class="arch-tag">🧪 仿真验证（数字孪生）</span>
+          <span class="arch-tag">🔄 数据飞轮主动学习</span>
+        </div>
+      </div>
+      <div style="text-align:center; font-size:20px; color:var(--primary); padding:4px;">↕</div>
+      <div class="arch-layer">
+        <div class="arch-layer-label" style="background:#7c3aed;">OTA反馈层<br>Deploy</div>
+        <div class="arch-layer-content" style="background:#f5f3ff;">
+          <span class="arch-tag">🔧 FOTA（固件升级：ECU/底层）</span>
+          <span class="arch-tag">💾 SOTA（算法模型/地图/APP）</span>
+          <span class="arch-tag">🧪 灰度AB测试发布</span>
+          <span class="arch-tag">↩️ 回滚机制（GB 44496合规）</span>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--gray-500);margin-top:12px;text-align:right;">来源: <span class="source-pill">S1</span> <span class="source-pill">S13</span></p>
+  </div>
+
+  <!-- 现状数据对比 -->
+  <div class="card">
+    <div class="card-title">📊 轻型商用车 vs 乘用车数据特征对比（2024基线）</div>
+    <div class="grid-2" style="gap:24px;">
+      <div>
+        <table class="data-table">
+          <thead><tr><th>特征维度</th><th>轻商现状（2024）</th><th>乘用车头部</th></tr></thead>
+          <tbody>
+            <tr><td>日均数据产生量</td><td>2–8 GB/辆/日</td><td>50–200 GB/辆/日</td></tr>
+            <tr><td>行驶数据上云率</td><td>40–60%</td><td>&gt;80%</td></tr>
+            <tr><td>视频数据上云率</td><td>&lt;10%</td><td>50–70%（头部）</td></tr>
+            <tr><td>年标注数据量</td><td>&lt;100万帧/OEM</td><td>&gt;10亿帧（头部）</td></tr>
+            <tr><td>数据闭环周期</td><td>&gt;30天</td><td>&lt;2周（特斯拉FSD）</td></tr>
+            <tr><td>OTA全域覆盖率</td><td>&lt;30%（底层ECU）</td><td>90%+（特斯拉/华为）</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="chart-wrap" style="box-shadow:none;border:none;padding:0;">
+        <div class="chart-title">数据能力雷达图（轻商 vs 乘用车头部）</div>
+        <canvas id="chartRadar" height="220"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 4: 核心关键技术 ===================== -->
+<section class="section" id="core-tech">
+  <div class="section-title">
+    <div class="section-title-icon">⚙️</div>
+    核心关键技术
+  </div>
+
+  <!-- 技术栈卡片 -->
+  <div class="grid-3" style="margin-bottom:20px;">
+    <div class="card">
+      <div class="card-title">🚗 D2：车端数据采集与感知</div>
+      <div style="display:flex; flex-direction:column; gap:8px; font-size:13px; color:var(--gray-700);">
+        <div style="background:var(--primary-light); border-radius:6px; padding:10px 12px;">
+          <strong style="color:var(--primary);">CAN/LIN总线信号采集</strong><br>
+          跨车型自适应采集方案（CN116528079A），成本低、标准化程度高 <span class="source-pill">S136</span>
+        </div>
+        <div style="background:#ecfdf5; border-radius:6px; padding:10px 12px;">
+          <strong style="color:var(--secondary);">视频/图像采集</strong><br>
+          前视1080P/60fps（ADAS核心）+ DMS驾驶员疲劳检测 + 360°环视（城配停车）
+        </div>
+        <div style="background:#fff3e0; border-radius:6px; padding:10px 12px;">
+          <strong style="color:var(--accent);">雷达感知</strong><br>
+          77GHz毫米波雷达（主流防碰撞）；激光LiDAR前装率&lt;5%（2024）
+        </div>
+        <div style="background:#f5f3ff; border-radius:6px; padding:10px 12px;">
+          <strong style="color:#7c3aed;">边缘智能网关</strong><br>
+          T-Box升级为IVI-Box（5G+算力）；数据分级/压缩/加密/优先级调度
+        </div>
+        <div style="background:#fef3c7; border-radius:6px; padding:10px 12px;">
+          <strong style="color:var(--warning);">全链路监控能力</strong><br>
+          CN119254604A：实时监控各节点接收状态，数据丢失自动触发报警定位 <span class="source-pill">S136</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">☁️ D3：云端数据处理与算法迭代</div>
+      <div style="display:flex; flex-direction:column; gap:8px; font-size:13px; color:var(--gray-700);">
+        <div style="background:var(--primary-light); border-radius:6px; padding:10px 12px;">
+          <strong style="color:var(--primary);">数据接入层</strong><br>
+          多协议适配（阿里云/华为云/百度AICloud）实时入湖+批量处理 <span class="source-pill">S60</span>
+        </div>
+        <div style="background:#ecfdf5; border-radius:6px; padding:10px 12px;">
+          <strong style="color:var(--secondary);">标注平台</strong><br>
+          半自动标注+众包；3D Box/语义分割；国内：千视通；国际：Scale AI
+        </div>
+        <div style="background:#fff3e0; border-radius:6px; padding:10px 12px;">
+          <strong style="color:var(--accent);">仿真验证</strong><br>
+          数字孪生仿真、场景泛化、Sim-to-Real；华为MDC仿真、百度Apollo Cloud
+        </div>
+        <div style="background:#fde8e8; border-radius:6px; padding:10px 12px;">
+          <strong style="color:var(--danger);">数据飞轮</strong><br>
+          主动学习+Corner Case自动挖掘；特斯拉Auto-labeling、小鹏Xnet
+        </div>
+        <div style="background:#f5f3ff; border-radius:6px; padding:10px 12px;">
+          <strong style="color:#7c3aed;">联邦学习（CN118918554A）</strong><br>
+          端-边-云三层协同训练，超网络模型个性化聚合权重，隐私保护+加速收敛 <span class="source-pill">S136</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔒 D4：数据安全与合规法规</div>
+      <div style="display:flex; flex-direction:column; gap:8px; font-size:13px; color:var(--gray-700);">
+        <div style="background:#fde8e8; border-radius:6px; padding:10px 12px;">
+          <strong style="color:var(--danger);">⚡ 强制合规：GB 44496-2024</strong><br>
+          汽车软件升级通用技术要求，2025年起强制实施，OTA差分升级/回滚机制必须验证 <span class="source-pill">S31</span>
+        </div>
+        <div style="background:#fef3c7; border-radius:6px; padding:10px 12px;">
+          <strong style="color:var(--warning);">《汽车数据安全管理若干规定》</strong><br>
+          敏感数据本地化存储、出境审批、最小化原则（2021年施行，持续修订） <span class="source-pill">S32</span>
+        </div>
+        <div style="background:var(--primary-light); border-radius:6px; padding:10px 12px;">
+          <strong style="color:var(--primary);">数据脱敏技术</strong><br>
+          人脸/车牌/位置坐标车端预处理脱敏后上云；CN112383897B双密钥加密体系
+        </div>
+        <div style="background:#ecfdf5; border-radius:6px; padding:10px 12px;">
+          <strong style="color:var(--secondary);">差分隐私（DP）</strong><br>
+          联邦学习场景下引入差分隐私噪声，数据价值与隐私保护平衡
+        </div>
+        <div style="background:var(--gray-50); border-radius:6px; padding:10px 12px;">
+          <strong style="color:var(--gray-700);">等保分级要求</strong><br>
+          规模化商用车数据平台须等保二级以上；国际化出口须等保三级
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 关键专利 -->
+  <div class="card">
+    <div class="card-title">📄 数据闭环相关核心专利清单</div>
+    <table class="data-table">
+      <thead>
+        <tr><th>专利号</th><th>技术方向</th><th>申请人</th><th>核心贡献</th><th>状态</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>CN116528079A</td><td>数据采集</td><td>重庆长安科技</td><td>序列化描述文件跨车型CAN信号自适应采集</td><td><span class="badge badge-mid">申请中</span></td></tr>
+        <tr><td>CN115348283A</td><td>数据采集</td><td>南京四维智联</td><td>CAN信号+时间戳唯一性锁定配置方案</td><td><span class="badge badge-high">已授权</span></td></tr>
+        <tr><td>CN119254604A</td><td>全链路监控</td><td>天津布尔科技</td><td>车联网数据采集全链路监控，节点故障精准定位</td><td><span class="badge badge-mid">申请中</span></td></tr>
+        <tr><td>CN112383897B</td><td>数据安全</td><td>东软集团</td><td>认证令牌+双密钥体系，端到端加密车云通信</td><td><span class="badge badge-high">已授权</span></td></tr>
+        <tr><td>CN114623838B</td><td>高精地图</td><td>智道网联</td><td>车联网车队众包方式更新高精地图（精度≤0.2m）</td><td><span class="badge badge-high">已授权</span></td></tr>
+        <tr><td>CN118918554A</td><td>联邦学习</td><td>重庆大学</td><td>车联网数据异构联邦学习，端-边-云三层协同训练</td><td><span class="badge badge-mid">申请中</span></td></tr>
+        <tr><td>CN119294226A</td><td>数据闭环装置</td><td>上海上禹智途</td><td>面向智能网联汽车的数据闭环完整装置及系统</td><td><span class="badge badge-mid">申请中</span></td></tr>
+        <tr><td>CN111988348B</td><td>数据采集（物流）</td><td>深圳顺丰泰森</td><td>物流场景车联网控制系统，多计算节点架构解决积压</td><td><span class="badge badge-high">已授权</span></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:var(--gray-500);margin-top:8px;">来源：PatSnap/Eureka专利数据库 <span class="source-pill">S136</span></p>
+  </div>
+</section>
+
+<!-- ===================== SECTION 5: 分阶段技术指标 ===================== -->
+<section class="section" id="roadmap">
+  <div class="section-title">
+    <div class="section-title-icon">🗺️</div>
+    分阶段技术指标（2026 / 2028 / 2030）
+  </div>
+
+  <!-- 阶段选择 Tab -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'tab2026')">🌱 2026 基础建设期</button>
+    <button class="tab-btn" onclick="switchTab(this,'tab2028')">🚀 2028 能力成熟期</button>
+    <button class="tab-btn" onclick="switchTab(this,'tab2030')">🌟 2030 生态主导期</button>
+  </div>
+
+  <div id="tab2026" class="tab-content active">
+    <div class="card">
+      <div class="card-title">🌱 2026年目标：基础数据闭环能力建设期 <span class="badge badge-mid">置信度：中</span></div>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div class="progress-row">
+          <div class="progress-label"><span>🔵 车端5G前装渗透率：&lt;10% → <strong>≥30%</strong></span><span>目标 30%</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:30%;background:var(--primary);"></div></div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-label"><span>🟢 基础行驶数据上云率：40-60% → <strong>≥80%</strong></span><span>目标 80%</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:80%;background:var(--secondary);"></div></div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-label"><span>🟠 年标注数据产量：&lt;100万帧 → <strong>≥500万帧</strong></span><span>目标 500万帧</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:50%;background:var(--accent);"></div></div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-label"><span>🔴 数据闭环周期：&gt;30天 → <strong>≤21天</strong></span><span>目标 21天</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:70%;background:#ef4444;"></div></div>
+        </div>
+      </div>
+      <table class="data-table" style="margin-top:16px;">
+        <thead><tr><th>技术指标</th><th>现状（2024）</th><th>2026目标</th><th>关键动作</th></tr></thead>
+        <tbody>
+          <tr><td>车端5G前装渗透率</td><td>&lt;10%</td><td>≥30%</td><td>T-Box升级至5G模组，首发车型搭载</td></tr>
+          <tr><td>车端日均数据产生量（高配）</td><td>2–8 GB/辆</td><td>≥20 GB/辆</td><td>增加前视摄像头分辨率+DMS</td></tr>
+          <tr><td>OTA覆盖车型数</td><td>1-2款（仅T-Box/车机）</td><td>≥3款主力车型</td><td>扩展至ADAS模块OTA</td></tr>
+          <tr><td>数据闭环周期</td><td>&gt;30天</td><td>≤21天</td><td>建立数据采集-训练-部署标准流程</td></tr>
+          <tr><td>合规认证</td><td>部分车型未认证</td><td>完成GB 44496-2024认证</td><td>启动OTA合规认证流程（法定要求）</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="tab2028" class="tab-content">
+    <div class="card">
+      <div class="card-title">🚀 2028年目标：数据驱动能力成熟期 <span class="badge badge-low">置信度：中-低</span></div>
+      <table class="data-table">
+        <thead><tr><th>技术指标</th><th>2028目标值</th><th>关键动作</th></tr></thead>
+        <tbody>
+          <tr><td>车端算力（ADAS域）</td><td>≥50 TOPS</td><td>集成高性能SOC，支持BEV/Transformer实时推理</td></tr>
+          <tr><td>数据闭环周期（常规）</td><td>≤7天</td><td>自动化数据管道+模型CI/CD</td></tr>
+          <tr><td>紧急安全推送</td><td>≤72小时</td><td>热修复OTA通道专道</td></tr>
+          <tr><td>联邦学习部署</td><td>商用车运营商网络中试点联邦训练</td><td>构建隐私保护多方数据联合训练平台</td></tr>
+          <tr><td>Corner Case数据库</td><td>≥10万条（行业级轻商专属场景）</td><td>主动挖掘+场景众包</td></tr>
+          <tr><td>高精地图在线更新</td><td>众包方式精度≤0.2m</td><td>智道网联式地图采集规模化（CN114623838B）</td></tr>
+          <tr><td>车云协同推理</td><td>云端大模型+车端轻量化模型协同</td><td>5G低延迟特性支撑</td></tr>
+          <tr><td>V2X数据接入</td><td>≥3个城市路侧RSU网络</td><td>C-V2X标准化推进</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="tab2030" class="tab-content">
+    <div class="card">
+      <div class="card-title">🌟 2030年目标：数据生态主导期 <span class="badge badge-low">置信度：低（方向性指引）</span></div>
+      <div class="alert alert-low"><span class="alert-icon">⚠️</span><div class="alert-text">2030年目标受政策环境、商业模式创新等非技术因素影响，目前具有较大不确定性，属于方向性指引而非硬性规划。</div></div>
+      <table class="data-table" style="margin-top:12px;">
+        <thead><tr><th>技术指标</th><th>2030目标值</th><th>关键动作</th></tr></thead>
+        <tbody>
+          <tr><td>累计标注数据量</td><td>≥50亿帧（含多模态）</td><td>构建行业共享数据联盟或独立数据护城河</td></tr>
+          <tr><td>L2+/L3辅助驾驶渗透率</td><td>轻型商用车≥40%</td><td>数据闭环持续迭代ADAS算法性能</td></tr>
+          <tr><td>数据变现能力</td><td>碳积分/保险UBI/地图更新数据商业化</td><td>布局车队数据资产运营</td></tr>
+          <tr><td>数据安全合规体系</td><td>等保三级+境外认证+数据跨境白名单</td><td>满足国际化出口车型数据合规要求</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 时间轴 -->
+  <div class="card" style="margin-top:20px;">
+    <div class="card-title">📅 技术演进时间轴</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year" style="color:#0284c7;">2025</div>
+        <div class="tl-body">
+          <div class="tl-title">🔧 合规基础与数据管道建设</div>
+          <div class="tl-metrics">
+            <div class="tl-metric"><div class="tl-metric-icon" style="background:#dbeafe;">⚖️</div><div class="tl-metric-text"><span class="tl-metric-value">GB 44496-2024</span> 强制实施 — OTA合规认证法定截止</div></div>
+            <div class="tl-metric"><div class="tl-metric-icon" style="background:#ecfdf5;">🛠️</div><div class="tl-metric-text">统一T-Box协议规范，建立CAN信号数据字典标准</div></div>
+            <div class="tl-metric"><div class="tl-metric-icon" style="background:#fff3e0;">🔒</div><div class="tl-metric-text">梳理现有平台个人信息处理合规性，完成隐私政策升级</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year" style="color:var(--primary);">2026</div>
+        <div class="tl-body">
+          <div class="tl-title">📡 5G前装+标注平台建设</div>
+          <div class="tl-metrics">
+            <div class="tl-metric"><div class="tl-metric-icon" style="background:#dbeafe;">5️⃣</div><div class="tl-metric-text">车端5G前装渗透率达 <span class="tl-metric-value">≥30%</span>，基础行驶数据上云率 <span class="tl-metric-value">≥80%</span></div></div>
+            <div class="tl-metric"><div class="tl-metric-icon" style="background:#ecfdf5;">🏷️</div><div class="tl-metric-text">引入半自动标注+众包，年标注量达 <span class="tl-metric-value">≥500万帧</span></div></div>
+            <div class="tl-metric"><div class="tl-metric-icon" style="background:#fff3e0;">🔄</div><div class="tl-metric-text">数据闭环周期压缩至 <span class="tl-metric-value">≤21天</span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year" style="color:var(--secondary);">2028</div>
+        <div class="tl-body">
+          <div class="tl-title">🚀 数据飞轮启动+联邦学习试点</div>
+          <div class="tl-metrics">
+            <div class="tl-metric"><div class="tl-metric-icon" style="background:#ecfdf5;">⚡</div><div class="tl-metric-text">数据闭环周期 <span class="tl-metric-value">≤7天</span>（常规）/ ≤72小时（紧急安全推送）</div></div>
+            <div class="tl-metric"><div class="tl-metric-icon" style="background:#f5f3ff;">🤝</div><div class="tl-metric-text">联邦学习在商用车运营商网络试点，Corner Case库 <span class="tl-metric-value">≥10万条</span></div></div>
+            <div class="tl-metric"><div class="tl-metric-icon" style="background:#dbeafe;">🗺️</div><div class="tl-metric-text">V2X接入 <span class="tl-metric-value">≥3个城市</span> RSU网络，高精地图众包更新精度≤0.2m</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year" style="color:#7c3aed;">2030</div>
+        <div class="tl-body" style="border-left-color:#e9d5ff;">
+          <div class="tl-title">🌟 数据生态主导+商业化变现</div>
+          <div class="tl-metrics">
+            <div class="tl-metric"><div class="tl-metric-icon" style="background:#f5f3ff;">🏆</div><div class="tl-metric-text">累计标注数据 <span class="tl-metric-value">≥50亿帧</span>，L2+/L3渗透率 <span class="tl-metric-value">≥40%</span></div></div>
+            <div class="tl-metric"><div class="tl-metric-icon" style="background:#fef3c7;">💰</div><div class="tl-metric-text">碳积分/UBI保险/地图更新数据商业化变现通道建立</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 6: 落地路径 ===================== -->
+<section class="section" id="landing">
+  <div class="section-title">
+    <div class="section-title-icon">🛣️</div>
+    落地路径
+  </div>
+  <div class="grid-3">
+    <div class="card" style="border-top: 4px solid #0284c7;">
+      <div class="card-title">⚡ 短期路径（2025–2026）<br><small style="font-weight:400;color:var(--gray-500);">能力奠基</small></div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;">1</div>
+          <div style="font-size:13px;color:var(--gray-700);">
+            <strong style="color:var(--gray-900);">数据基础设施统一</strong><br>
+            统一车队T-Box协议规范，建立CAN信号数据字典标准（横向打通全系车型）；引入全链路监控能力（CN119254604A）
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;">2</div>
+          <div style="font-size:13px;color:var(--gray-700);">
+            <strong style="color:var(--danger);">合规先行（法定义务）</strong><br>
+            完成GB 44496-2024 OTA合规认证；梳理GB/T 35273隐私合规；建立驾驶员数据使用授权机制
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;">3</div>
+          <div style="font-size:13px;color:var(--gray-700);">
+            <strong style="color:var(--gray-900);">标注能力建设</strong><br>
+            引入/自建轻量化标注平台；建立商用车场景数据集（优先级：危险事件 > 特殊场景 > 日常驾驶）
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-top: 4px solid var(--primary);">
+      <div class="card-title">🚀 中期路径（2026–2028）<br><small style="font-weight:400;color:var(--gray-500);">飞轮启动</small></div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--secondary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;">1</div>
+          <div style="font-size:13px;color:var(--gray-700);">
+            <strong>数据飞轮加速</strong><br>
+            自动化Corner Case挖掘流程；大模型辅助标注（减少人工成本70%+）；与路侧/保险UBI数据联合计算
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--secondary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;">2</div>
+          <div style="font-size:13px;color:var(--gray-700);">
+            <strong>OTA能力全域化</strong><br>
+            推进底层ECU FOTA（安全域/动力域）；建立OTA灰度发布体系（试点→优质运营商→全量）
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--secondary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;">3</div>
+          <div style="font-size:13px;color:var(--gray-700);">
+            <strong>联邦学习试点</strong><br>
+            与重点运营商合作，在隐私保护前提下开展联邦训练，验证隐私保护效果与模型效果平衡点
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-top: 4px solid #7c3aed;">
+      <div class="card-title">🌟 长期路径（2028–2030）<br><small style="font-weight:400;color:var(--gray-500);">生态主导</small></div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;">1</div>
+          <div style="font-size:13px;color:var(--gray-700);">
+            <strong>数据联盟建设</strong><br>
+            与运营商、保险公司、园区共建数据共享机制，布局行业级数据联盟
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;">2</div>
+          <div style="font-size:13px;color:var(--gray-700);">
+            <strong>生态开放</strong><br>
+            开放部分场景数据（脱敏后）给上下游供应商生态，构建数据护城河
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;">3</div>
+          <div style="font-size:13px;color:var(--gray-700);">
+            <strong>数据资产运营</strong><br>
+            探索数据要素市场化运营路径（碳积分/UBI保险/众包地图变现）
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 7: 竞品对标 ===================== -->
+<section class="section" id="competitor">
+  <div class="section-title">
+    <div class="section-title-icon">🏁</div>
+    竞品对标（D6）
+  </div>
+
+  <div class="grid-3" style="margin-bottom:20px;">
+    <div class="comp-card">
+      <div class="comp-name">🚗 特斯拉</div>
+      <div><span class="comp-tag comp-tag-lv">乘用车标杆</span></div>
+      <div class="comp-row"><span>数据采集规模</span><strong>车队日均PB级</strong></div>
+      <div class="comp-row"><span>核心路线</span><strong>纯视觉，去LiDAR</strong></div>
+      <div class="comp-row"><span>核心优势</span><strong>FSD影子模式全量触发</strong></div>
+      <div class="comp-row"><span>训练设施</span><strong>DOJO超算中心</strong></div>
+      <div class="comp-row"><span>数据闭环周期</span><strong style="color:var(--danger);">&lt;2周</strong></div>
+      <div class="comp-row"><span>商用车覆盖</span><strong>暂无，方法论可参考</strong></div>
+      <p style="font-size:11px;color:var(--gray-500);margin-top:8px;"><span class="source-pill">S87</span></p>
+    </div>
+    <div class="comp-card">
+      <div class="comp-name">🔷 华为（智界/问界）</div>
+      <div><span class="comp-tag comp-tag-lv">乘用车+延伸商用</span></div>
+      <div class="comp-row"><span>数据平台</span><strong>华为云ADS全栈自研</strong></div>
+      <div class="comp-row"><span>核心路线</span><strong>MDC算力+雷达视觉融合</strong></div>
+      <div class="comp-row"><span>核心优势</span><strong>ADS 2.0全场景感知，支持无图区域</strong></div>
+      <div class="comp-row"><span>商用车合作</span><strong style="color:var(--secondary);">福田、江铃（已延伸）</strong></div>
+      <div class="comp-row"><span>数据闭环能力</span><strong>完整全栈</strong></div>
+      <p style="font-size:11px;color:var(--gray-500);margin-top:8px;"><span class="source-pill">S87</span></p>
+    </div>
+    <div class="comp-card">
+      <div class="comp-name">🔴 百度 Apollo</div>
+      <div><span class="comp-tag comp-tag-lc">商用车入局</span></div>
+      <div class="comp-row"><span>数据平台</span><strong>Apollo Cloud（虚实结合）</strong></div>
+      <div class="comp-row"><span>核心路线</span><strong>仿真驱动，积木化场景库</strong></div>
+      <div class="comp-row"><span>核心优势</span><strong>仿真覆盖率指标驱动迭代</strong></div>
+      <div class="comp-row"><span>商用车动作</span><strong style="color:var(--secondary);">萝卜快跑轻型货运（已进入）</strong></div>
+      <div class="comp-row"><span>数据闭环能力</span><strong>完整</strong></div>
+      <p style="font-size:11px;color:var(--gray-500);margin-top:8px;"><span class="source-pill">S87</span></p>
+    </div>
+    <div class="comp-card">
+      <div class="comp-name">🟢 小鹏</div>
+      <div><span class="comp-tag comp-tag-lv">乘用车数据领先</span></div>
+      <div class="comp-row"><span>数据采集规模</span><strong>日均2000万公里（2023）</strong></div>
+      <div class="comp-row"><span>核心路线</span><strong>Xnet端到端感知网络</strong></div>
+      <div class="comp-row"><span>核心优势</span><strong>主动学习+自动标注+多任务联合</strong></div>
+      <div class="comp-row"><span>商用车覆盖</span><strong>暂无，数据平台技术领先</strong></div>
+      <p style="font-size:11px;color:var(--gray-500);margin-top:8px;"><span class="source-pill">S87</span></p>
+    </div>
+    <div class="comp-card">
+      <div class="comp-name">📦 顺丰科技</div>
+      <div><span class="comp-tag comp-tag-lc">轻商物流直接覆盖</span></div>
+      <div class="comp-row"><span>专利</span><strong>CN111988348B</strong></div>
+      <div class="comp-row"><span>核心路线</span><strong>物流场景定制，多计算节点</strong></div>
+      <div class="comp-row"><span>核心优势</span><strong>解决轻商物流数据积压问题</strong></div>
+      <div class="comp-row"><span>商用车覆盖</span><strong style="color:var(--secondary);">直接覆盖轻商物流场景</strong></div>
+      <p style="font-size:11px;color:var(--gray-500);margin-top:8px;"><span class="source-pill">S136</span></p>
+    </div>
+    <div class="comp-card">
+      <div class="comp-name">🚙 广汽埃安</div>
+      <div><span class="comp-tag comp-tag-lv">乘用车可移植</span></div>
+      <div class="comp-row"><span>专利</span><strong>CN118656408A</strong></div>
+      <div class="comp-row"><span>核心路线</span><strong>多系统数据集成，CAN多维分析</strong></div>
+      <div class="comp-row"><span>核心优势</span><strong>数据质量监测自动化，可用性提升</strong></div>
+      <div class="comp-row"><span>商用车覆盖</span><strong>乘用车，方案可移植</strong></div>
+      <p style="font-size:11px;color:var(--gray-500);margin-top:8px;"><span class="source-pill">S136</span></p>
+    </div>
+  </div>
+
+  <!-- 差距分析 -->
+  <div class="card">
+    <div class="card-title">📊 关键能力差距分析（轻商主机厂 vs 行业前沿）</div>
+    <div class="grid-2">
+      <div>
+        <table class="data-table">
+          <thead><tr><th>能力维度</th><th>行业前沿水平</th><th>轻商主机厂现状</th><th>差距</th></tr></thead>
+          <tbody>
+            <tr><td>车端数据采集量</td><td>50–200 GB/辆/日</td><td>2–8 GB/辆/日</td><td><span class="gap-badge gap-xl">极大</span></td></tr>
+            <tr><td>标注数据年增量</td><td>&gt;10亿帧（头部）</td><td>&lt;100万帧</td><td><span class="gap-badge gap-xl">极大</span></td></tr>
+            <tr><td>OTA全域覆盖率</td><td>90%+（特斯拉/华为）</td><td>&lt;30%（底层ECU）</td><td><span class="gap-badge gap-lg">大</span></td></tr>
+            <tr><td>数据飞轮周期</td><td>&lt;2周（特斯拉）</td><td>&gt;30天</td><td><span class="gap-badge gap-lg">大</span></td></tr>
+            <tr><td>数据安全合规</td><td>等保3级+境外认证</td><td>等保2级（部分达标）</td><td><span class="gap-badge gap-md">中</span></td></tr>
+            <tr><td>联邦学习能力</td><td>研究→试点（行业整体）</td><td>尚未布局</td><td><span class="gap-badge gap-md">中</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="chart-wrap" style="box-shadow:none;border:none;padding:0;">
+        <div class="chart-title">差距热力图（评分越高=差距越小）</div>
+        <canvas id="chartGap" height="220"></canvas>
+      </div>
+    </div>
+    <div style="margin-top:16px; padding:14px; background:#f0fdf4; border-radius:8px; border:1px solid #86efac;">
+      <strong style="color:#065f46;">💡 差异化竞争路径建议：</strong>
+      <ul style="font-size:13px; color:var(--gray-700); padding-left:18px; margin-top:6px; line-height:2;">
+        <li>扬长避短：固定路线+专业驾驶员+高频运营，先于乘用车在垂直场景（冷链/城配/工程）形成数据优势</li>
+        <li>借力生态：优先与华为车云（ADS数据平台）、百度Apollo商用车解决方案建立数据技术合作</li>
+        <li>合规即优势：严格先行者合规，将数据合规能力转化为ToB运营商市场的差异化卖点</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 8: 特殊场景适配 ===================== -->
+<section class="section" id="scenario">
+  <div class="section-title">
+    <div class="section-title-icon">🚚</div>
+    轻型商用车特殊场景适配（D7）
+  </div>
+  <div class="grid-2">
+    <div class="card" style="border-top:3px solid var(--primary);">
+      <div class="card-title">🏙️ 城配"最后一公里"场景</div>
+      <div style="font-size:13px;color:var(--gray-700);">
+        <p style="margin-bottom:10px;">九识智能、京东物流、美团等已发布多款L4级无人轻卡/配送车，加速商业化落地。<span class="source-pill">S114</span> <span class="source-pill">S115</span></p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+          <span style="background:#dbeafe;color:#1e40af;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:500;">低速5-20km/h数据为主</span>
+          <span style="background:#ecfdf5;color:#065f46;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:500;">装卸货后厢感知数据</span>
+          <span style="background:#fff3e0;color:#92400e;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:500;">精确停车定位数据</span>
+          <span style="background:#fde8e8;color:#991b1b;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:500;">人车混行感知数据</span>
+        </div>
+        <div style="background:var(--gray-50);border-radius:8px;padding:10px 12px;font-size:12px;">
+          💡 <strong>上传窗口：</strong>停车和装卸货期间可通过WiFi批量传输，弥补行驶里程短（50-200km/日）导致的数据量不足
+        </div>
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--secondary);">
+      <div class="card-title">🛣️ 城际货运/干线物流场景</div>
+      <div style="font-size:13px;color:var(--gray-700);">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+          <span style="background:#dbeafe;color:#1e40af;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:500;">高速巡航80-120km/h</span>
+          <span style="background:#ecfdf5;color:#065f46;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:500;">DMS长时疲劳监测</span>
+          <span style="background:#fde8e8;color:#991b1b;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:500;">雨雾/夜间/冰雪稀缺数据</span>
+          <span style="background:#fff3e0;color:#92400e;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:500;">货重变化对制动的影响</span>
+        </div>
+        <div style="background:var(--gray-50);border-radius:8px;padding:10px 12px;font-size:12px;">
+          💡 <strong>差异化价值：</strong>货箱重量变化对制动距离/转向特性影响的数据，是乘用车场景完全缺失的高价值数据集
+        </div>
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent);">
+      <div class="card-title">🏗️ 工程/特种车辆场景</div>
+      <div style="font-size:13px;color:var(--gray-700);">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+          <span style="background:#fff3e0;color:#92400e;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:500;">非结构化道路（泥泞/碎石）</span>
+          <span style="background:#dbeafe;color:#1e40af;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:500;">自卸翻斗稳定性数据</span>
+          <span style="background:#ecfdf5;color:#065f46;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:500;">矿山/港口L4先行落地</span>
+        </div>
+        <div style="background:var(--gray-50);border-radius:8px;padding:10px 12px;font-size:12px;">
+          💡 <strong>先行价值：</strong>封闭场景（矿山/港口）是L4自动驾驶优先商业化落地区域，数据价值极高
+        </div>
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid #0891b2;">
+      <div class="card-title">❄️ 冷链/温控物流场景</div>
+      <div style="font-size:13px;color:var(--gray-700);">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+          <span style="background:#cffafe;color:#164e63;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:500;">货箱温度与行驶关联数据</span>
+          <span style="background:#dbeafe;color:#1e40af;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:500;">开门频次保温性能建模</span>
+          <span style="background:#ecfdf5;color:#065f46;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:500;">合规监管+算法优化双重价值</span>
+        </div>
+        <div style="background:var(--gray-50);border-radius:8px;padding:10px 12px;font-size:12px;">
+          💡 <strong>双重价值：</strong>冷链数据既有监管合规价值（食品安全溯源）又有算法优化价值（能耗优化），商业化路径清晰
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 9: 局限声明 ===================== -->
+<section class="section" id="limitation">
+  <div class="section-title">
+    <div class="section-title-icon">⚠️</div>
+    已知局限声明
+  </div>
+  <div class="limit-item">
+    <div class="limit-title">⚠️ D7维度（轻商专属场景）覆盖度局限</div>
+    <div class="limit-text">A级来源数量不足，大量数据来自乘用车、无人配送车领域的类比推断；轻型商用车OEM侧一手数据闭环实践资料在公开渠道极为有限。<strong>D7相关结论请保持审慎态度。</strong></div>
+  </div>
+  <div class="limit-item">
+    <div class="limit-title">⚠️ D6维度（竞品对标）信息局限</div>
+    <div class="limit-text">国内轻型商用车主机厂的数据闭环能力现状几乎无公开披露。报告中"典型现状"基于行业通识性判断，<strong>非针对特定企业的实测数据</strong>，不应直接用于竞品战略决策。</div>
+  </div>
+  <div class="limit-item">
+    <div class="limit-title">⚠️ 时效性局限</div>
+    <div class="limit-text">所有数据截止至2026年5月22日。部分技术指标（特斯拉每日数据量、乘用车OTA装配率）来自2024-2025年公开报道，可能已有新进展。GB 44496-2024等法规实施细则可能持续更新。</div>
+  </div>
+  <div class="limit-item">
+    <div class="limit-title">⚠️ 来源可信度局限</div>
+    <div class="limit-text">C级来源（19%，约5条）含部分市场预测数据，引用时已明确不进行量化数字直接引用，仅作趋势方向参考。网络搜索来源均通过AI聚合搜索引擎返回，部分为聚合摘要（非原文），存在二次加工偏差风险。</div>
+  </div>
+  <div class="limit-item">
+    <div class="limit-title">⚠️ 偏见风险（海外来源偏少）</div>
+    <div class="limit-text">英文/中文来源分布约40%/60%，可能遗漏奔驰Actros、沃尔沃FH等海外商用车OEM的数据闭环实践。欧盟GDPR合规路径覆盖不足。<strong>建议针对海外OEM开展定向补充调研。</strong></div>
+  </div>
+  <div class="limit-item">
+    <div class="limit-title">⚠️ 知识底座穿透率局限</div>
+    <div class="limit-text">D7维度知识底座穿透率&lt;100%。在"轻型商用车特种场景数据标准化"细分方向，未发现公开的权威标准文档或政策规划，该领域标准化工作仍属空白。</div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 10: 综合分析 ===================== -->
+<section class="section" id="analysis">
+  <div class="section-title">
+    <div class="section-title-icon">🧠</div>
+    综合分析
+  </div>
+
+  <!-- 维度关联分析 -->
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-title">🔗 维度间关联分析</div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div style="background:var(--primary-light);border-radius:8px;padding:14px 16px;">
+        <strong style="color:var(--primary);">D1 ↔ D4：架构与合规的互制关系</strong>
+        <p style="font-size:13px;color:var(--gray-700);margin-top:6px;line-height:1.7;">车路云一体化架构推进速度与数据安全合规要求高度耦合。GB 44496-2024将成为OTA能力建设的法律刚需，反向推动数据闭环基础设施加速投资。<strong>合规不是障碍，而是倒逼数据基础设施升级的外部驱动力。</strong></p>
+      </div>
+      <div style="background:#ecfdf5;border-radius:8px;padding:14px 16px;">
+        <strong style="color:var(--secondary);">D2 ↔ D3：车端采集量与云端算法迭代的飞轮关系</strong>
+        <p style="font-size:13px;color:var(--gray-700);margin-top:6px;line-height:1.7;">数据飞轮加速条件：车端采集量突破临界阈值（轻商估算：日均≥50TB车队数据）→ 云端高质量标注 → 算法迭代周期缩短 → ADAS功能提升 → 吸引更多运营商购车 → 车队规模扩大 → 数据量进一步增加。<strong>当前轻商症结在于数据量和标注量双重不足，飞轮尚未启动。</strong></p>
+      </div>
+      <div style="background:#fef3c7;border-radius:8px;padding:14px 16px;">
+        <strong style="color:var(--warning);">D5 ↔ D1：OTA是闭环"最后一公里"</strong>
+        <p style="font-size:13px;color:var(--gray-700);margin-top:6px;line-height:1.7;">数据采集和算法训练的最终价值实现，依赖OTA将更新的模型准确、安全、快速地部署到车端。当前商用车OTA能力薄弱（仅车机/T-Box级），构成整个数据闭环的最大短板，需要优先突破。<span class="source-pill">S46</span></p>
+      </div>
+      <div style="background:#f5f3ff;border-radius:8px;padding:14px 16px;">
+        <strong style="color:#7c3aed;">D6 ↔ D7：竞品差距与场景分化的双重机会</strong>
+        <p style="font-size:13px;color:var(--gray-700);margin-top:6px;line-height:1.7;">主流乘用车OEM的数据闭环优势建立在乘用车场景基础上，在轻商的低速、停车、装卸、货运等专属场景中并无数据积累。<strong>战略时间窗口约2026-2028年</strong>（在乘用车OEM大规模进军商用车之前）。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心结论分级 -->
+  <div class="card">
+    <div class="card-title">🎯 核心结论（按置信度分级）</div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#065f46;margin-bottom:8px;">✅ 高置信度结论（核心论断，有A/B级来源支撑）</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="alert alert-high"><span class="alert-icon">1</span><div class="alert-text">数据闭环已成为轻型商用车智能化发展的核心基础设施，2024-2025年架构共识已形成，现在是基础能力建设的黄金窗口期</div></div>
+          <div class="alert alert-high"><span class="alert-icon">2</span><div class="alert-text">GB 44496-2024已于2025年强制实施，OTA合规能力是法定要求，<strong>非可选项</strong> <span class="source-pill">S31</span></div></div>
+          <div class="alert alert-high"><span class="alert-icon">3</span><div class="alert-text">竞品（特斯拉/华为/小鹏）的数据飞轮优势正在快速扩大，技术路线已清晰，轻商主机厂差距极大 <span class="source-pill">S87</span></div></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#1e40af;margin-bottom:8px;">🔵 中置信度结论（有B/C级来源支撑，存在推断成分）</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="alert alert-mid"><span class="alert-icon">4</span><div class="alert-text">轻型商用车的"固定路线+专业驾驶员"特征可转化为高价值精标数据来源优势，有望在垂直场景建立差异化数据护城河</div></div>
+          <div class="alert alert-mid"><span class="alert-icon">5</span><div class="alert-text">联邦学习技术将在2026-2028年期间从研究走向商用，成为解决商用车运营商数据隐私顾虑的关键技术手段</div></div>
+          <div class="alert alert-mid"><span class="alert-icon">6</span><div class="alert-text">2028年数据闭环周期缩短至7天以内、联邦训练试点落地是可实现的技术目标</div></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#78350f;margin-bottom:8px;">⚠️ 低置信度结论（方向性指引，大量不确定性因素）</div>
+        <div class="alert alert-low"><span class="alert-icon">7</span><div class="alert-text">2030年数据变现、数据资产证券化等长期目标受政策环境、商业模式创新等非技术因素影响，目前具有较大不确定性</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 三条主线建议 -->
+  <div class="card" style="margin-top:20px; background:linear-gradient(135deg,#f0fdf4,#eff6ff); border-color:#86efac;">
+    <div class="card-title">🚀 战略建议：三条主线有序推进</div>
+    <div class="grid-3">
+      <div style="background:#fff;border-radius:10px;padding:16px;border-top:3px solid var(--danger);">
+        <div style="font-size:15px;font-weight:700;color:var(--danger);margin-bottom:8px;">主线一：合规基础</div>
+        <p style="font-size:13px;color:var(--gray-700);line-height:1.7;">以GB 44496-2024 OTA合规认证为契机，系统性升级数据基础设施，建立车联网数据安全标准体系。这既是法律义务也是进入高端运营商采购市场的前提条件。</p>
+      </div>
+      <div style="background:#fff;border-radius:10px;padding:16px;border-top:3px solid var(--primary);">
+        <div style="font-size:15px;font-weight:700;color:var(--primary);margin-bottom:8px;">主线二：飞轮启动</div>
+        <p style="font-size:13px;color:var(--gray-700);line-height:1.7;">2025-2026年集中投资"车端5G采集能力升级 + 标注平台建设 + 数据管道标准化"三项基础能力，尽快将数据闭环周期压缩至21天以内，为后续算法迭代加速奠定基础。</p>
+      </div>
+      <div style="background:#fff;border-radius:10px;padding:16px;border-top:3px solid var(--secondary);">
+        <div style="font-size:15px;font-weight:700;color:var(--secondary);margin-bottom:8px;">主线三：场景聚焦</div>
+        <p style="font-size:13px;color:var(--gray-700);line-height:1.7;">优先在1-2个高价值场景（城配/冷链）建立数据采集+算法迭代的完整闭环样板，以场景数据深度优势对抗竞品的规模数据优势，形成差异化竞争格局。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /main-wrap -->
+
+<!-- FOOTER -->
+<footer class="report-footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-col-title">📋 报告信息</div>
+      <div>报告版本：v1.0</div>
+      <div>编制时间：2026-05-22</div>
+      <div>编制单位：商品研发院 · 先行平台开发中心</div>
+      <div>生成工具：tech-intel-v25 六阶段情报流程</div>
+    </div>
+    <div>
+      <div class="footer-col-title">📊 情报质量说明</div>
+      <div>综合置信度：中</div>
+      <div>A级来源：10条（37%）| B级：12条（44%）| C级：5条（19%）</div>
+      <div>来源总计：27条（去重后）</div>
+      <div>专利来源：20件（2019-2025年，PatSnap/Eureka）</div>
+    </div>
+    <div>
+      <div class="footer-col-title">⚠️ 使用声明</div>
+      <div>本报告基于公开可获取的信息，综合置信度为"中"。</div>
+      <div>C级来源标注的结论请交叉验证后使用。</div>
+      <div>D7（轻商专属场景）相关结论请保持审慎。</div>
+      <div>未标注[S#]的结论应视为Unverified。</div>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:24px auto 0;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1);font-size:11px;color:rgba(255,255,255,0.4);text-align:center;">
+    © 2026 · 轻型商用车智能网联数据闭环技术研究报告 · 内部参考文件 · 请勿对外传播 · Powered by Eureka / tech-intel-v25
+  </div>
+</footer>
+
+<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ===== SCROLL TOP =====
+window.addEventListener('scroll', function() {
+  const btn = document.getElementById('scrollTop');
+  btn.style.display = window.scrollY > 400 ? 'flex' : 'none';
+});
+
+// ===== NAV ACTIVE =====
+const sections = document.querySelectorAll('section[id]');
+const navItems = document.querySelectorAll('.nav-item');
+window.addEventListener('scroll', function() {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) current = s.id;
+  });
+  navItems.forEach(n => {
+    n.classList.toggle('active', n.getAttribute('href') === '#' + current);
+  });
+});
+
+// ===== TABS =====
+function switchTab(btn, tabId) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+// ===== CHART: Source Quality Donut =====
+new Chart(document.getElementById('chartSourceQuality'), {
+  type: 'doughnut',
+  data: {
+    labels: ['A级来源（37%）', 'B级来源（44%）', 'C级来源（19%）'],
+    datasets: [{
+      data: [10, 12, 5],
+      backgroundColor: ['#059669', '#2563eb', '#d97706'],
+      borderWidth: 3,
+      borderColor: '#fff',
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 16, font: { size: 12 } } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            return ctx.label + '：' + ctx.parsed + '条';
+          }
+        }
+      }
+    },
+    cutout: '60%'
+  }
+});
+
+// ===== CHART: Dimension Coverage Bar =====
+new Chart(document.getElementById('chartDimCoverage'), {
+  type: 'bar',
+  data: {
+    labels: ['D1 闭环架构', 'D2 车端采集', 'D3 云端平台', 'D4 合规法规', 'D5 OTA反馈', 'D6 竞品对标', 'D7 场景适配'],
+    datasets: [
+      {
+        label: 'A级来源数',
+        data: [4, 3, 2, 4, 3, 2, 1],
+        backgroundColor: '#059669',
+        borderRadius: 4
+      },
+      {
+        label: 'B级来源数',
+        data: [4, 5, 5, 3, 4, 4, 3],
+        backgroundColor: '#2563eb',
+        borderRadius: 4
+      },
+      {
+        label: 'C级来源数',
+        data: [1, 1, 1, 1, 2, 2, 2],
+        backgroundColor: '#d97706',
+        borderRadius: 4
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 12, font: { size: 11 } } }
+    },
+    scales: {
+      x: { stacked: true, ticks: { font: { size: 11 } } },
+      y: { stacked: true, beginAtZero: true, ticks: { stepSize: 2 } }
+    }
+  }
+});
+
+// ===== CHART: Radar =====
+new Chart(document.getElementById('chartRadar'), {
+  type: 'radar',
+  data: {
+    labels: ['数据采集量', '上云率', '标注数据量', '闭环周期', 'OTA覆盖率', '合规程度', '联邦学习'],
+    datasets: [
+      {
+        label: '乘用车头部（特斯拉/华为）',
+        data: [95, 90, 95, 90, 90, 80, 70],
+        fill: true,
+        backgroundColor: 'rgba(37,99,235,0.15)',
+        borderColor: '#2563eb',
+        pointBackgroundColor: '#2563eb',
+        borderWidth: 2
+      },
+      {
+        label: '轻型商用车主机厂（典型）',
+        data: [20, 45, 10, 30, 25, 50, 5],
+        fill: true,
+        backgroundColor: 'rgba(234,88,12,0.15)',
+        borderColor: '#ea580c',
+        pointBackgroundColor: '#ea580c',
+        borderWidth: 2
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      r: {
+        min: 0, max: 100,
+        ticks: { stepSize: 20, font: { size: 10 } },
+        pointLabels: { font: { size: 11 } }
+      }
+    },
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 12, font: { size: 11 } } }
+    }
+  }
+});
+
+// ===== CHART: Gap Bar =====
+new Chart(document.getElementById('chartGap'), {
+  type: 'bar',
+  data: {
+    labels: ['数据采集量', '标注数据量', 'OTA覆盖率', '闭环周期', '数据合规', '联邦学习'],
+    datasets: [
+      {
+        label: '乘用车头部水平',
+        data: [95, 92, 90, 88, 80, 70],
+        backgroundColor: 'rgba(37,99,235,0.7)',
+        borderRadius: 4
+      },
+      {
+        label: '轻型商用车现状',
+        data: [20, 10, 25, 30, 50, 5],
+        backgroundColor: 'rgba(234,88,12,0.7)',
+        borderRadius: 4
+      }
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 12, font: { size: 11 } } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            return ctx.dataset.label + '：' + ctx.parsed.x + '分';
+          }
+        }
+      }
+    },
+    scales: {
+      x: { beginAtZero: true, max: 100, ticks: { font: { size: 11 } } },
+      y: { ticks: { font: { size: 11 } } }
+    }
+  }
+});
+
+// ===== ANIMATE PROGRESS BARS ON LOAD =====
+document.addEventListener('DOMContentLoaded', function() {
+  const fills = document.querySelectorAll('.progress-fill');
+  fills.forEach(f => {
+    const w = f.style.width;
+    f.style.width = '0';
+    setTimeout(() => { f.style.width = w; }, 300);
+  });
+});
+</script>
+</body>
+</html>
