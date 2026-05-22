@@ -137,6 +137,7 @@ body {
 /* Sub items */
 .sub-list { overflow: hidden; transition: max-height .4s cubic-bezier(0.4, 0, 0.2, 1); }
 .sub-list.collapsed { max-height: 0 !important; }
+.hidden { display: none !important; }
 .sub-item {
   display: flex; align-items: flex-start; gap: 10px;
   padding: 10px 24px 10px 44px; cursor: pointer;
@@ -523,8 +524,7 @@ async function buildTree() {
       html += '<span class="cat-count">' + numItems + '</span>';
       html += '</div>';
 
-      var subHeight = Math.max(numItems, 1) * 54;
-      html += '<div class="sub-list" style="max-height:' + subHeight + 'px" data-cat="' + catId + '">';
+      html += '<div class="sub-list" style="max-height:9999px" data-cat="' + catId + '">';
 
       if (numItems === 0) {
         html += '<div class="sub-item" style="cursor:default;color:#3d5068;font-size:12px;padding-left:44px;">（暂无报告）</div>';
@@ -550,6 +550,10 @@ async function buildTree() {
 
     html += '<div class="no-results" id="noResults">未找到匹配的报告</div>';
     wrap.innerHTML = html;
+    // Fix max-heights to actual content height
+    document.querySelectorAll('.sub-list').forEach(function(sl) {
+      sl.style.maxHeight = sl.scrollHeight + 'px';
+    });
     document.getElementById('totalCount').textContent = total;
   } catch (err) {
     wrap.innerHTML = '<div style="padding:40px 24px;text-align:center;color:#e74c3c;font-size:13px;">加载失败：' + err.message + '</div>';
@@ -567,8 +571,7 @@ function toggleCat(header) {
   } else {
     header.classList.add('open');
     subList.classList.remove('collapsed');
-    var items = subList.querySelectorAll('.sub-item:not(.hidden)');
-    subList.style.maxHeight = (Math.max(items.length, 1) * 54) + 'px';
+    subList.style.maxHeight = subList.scrollHeight + 'px';
   }
 }
 
@@ -582,24 +585,51 @@ function selectReport(el) {
   var title = el.dataset.title;
   var filePath = encodeURI(el.dataset.path);
 
-  // Debug: show raw path and encoded URL in console
-  console.log('Raw path:', el.dataset.path);
-  console.log('Encoded URL:', filePath);
-
   document.getElementById('welcomeScreen').style.display = 'none';
-  document.getElementById('docContainer').classList.add('visible');
-  document.getElementById('docFallback').classList.remove('visible');
   document.getElementById('docToolbar').classList.add('visible');
   document.getElementById('docTitle').textContent = title;
   document.getElementById('btnDownload').href = filePath;
-  document.getElementById('docFrame').src = filePath;
 
-  // Debug: verify the URL is reachable
-  fetch(filePath, {method: 'HEAD'}).then(function(r) {
-    console.log('Fetch status for', filePath, ':', r.status);
-  }).catch(function(e) {
-    console.error('Fetch error for', filePath, ':', e.message);
-  });
+  // Check if file is deployed before loading the iframe
+  var docFrame = document.getElementById('docFrame');
+  var docContainer = document.getElementById('docContainer');
+  var docFallback = document.getElementById('docFallback');
+
+  function tryLoad(retryCount) {
+    docContainer.classList.add('visible');
+    docFallback.classList.remove('visible');
+    docFallback.innerHTML = '';
+
+    fetch(filePath, {method: 'HEAD'}).then(function(r) {
+      if (r.ok) {
+        // File exists, load it
+        docFrame.src = filePath;
+      } else if (retryCount < 12) {
+        // Still deploying, retry after 10 seconds
+        docFallback.classList.add('visible');
+        docFallback.innerHTML = '<p style="color:#f0a040;">报告正在部署到服务器...</p><p style="color:#5a7a9a;font-size:12px;">GitHub Pages 部署中，约需 1-2 分钟</p><p style="color:#5a7a9a;font-size:12px;">10 秒后自动重试（第 ' + (retryCount + 1) + '/12 次）</p>';
+        setTimeout(function() { tryLoad(retryCount + 1); }, 10000);
+      } else {
+        // Failed after all retries
+        docContainer.classList.remove('visible');
+        docFallback.classList.add('visible');
+        docFallback.innerHTML = '<p style="color:#e74c3c;">报告加载失败</p><p style="color:#5a7a9a;font-size:12px;">请稍后点击"获取最新信息"后重试</p><button class="btn" onclick="closeReport()" style="padding:8px 20px;margin-top:12px;">返回目录</button>';
+        showToast('报告尚未部署完成，请稍后重试', 'error', 5000);
+      }
+    }).catch(function() {
+      if (retryCount < 12) {
+        docFallback.classList.add('visible');
+        docFallback.innerHTML = '<p style="color:#f0a040;">正在检测报告状态...</p><p style="color:#5a7a9a;font-size:12px;">第 ' + (retryCount + 1) + '/12 次重试</p>';
+        setTimeout(function() { tryLoad(retryCount + 1); }, 10000);
+      } else {
+        docContainer.classList.remove('visible');
+        docFallback.classList.add('visible');
+        docFallback.innerHTML = '<p style="color:#e74c3c;">无法连接到服务器</p><p style="color:#5a7a9a;font-size:12px;">请检查网络连接后重试</p><button class="btn" onclick="closeReport()" style="padding:8px 20px;margin-top:12px;">返回目录</button>';
+      }
+    });
+  }
+
+  tryLoad(0);
 
   if (window.innerWidth <= 768) {
     document.getElementById('sidebar').classList.remove('open');
@@ -648,7 +678,7 @@ function filterTree() {
         header.classList.add('open');
         subList.classList.remove('collapsed');
       }
-      subList.style.maxHeight = (Math.max(catVisible, 1) * 54) + 'px';
+      subList.style.maxHeight = subList.scrollHeight + 'px';
     }
 
     catItem.style.display = (query && catVisible === 0) ? 'none' : '';
