@@ -534,9 +534,7 @@ async function buildTree() {
           var itemId = catId + '-' + (idx + 1);
           // Display name: base name without version
           var displayTitle = base;
-          // Full path for the link
-          var fullPath = 'reports/' + encodeURIComponent(dirName) + '/' + encodeURIComponent(g.name);
-          html += '<div class="sub-item" data-id="' + itemId + '" data-cat="' + catId + '" data-path="' + escapeHtml(fullPath) + '" data-title="' + escapeHtml(displayTitle) + '" onclick="selectReport(this)">';
+          html += '<div class="sub-item" data-id="' + itemId + '" data-cat="' + catId + '" data-dir="' + escapeHtml(dirName) + '" data-file="' + escapeHtml(g.name) + '" data-title="' + escapeHtml(displayTitle) + '" onclick="selectReport(this)">';
           html += '<span class="dot"></span>';
           html += '<div class="sub-text">';
           html += '<div class="sub-title">' + escapeHtml(displayTitle) + '</div>';
@@ -582,7 +580,7 @@ function selectReport(el) {
   document.getElementById('selectedCount').textContent = '1';
 
   var title = el.dataset.title;
-  var filePath = el.dataset.path;
+  var filePath = encodeURI('reports/' + el.dataset.dir + '/' + el.dataset.file);
 
   document.getElementById('welcomeScreen').style.display = 'none';
   document.getElementById('docContainer').classList.add('visible');
