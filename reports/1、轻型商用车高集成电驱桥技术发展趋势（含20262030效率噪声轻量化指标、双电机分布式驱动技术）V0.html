@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>轻型商用车高集成电驱桥技术发展趋势</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root { --bg:#0f1923; --card:#1a2736; --border:#2a3a4a; --text:#d0d8e0; --accent:#00b4d8; --warn:#f4a261; --red:#e63946; --green:#2ecc71; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; padding:20px; }
+  .container { max-width:1200px; margin:0 auto; }
+  .cover { text-align:center; padding:60px 20px 40px; border-bottom:3px solid var(--accent); margin-bottom:40px; }
+  .cover h1 { font-size:2.2em; color:#fff; margin-bottom:10px; }
+  .cover .sub { color:var(--accent); font-size:1.1em; }
+  .section { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:30px; margin-bottom:24px; }
+  .section h2 { color:var(--accent); font-size:1.5em; border-left:4px solid var(--accent); padding-left:12px; margin-bottom:20px; }
+  .section h3 { color:#fff; font-size:1.15em; margin:20px 0 12px; }
+  table { width:100%; border-collapse:collapse; margin:16px 0; font-size:0.9em; }
+  th { background:#1e3a50; color:var(--accent); padding:10px 12px; text-align:left; border-bottom:2px solid var(--accent); }
+  td { padding:8px 12px; border-bottom:1px solid var(--border); }
+  tr:hover td { background:rgba(0,180,216,0.06); }
+  .badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:0.8em; font-weight:600; }
+  .badge-a { background:#1a4a2a; color:var(--green); }
+  .badge-b { background:#4a351a; color:var(--warn); }
+  .badge-c { background:#4a1a1a; color:var(--red); }
+  .chart-row { display:flex; gap:20px; flex-wrap:wrap; margin:20px 0; }
+  .chart-box { flex:1; min-width:320px; background:#111d29; border-radius:8px; padding:16px; }
+  .chart-box canvas { max-height:350px; }
+  .kpi-row { display:flex; gap:16px; flex-wrap:wrap; margin:16px 0; }
+  .kpi { flex:1; min-width:160px; background:#111d29; border-radius:8px; padding:16px; text-align:center; border-top:3px solid var(--accent); }
+  .kpi .val { font-size:2em; font-weight:700; color:#fff; }
+  .kpi .lbl { font-size:0.8em; color:#8899aa; margin-top:4px; }
+  .roadmap { position:relative; padding:20px 0; }
+  .roadmap .bar { display:flex; align-items:center; margin:6px 0; }
+  .roadmap .yr { width:56px; font-weight:700; color:var(--accent); text-align:right; padding-right:12px; flex-shrink:0; }
+  .roadmap .fill { height:28px; background:linear-gradient(90deg,var(--accent),#0077b6); border-radius:4px; display:flex; align-items:center; padding:0 10px; font-size:0.8em; color:#fff; white-space:nowrap; }
+  .note { background:#1a2a1a; border-left:3px solid var(--green); padding:10px 14px; border-radius:0 6px 6px 0; margin:12px 0; font-size:0.9em; }
+  .warn { background:#2a1a1a; border-left:3px solid var(--red); padding:10px 14px; border-radius:0 6px 6px 0; margin:12px 0; font-size:0.9em; }
+  @media(max-width:768px){ .chart-row{flex-direction:column;} .kpi-row{gap:8px;} }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- COVER -->
+<div class="cover">
+  <h1>轻型商用车高集成电驱桥技术发展趋势</h1>
+  <p class="sub">深度研究级报告 | 2026年5月 | PPT五段式结构 | 35条来源</p>
+</div>
+
+<!-- 第一章：现状基线 -->
+<div class="section">
+  <h2>一、现状基线（2025/2026 Baseline）</h2>
+  
+  <div class="kpi-row">
+    <div class="kpi"><div class="val">93-97%</div><div class="lbl">系统综合效率（头部）</div></div>
+    <div class="kpi"><div class="val">72-78dBA</div><div class="lbl">噪声水平（主流）</div></div>
+    <div class="kpi"><div class="val">3合1</div><div class="lbl">主流集成度</div></div>
+    <div class="kpi"><div class="val">-15~20%</div><div class="lbl">轻量化减重幅度</div></div>
+    <div class="kpi"><div class="val">>70%</div><div class="lbl">2035 eAxle渗透率</div></div>
+  </div>
+
+  <h3>架构演进三阶段</h3>
+  <div class="roadmap">
+    <div class="bar"><span class="yr">2020前</span><div class="fill" style="width:35%">中央电机+传动轴 效率85-90% ❌</div></div>
+    <div class="bar"><span class="yr">2022-25</span><div class="fill" style="width:60%;background:linear-gradient(90deg,#f4a261,#e76f51)">2合1/3合1平行轴 效率92-95% ⚡主流</div></div>
+    <div class="bar"><span class="yr">2025+</span><div class="fill" style="width:85%;background:linear-gradient(90deg,#2ecc71,#00b4d8)">3合1/4合1同轴/一体化 效率95-97%+ 🚀前沿</div></div>
+  </div>
+  
+  <div class="note">✅ 五菱同轴桥累计150万台验证 | ✅ 精进电动"共油冷却"三合一发布 | ✅ 万里扬NVH行业领先(-15dBA)</div>
+  
+  <h3>关键瓶颈</h3>
+  <table>
+    <tr><th>瓶颈</th><th>紧迫度</th><th>现状</th></tr>
+    <tr><td>SiC供应链</td><td><span class="badge badge-c">★★★★★</span></td><td>博世/ZF已集成800V SiC，国内产能爬坡中</td></tr>
+    <tr><td>高转速轴承</td><td><span class="badge badge-b">★★★★</span></td><td>20000rpm+对轴承寿命提出挑战</td></tr>
+    <tr><td>分布式驱动控制</td><td><span class="badge badge-b">★★★★</span></td><td>扭矩矢量算法仅少数玩家掌握</td></tr>
+    <tr><td>成本压力</td><td><span class="badge badge-a">★★★</span></td><td>三合一较传统方案贵30-50%</td></tr>
+  </table>
+</div>
+
+<!-- 第二章：分阶段指标 -->
+<div class="section">
+  <h2>二、2026 / 2028 / 2030 分阶段指标</h2>
+  
+  <div class="chart-row">
+    <div class="chart-box">
+      <canvas id="efficiencyChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <canvas id="noiseChart"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-row">
+    <div class="chart-box">
+      <canvas id="densityChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <canvas id="integrationChart"></canvas>
+    </div>
+  </div>
+
+  <h3>核心指标路线图</h3>
+  <table>
+    <tr><th>指标</th><th>2026基线</th><th>2028中期</th><th>2030远期</th></tr>
+    <tr><td>系统综合效率</td><td>≥96%（头部97%+）</td><td>≥97.5%（头部98%）</td><td>≥98%</td></tr>
+    <tr><td>峰值效率</td><td>97-98%</td><td>98-98.5%</td><td>≥99%</td></tr>
+    <tr><td>系统功率密度</td><td>3-4 kW/kg</td><td>5-6 kW/kg</td><td>≥7 kW/kg</td></tr>
+    <tr><td>噪声(1m声压级)</td><td>≤72dBA（头68）</td><td>≤65dBA</td><td>≤62dBA</td></tr>
+    <tr><td>轻量化减重比</td><td>-15%~-20%</td><td>-25%~-30%</td><td>-35%+</td></tr>
+    <tr><td>B10寿命</td><td>100-160万km</td><td>150-200万km</td><td>≥200万km</td></tr>
+    <tr><td>电压平台</td><td>400/600/800V并存</td><td>800V成主流</td><td>≥900V</td></tr>
+    <tr><td>集成度</td><td>3合1→部分4合1</td><td>4合1→部分5合1</td><td>5合1/6合1标准</td></tr>
+    <tr><td>SiC渗透率</td><td>15-20%</td><td>40-50%</td><td>≥80%</td></tr>
+    <tr><td>双电机分布式占比</td><td>&lt;5%</td><td>10-15%</td><td>20-25%</td></tr>
+  </table>
+  
+  <h3>能耗对标（集成电驱桥 vs 传统方案）</h3>
+  <table>
+    <tr><th>车型</th><th>传统柴油(L/100km)</th><th>中央电驱(kWh/100km)</th><th>集成电驱桥(kWh/100km)</th><th>降幅</th></tr>
+    <tr><td>4.5t轻卡城配</td><td>12-14</td><td>35-40</td><td>28-32</td><td style="color:var(--green)">-20%</td></tr>
+    <tr><td>6t轻卡城际</td><td>15-18</td><td>42-48</td><td>34-38</td><td style="color:var(--green)">-19%</td></tr>
+    <tr><td>7.5t中卡</td><td>18-22</td><td>50-58</td><td>40-45</td><td style="color:var(--green)">-20%</td></tr>
+  </table>
+</div>
+
+<!-- 第三章：核心关键技术 -->
+<div class="section">
+  <h2>三、核心关键技术</h2>
+  
+  <div class="chart-row">
+    <div class="chart-box">
+      <canvas id="techRadar"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>架构集成三层级</h3>
+      <table>
+        <tr><th>层级</th><th>架构</th><th>代表</th><th>成熟度</th></tr>
+        <tr><td>L1</td><td>平行轴 2合1</td><td>汇川早期</td><td>★★★★★</td></tr>
+        <tr><td>L2</td><td>同轴 3合1</td><td>五菱/博世轻商</td><td>★★★★★</td></tr>
+        <tr><td>L3</td><td>一体化 4合1+</td><td>ZF AxTrax 2 dual</td><td>★★★★☆</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h3>双电机/分布式驱动方案</h3>
+  <table>
+    <tr><th>方案</th><th>架构</th><th>功率范围</th><th>代表产品</th><th>成熟度</th></tr>
+    <tr><td>双电机同轴</td><td>两电机同桥壳</td><td>200-400kW</td><td>汇川双电机</td><td>★★★★ 量产</td></tr>
+    <tr><td>双电机分布式</td><td>左右轮独立驱动</td><td>400-800kW</td><td>ZF AxTrax 2 dual</td><td>★★★☆ 试点</td></tr>
+    <tr><td>轴向磁通分布式</td><td>轴向磁通替代径向</td><td>单机306kW</td><td>盘毂ICD306K</td><td>★★★ 验证</td></tr>
+    <tr><td>四轮独立</td><td>四电机全解耦</td><td>4×200-300kW</td><td>概念/预研</td><td>★★☆ 预研</td></tr>
+  </table>
+
+  <div class="note">⚡ 盘毂ICD306K轴向磁通电机：306kW峰值、18000rpm、>21kW/kg功率密度（国家2035目标3倍）、双电机系统≤95kg</div>
+  
+  <h3>轻量化技术矩阵</h3>
+  <table>
+    <tr><th>方向</th><th>手段</th><th>减重效果</th><th>成熟度</th></tr>
+    <tr><td>材料替代</td><td>铝合金桥壳/碳纤维轴/镁合金</td><td>-25~60%</td><td>★★★★★</td></tr>
+    <tr><td>结构优化</td><td>一体化压铸/拓扑优化/同轴架构</td><td>-10~20%</td><td>★★★★</td></tr>
+    <tr><td>电机轻量</td><td>轴向磁通/扁线绕组/高速电机</td><td>-5~50%</td><td>★★★☆</td></tr>
+  </table>
+  
+  <h3>NVH差异化技术</h3>
+  <table>
+    <tr><th>技术</th><th>降噪效果</th><th>应用状态</th></tr>
+    <tr><td>高精度磨齿+齿面修形</td><td>-3~5dBA</td><td>行业标配</td></tr>
+    <tr><td>电磁谐波主动注入</td><td>-5~8dBA</td><td>头部导入</td></tr>
+    <tr><td>壳体阻尼优化</td><td>-2~3dBA</td><td>仿真驱动</td></tr>
+    <tr><td>万里扬综合方案</td><td style="color:var(--accent);font-weight:700">-10~15dBA</td><td>行业标杆</td></tr>
+  </table>
+</div>
+
+<!-- 第四章：落地路径 -->
+<div class="section">
+  <h2>四、落地路径</h2>
+  
+  <div class="chart-box" style="margin:16px 0;">
+    <canvas id="roadmapChart"></canvas>
+  </div>
+
+  <h3>三阶段落地路径</h3>
+  <table>
+    <tr><th>阶段</th><th>时间</th><th>主题</th><th>关键里程碑</th></tr>
+    <tr><td>第一阶段</td><td>2026-2027</td><td>规模化降本</td><td>SiC国产供应链建设、三合一标准化、轻商专属平台</td></tr>
+    <tr><td>第二阶段</td><td>2027-2028</td><td>分布式驱动突破</td><td>双电机轻商方案、轴向磁通量产（>5万台/年）、800V全系推广</td></tr>
+    <tr><td>第三阶段</td><td>2028-2030</td><td>智能化+极致高效</td><td>AI效率优化、GaN导入、5合1/6合1标准化、无稀土电机</td></tr>
+  </table>
+
+  <h3>供应链成熟度</h3>
+  <table>
+    <tr><th>关键零部件</th><th>2026</th><th>2028E</th><th>国产化率</th><th>风险</th></tr>
+    <tr><td>SiC功率模块</td><td>★★★☆</td><td>★★★★★</td><td>40%→70%</td><td>🟡中</td></tr>
+    <tr><td>高速轴承</td><td>★★★★</td><td>★★★★★</td><td>60%→85%</td><td>🟢低</td></tr>
+    <tr><td>扁线电机产线</td><td>★★★★★</td><td>★★★★★</td><td>90%+</td><td>🟢低</td></tr>
+    <tr><td>轴向磁通电机</td><td>★★★</td><td>★★★★</td><td>盘毂→2-3家</td><td>🟡中</td></tr>
+    <tr><td>车规级GaN</td><td>★★☆</td><td>★★★</td><td>&lt;10%→20%</td><td>🔴高</td></tr>
+  </table>
+</div>
+
+<!-- 第五章：竞品对标 -->
+<div class="section">
+  <h2>五、竞品对标</h2>
+
+  <div class="chart-row">
+    <div class="chart-box">
+      <canvas id="competitorRadar"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>竞争力差异矩阵</h3>
+      <table>
+        <tr><th>维度</th><th>领先者</th><th>差异化者</th></tr>
+        <tr><td>系统效率</td><td>博世(>97%)</td><td>盘毂轴向磁通Map</td></tr>
+        <tr><td>功率密度</td><td>盘毂(21kW/kg)</td><td>博世SiC缩小电机</td></tr>
+        <tr><td>NVH</td><td>万里扬(-15dBA)</td><td>独一档</td></tr>
+        <tr><td>集成度</td><td>ZF→博世(6合1)</td><td>精进共油创新</td></tr>
+        <tr><td>B10寿命</td><td>东风德纳(160万km)</td><td>万里扬系</td></tr>
+        <tr><td>轻量化</td><td>盘毂(-50%)</td><td>五菱同轴</td></tr>
+        <tr><td>成本</td><td>五菱>万里扬>汇川</td><td>国产整体优势</td></tr>
+        <tr><td>全球化</td><td>博世>ZF>康明斯</td><td>—</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h3>全球主要竞品参数总览</h3>
+  <table style="font-size:0.82em;">
+    <tr><th>厂商</th><th>产品</th><th>功率</th><th>效率</th><th>集成度</th><th>电压</th><th>轻量化</th><th>噪声</th><th>量产</th></tr>
+    <tr><td><strong>博世</strong></td><td>eAxle LCV</td><td>70-300kW</td><td>>97%</td><td>3→6合1</td><td>800V</td><td>SiC缩小</td><td>—</td><td>2024</td></tr>
+    <tr><td><strong>ZF</strong></td><td>AxTrax 2 dual</td><td>380kW</td><td>高效</td><td>One-Box</td><td>双800V</td><td>极简</td><td>—</td><td>2025</td></tr>
+    <tr><td><strong>康明斯</strong></td><td>12Xe/14Xe</td><td>200/300kW</td><td>97%</td><td>3合1</td><td>600/800V</td><td>-15%</td><td>低噪</td><td>2027本地</td></tr>
+    <tr><td><strong>盘毂</strong></td><td>ICD306K</td><td>306kW</td><td>高效Map</td><td>分布式</td><td>—</td><td>-50%</td><td>—</td><td>量试</td></tr>
+    <tr><td><strong>精进</strong></td><td>三合一</td><td>—</td><td>高效</td><td>共油3合1</td><td>—</td><td>创新</td><td>—</td><td>2025</td></tr>
+    <tr><td><strong>汇川</strong></td><td>多平台</td><td>—</td><td>—</td><td>3/多合1</td><td>—</td><td>模块化</td><td>—</td><td>量产</td></tr>
+    <tr><td><strong>五菱</strong></td><td>同轴桥</td><td>—</td><td>高效</td><td>同轴</td><td>—</td><td>紧凑</td><td>—</td><td>150万台</td></tr>
+    <tr><td><strong>万里扬</strong></td><td>轻卡桥</td><td>—</td><td>—</td><td>3合1</td><td>—</td><td>轻卡适配</td><td>-15dBA</td><td>量产</td></tr>
+  </table>
+
+  <h3>六大竞争洞察</h3>
+  <div class="note">① 博世vs ZF：宽平台+高集成 vs 极致性能，轻商场景博世覆盖更广</div>
+  <div class="note">② 康明斯Accelera：2027中国本地化是最大变量，1亿km验证数据是护城河</div>
+  <div class="note">③ 盘毂动力：轴向磁通赛道独占，21kW/kg提前达国家2035目标</div>
+  <div class="note">④ 国产双雄：汇川平台化+客户覆盖 vs 精进共油技术创新</div>
+  <div class="note">⑤ 万里扬NVH壁垒：-15dBA是know-how型壁垒，短期难以追平</div>
+  <div class="note">⑥ 五菱150万台：销量≠最先进，但=商业可行性最强验证</div>
+</div>
+
+<!-- FOOTER -->
+<div class="section" style="text-align:center;font-size:0.85em;color:#8899aa;">
+  <p>研究框架：research-team v2.2 | 来源：35条（A12/B16/C7）| 日期：2026-05-21</p>
+  <p>⚠️ 已知局限：2028里程碑缺乏官方路线图文件支撑；博世官网/媒体效率数据存在差异</p>
+</div>
+
+</div>
+
+<script>
+// Efficiency evolution chart
+new Chart(document.getElementById('efficiencyChart'), {
+  type:'line', data:{
+    labels:['2023','2024','2025','2026','2027','2028','2029','2030'],
+    datasets:[
+      {label:'系统综合效率(%)',data:[93,94,95.5,96.5,97,97.5,98,98.5],borderColor:'#00b4d8',backgroundColor:'rgba(0,180,216,0.1)',tension:0.4,fill:true},
+      {label:'峰值效率(%)',data:[95.5,96.5,97.5,98,98.5,98.8,99,99.2],borderColor:'#2ecc71',tension:0.4,borderDash:[5,5]}
+    ]
+  },
+  options:{responsive:true,plugins:{title:{display:true,text:'效率演进曲线',color:'#d0d8e0'},legend:{labels:{color:'#8899aa'}}},scales:{y:{min:90,max:100,ticks:{color:'#8899aa'},grid:{color:'#2a3a4a'}},x:{ticks:{color:'#8899aa'},grid:{color:'#2a3a4a'}}}}
+});
+
+// Noise reduction chart
+new Chart(document.getElementById('noiseChart'), {
+  type:'bar', data:{
+    labels:['2023','2025','2026','2028','2030'],
+    datasets:[
+      {label:'噪声(dBA)',data:[82,78,72,65,62],backgroundColor:['#4a1a1a','#7a3a1a','#aa6a2a','#3a6a1a','#1a4a2a']}
+    ]
+  },
+  options:{responsive:true,plugins:{title:{display:true,text:'噪声指标演进 (1m声压级)',color:'#d0d8e0'},legend:{display:false}},scales:{y:{min:55,max:85,ticks:{color:'#8899aa'},grid:{color:'#2a3a4a'}},x:{ticks:{color:'#8899aa'},grid:{color:'#2a3a4a'}}}}
+});
+
+// Power density chart
+new Chart(document.getElementById('densityChart'), {
+  type:'bar', data:{
+    labels:['2026','2028','2030','2035(国家)'],
+    datasets:[
+      {label:'系统功率密度(kW/kg)',data:[3.5,5.5,7.5,7],backgroundColor:['#2a4a6a','#3a6a8a','#00b4d8','#f4a261']},
+      {label:'盘毂轴向磁通',data:[21,21,21,21],backgroundColor:'#e63946',borderColor:'#e63946',type:'line'}
+    ]
+  },
+  options:{responsive:true,plugins:{title:{display:true,text:'功率密度对标',color:'#d0d8e0'}},scales:{y:{ticks:{color:'#8899aa'},grid:{color:'#2a3a4a'}},x:{ticks:{color:'#8899aa'},grid:{color:'#2a3a4a'}}}}
+});
+
+// Integration evolution
+new Chart(document.getElementById('integrationChart'), {
+  type:'line', data:{
+    labels:['2020','2022','2024','2026','2028','2030'],
+    datasets:[
+      {label:'集成度(合1数)',data:[1,2,3,4,5,6],borderColor:'#f4a261',tension:0.3,pointRadius:6,pointBackgroundColor:'#f4a261'},
+      {label:'SiC渗透率(%)',data:[0,5,15,20,45,85],borderColor:'#2ecc71',tension:0.3,yAxisID:'y1'}
+    ]
+  },
+  options:{responsive:true,plugins:{title:{display:true,text:'集成度 & SiC渗透率',color:'#d0d8e0'}},scales:{y:{position:'left',ticks:{color:'#f4a261'},grid:{color:'#2a3a4a'},title:{display:true,text:'集成度',color:'#f4a261'}},y1:{position:'right',min:0,max:100,ticks:{color:'#2ecc71'},grid:{display:false},title:{display:true,text:'SiC渗透率%',color:'#2ecc71'}},x:{ticks:{color:'#8899aa'},grid:{color:'#2a3a4a'}}}}
+});
+
+// Technology radar
+new Chart(document.getElementById('techRadar'), {
+  type:'radar', data:{
+    labels:['集成度','系统效率','功率密度','轻量化','NVH','可靠性','热管理','成本'],
+    datasets:[
+      {label:'行业均值',data:[3.5,3.5,3,3,3,3.5,3,3.5],borderColor:'#8899aa',backgroundColor:'rgba(136,153,170,0.15)'},
+      {label:'头部水平',data:[4.5,4.5,4,4,4,4.5,4,3.5],borderColor:'#00b4d8',backgroundColor:'rgba(0,180,216,0.15)'},
+      {label:'盘毂轴向磁通',data:[4,4,5,5,3,3,3,2.5],borderColor:'#e63946',backgroundColor:'rgba(230,57,70,0.1)',borderDash:[3,3]}
+    ]
+  },
+  options:{responsive:true,plugins:{title:{display:true,text:'技术成熟度雷达图',color:'#d0d8e0'}},scales:{r:{ticks:{display:false},grid:{color:'#2a3a4a'},pointLabels:{color:'#8899aa'}}}}
+});
+
+// Competitor radar
+new Chart(document.getElementById('competitorRadar'), {
+  type:'radar', data:{
+    labels:['效率','功率密度','NVH','集成度','可靠性','轻量化','成本'],
+    datasets:[
+      {label:'博世',data:[5,3.5,3.5,5,4,4,3],borderColor:'#00b4d8',backgroundColor:'rgba(0,180,216,0.08)'},
+      {label:'ZF',data:[4.5,4,3.5,5,4,4.5,2.5],borderColor:'#0077b6',backgroundColor:'rgba(0,119,182,0.08)'},
+      {label:'康明斯',data:[4.5,3.5,3.5,4,4.5,3.5,3],borderColor:'#f4a261',backgroundColor:'rgba(244,162,97,0.08)'},
+      {label:'盘毂',data:[4,5,3,3.5,3,5,2.5],borderColor:'#e63946',backgroundColor:'rgba(230,57,70,0.08)',borderDash:[3,3]},
+      {label:'万里扬',data:[3.5,3,5,3.5,4,3,4],borderColor:'#2ecc71',backgroundColor:'rgba(46,204,113,0.08)',borderDash:[3,3]}
+    ]
+  },
+  options:{responsive:true,plugins:{title:{display:true,text:'五维竞品对标雷达',color:'#d0d8e0'}},scales:{r:{ticks:{display:false},grid:{color:'#2a3a4a'},pointLabels:{color:'#8899aa'}}}}
+});
+
+// Roadmap timeline
+new Chart(document.getElementById('roadmapChart'), {
+  type:'scatter', data:{
+    datasets:[
+      {label:'国际Tier1',data:[{x:2024,y:3,label:'博世轻商'},{x:2025,y:4,label:'ZF AxTrax 2'},{x:2027,y:6,label:'康明斯中国'}],backgroundColor:'#00b4d8',pointRadius:10},
+      {label:'国产厂商',data:[{x:2022,y:2,label:'五菱同轴'},{x:2023,y:3,label:'万里扬'},{x:2025,y:4,label:'精进三合一'},{x:2026,y:5,label:'汇川双电机'}],backgroundColor:'#f4a261',pointRadius:10},
+      {label:'新势力',data:[{x:2026,y:5,label:'盘毂量试'},{x:2028,y:7,label:'盘毂量产'}],backgroundColor:'#e63946',pointRadius:10,pointStyle:'triangle'}
+    ]
+  },
+  options:{responsive:true,plugins:{title:{display:true,text:'量产时间节点地图',color:'#d0d8e0'},tooltip:{callbacks:{label:ctx=>ctx.raw.label}}},scales:{x:{min:2021,max:2031,ticks:{stepSize:1,color:'#8899aa'},grid:{color:'#2a3a4a'},title:{display:true,text:'年份',color:'#8899aa'}},y:{min:0,max:8,ticks:{color:'#8899aa'},grid:{color:'#2a3a4a'},title:{display:true,text:'成熟度(1-7)',color:'#8899aa'}}}}
+});
+</script>
+
+</body>
+</html>

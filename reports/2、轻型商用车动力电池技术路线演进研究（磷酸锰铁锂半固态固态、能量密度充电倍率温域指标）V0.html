@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>轻型商用车动力电池技术路线演进研究</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root { --bg:#0f1923; --card:#1a2736; --border:#2a3a4a; --text:#d0d8e0; --accent:#e76f51; --warn:#f4a261; --red:#e63946; --green:#2ecc71; --blue:#00b4d8; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; padding:20px; }
+  .container { max-width:1200px; margin:0 auto; }
+  .cover { text-align:center; padding:60px 20px 40px; border-bottom:3px solid var(--accent); margin-bottom:40px; }
+  .cover h1 { font-size:2.2em; color:#fff; margin-bottom:10px; }
+  .cover .sub { color:var(--accent); font-size:1.1em; }
+  .section { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:30px; margin-bottom:24px; }
+  .section h2 { color:var(--accent); font-size:1.5em; border-left:4px solid var(--accent); padding-left:12px; margin-bottom:20px; }
+  .section h3 { color:#fff; font-size:1.15em; margin:20px 0 12px; }
+  table { width:100%; border-collapse:collapse; margin:16px 0; font-size:0.88em; }
+  th { background:#3a1a10; color:var(--accent); padding:10px 12px; text-align:left; border-bottom:2px solid var(--accent); }
+  td { padding:8px 12px; border-bottom:1px solid var(--border); }
+  tr:hover td { background:rgba(231,111,81,0.06); }
+  .chart-row { display:flex; gap:20px; flex-wrap:wrap; margin:20px 0; }
+  .chart-box { flex:1; min-width:320px; background:#111d29; border-radius:8px; padding:16px; }
+  .chart-box canvas { max-height:350px; }
+  .kpi-row { display:flex; gap:16px; flex-wrap:wrap; margin:16px 0; }
+  .kpi { flex:1; min-width:150px; background:#111d29; border-radius:8px; padding:16px; text-align:center; border-top:3px solid var(--accent); }
+  .kpi .val { font-size:1.8em; font-weight:700; color:#fff; }
+  .kpi .lbl { font-size:0.78em; color:#8899aa; margin-top:4px; }
+  .note { background:#1a2a1a; border-left:3px solid var(--green); padding:10px 14px; border-radius:0 6px 6px 0; margin:12px 0; font-size:0.9em; }
+  .warn { background:#2a1a1a; border-left:3px solid var(--red); padding:10px 14px; border-radius:0 6px 6px 0; margin:12px 0; font-size:0.9em; }
+  .timeline { position:relative; padding:10px 0; }
+  .timeline-item { display:flex; align-items:flex-start; margin:10px 0; padding:10px; background:#111d29; border-radius:8px; border-left:3px solid var(--accent); }
+  .timeline-item .year { color:var(--accent); font-weight:700; min-width:60px; font-size:1.1em; }
+  .timeline-item .desc { flex:1; font-size:0.9em; }
+  .tech-card { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin:16px 0; }
+  .tech-card .card { background:#111d29; border-radius:8px; padding:16px; border-top:3px solid var(--accent); }
+  .tech-card .card h4 { color:var(--accent); margin-bottom:8px; }
+  @media(max-width:768px){ .chart-row{flex-direction:column;} .kpi-row{gap:8px;} }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- COVER -->
+<div class="cover">
+  <h1>轻型商用车动力电池技术路线演进研究</h1>
+  <p class="sub">深度研究级报告 | 2026年5月 | PPT五段式结构 | 28条来源</p>
+  <p style="color:#8899aa;margin-top:8px;">磷酸锰铁锂 / 半固态 / 全固态 | 能量密度 / 充电倍率 / 温域指标</p>
+</div>
+
+<!-- 第一章：现状基线 -->
+<div class="section">
+  <h2>一、现状基线（2025/2026 Baseline）</h2>
+  
+  <div class="kpi-row">
+    <div class="kpi"><div class="val">>3万吨</div><div class="lbl">LMFP 2025出货(+275%)</div></div>
+    <div class="kpi"><div class="val">500Wh/kg</div><div class="lbl">半固态最高能量密度</div></div>
+    <div class="kpi"><div class="val">>15GWh</div><div class="lbl">2026半固态全球出货</div></div>
+    <div class="kpi"><div class="val">4C→6C</div><div class="lbl">快充倍率演进</div></div>
+    <div class="kpi"><div class="val">0.3-0.4元</div><div class="lbl">LFP/LMFP系统成本/Wh</div></div>
+  </div>
+
+  <h3>四代电池技术路线并肩演进</h3>
+  <table>
+    <tr><th>技术路线</th><th>电芯能量密度</th><th>系统能量密度</th><th>成本(元/Wh)</th><th>循环寿命</th><th>量产状态</th></tr>
+    <tr><td><strong>LFP（基准）</strong></td><td>140-180 Wh/kg</td><td>130-160</td><td>0.3-0.4</td><td>3000-6000</td><td>★★★★★ 全系标配</td></tr>
+    <tr><td><strong>LMFP</strong></td><td>180-240 Wh/kg</td><td>160-190</td><td>0.3-0.45 →LFP</td><td>3000-4000</td><td>★★★★ 2026爆发</td></tr>
+    <tr><td><strong>半固态</strong></td><td>350-500 Wh/kg</td><td>260-350</td><td>1.6-2.2</td><td>1500-2000+</td><td>★★★ 2026量产</td></tr>
+    <tr><td><strong>全固态</strong></td><td>400-500 目标</td><td>300-400 目标</td><td>2-5 →2030:0.5-0.7</td><td>>10000</td><td>★★☆ 2027冲刺</td></tr>
+  </table>
+
+  <h3>商用车电池适配矩阵</h3>
+  <div class="tech-card">
+    <div class="card"><h4>🔋 LFP</h4><p>宁德/比亚迪/国轩<br>轻卡全系标配<br>系统140-160Wh/kg<br>✅ 成本最低、安全可靠<br>⚠️ 能量密度天花板</p></div>
+    <div class="card"><h4>⚡ LMFP</h4><p>国轩启晨L600 / 亿纬LM254<br>轻卡/VAN/中卡<br>系统160-190Wh/kg<br>✅ +15-20%能量密度、低温好<br>⚠️ 锰溶出需长验证</p></div>
+    <div class="card"><h4>🔮 半固态</h4><p>宁德凝聚态500Wh/kg<br>先乘用后商用<br>系统260-350Wh/kg<br>✅ 能量密度翻倍<br>⚠️ 成本5倍、商用验证不足</p></div>
+    <div class="card"><h4>🧪 全固态</h4><p>比亚迪/宁德/国轩<br>2027小批量→商用<br>系统300-400Wh/kg<br>✅ 极致安全+密度<br>⚠️ 量产未到、成本极高</p></div>
+  </div>
+
+  <div class="note">⚡ 2026三大标志：①LMFP出货3万吨+量变到质变；②半固态>15GWh全球量产元年；③中国全固态三条硫化物路线并跑丰田</div>
+</div>
+
+<!-- 第二章：分阶段指标 -->
+<div class="section">
+  <h2>二、2026 / 2028 / 2030 分阶段指标</h2>
+  
+  <div class="chart-row">
+    <div class="chart-box">
+      <canvas id="energyDensityChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <canvas id="costChart"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-row">
+    <div class="chart-box">
+      <canvas id="chargingChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <canvas id="penetrationChart"></canvas>
+    </div>
+  </div>
+
+  <h3>核心指标路线图</h3>
+  <table>
+    <tr><th>指标</th><th>路线</th><th>2026基线</th><th>2028中期</th><th>2030远期</th></tr>
+    <tr><td rowspan="3">电芯能量密度(Wh/kg)</td><td>LMFP</td><td>200-240</td><td>220-260</td><td>250-280</td></tr>
+    <tr><td>半固态</td><td>350-500</td><td>400-550</td><td>500-600</td></tr>
+    <tr><td>全固态</td><td>400-450</td><td>450-550</td><td>500-700</td></tr>
+    <tr><td rowspan="3">成本(元/Wh)</td><td>LMFP</td><td>0.3-0.45</td><td>0.25-0.35</td><td>0.2-0.3</td></tr>
+    <tr><td>半固态</td><td>1.6-2.2</td><td>1.1-1.5</td><td>0.6-1.0</td></tr>
+    <tr><td>全固态</td><td>2-5</td><td>1.0-1.5</td><td style="color:var(--accent);font-weight:700">0.5-0.7 固液同价</td></tr>
+    <tr><td>充电倍率</td><td>全路线</td><td>4C普及/6C导入</td><td>6C标准/8C试点</td><td>≥8C / 10min 80%</td></tr>
+    <tr><td>低温保持(-20℃)</td><td>LMFP</td><td>85-93%</td><td>>90%</td><td>>95%</td></tr>
+    <tr><td>商用车LMFP渗透率</td><td>—</td><td>15-20%</td><td>30-40%</td><td>50%+</td></tr>
+    <tr><td>商用车固态渗透率</td><td>—</td><td>0%</td><td><3%</td><td>10-15%</td></tr>
+  </table>
+</div>
+
+<!-- 第三章：核心关键技术 -->
+<div class="section">
+  <h2>三、核心关键技术</h2>
+  
+  <div class="chart-row">
+    <div class="chart-box">
+      <canvas id="techRadar"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>LMFP vs LFP 核心指标对比</h3>
+      <table>
+        <tr><th>参数</th><th>LFP</th><th>LMFP</th><th>提升</th></tr>
+        <tr><td>电压平台</td><td>3.2V</td><td>3.7-4.1V</td><td style="color:var(--green)">+15-25%</td></tr>
+        <tr><td>能量密度</td><td>140-180</td><td>180-240</td><td style="color:var(--green)">+15-33%</td></tr>
+        <tr><td>-20℃保持</td><td>60-70%</td><td>85-93%</td><td style="color:var(--green)">+25-35%</td></tr>
+        <tr><td>成本</td><td>0.3-0.4</td><td>0.3-0.45→同价</td><td style="color:var(--accent)">趋近0</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h3>全球全固态电池量产竞赛</h3>
+  <table style="font-size:0.82em;">
+    <tr><th>厂商</th><th>路线</th><th>能量密度</th><th>量产时间</th><th>关键突破</th></tr>
+    <tr><td><strong>比亚迪(弗迪)</strong></td><td>硫化物+高镍+硅基</td><td>400-450Wh/kg</td><td style="color:var(--accent)">★2027</td><td>-30℃保持85%、>1万次、10min快充、2GWh中试</td></tr>
+    <tr><td><strong>宁德时代</strong></td><td>硫化物</td><td>500Wh/kg</td><td style="color:var(--accent)">★2027</td><td>全栈技术储备</td></tr>
+    <tr><td><strong>国轩高科</strong></td><td>金石全固态</td><td>400Wh/kg</td><td>2026-2027</td><td>固态平价元年</td></tr>
+    <tr><td><strong>丰田</strong></td><td>硫化物+住友金属</td><td>620英里续航</td><td>2027-2028</td><td>10min快充、专用工厂</td></tr>
+    <tr><td><strong>Samsung SDI</strong></td><td>硫化物棱柱形</td><td>900Wh/L</td><td>2027H2</td><td>体积密度领先</td></tr>
+    <tr><td><strong>LG Energy</strong></td><td>硫化物+聚合物</td><td>—</td><td>2027 pilot</td><td>双路线并行</td></tr>
+    <tr><td><strong>奇瑞</strong></td><td>犀牛S</td><td>600Wh/kg</td><td>2027验证</td><td>1200km续航</td></tr>
+  </table>
+
+  <h3>宁德凝聚态电池标杆参数</h3>
+  <div class="note">
+    <strong>500Wh/kg</strong> 单体能量密度 | <strong>15分钟→80%</strong> 快充 | <strong>CLTC>1200km</strong> 续航<br>
+    <strong>216项</strong> 车规级安全测试(针刺/挤压/热冲击/过充)→零起火零爆炸<br>
+    <strong>95%</strong> 中试良率 | <strong>2026Q4</strong> 蔚来ET9/极氪001 FR 首批装车
+  </div>
+
+  <h3>温域性能对比</h3>
+  <table>
+    <tr><th>温度区间</th><th>LFP</th><th>LMFP</th><th>半固态</th><th>全固态</th></tr>
+    <tr><td><strong>-30℃ 容量保持</strong></td><td>40-50%</td><td>70-80%</td><td>75-85%</td><td style="color:var(--green)"><strong>85%+</strong></td></tr>
+    <tr><td><strong>-20℃ 容量保持</strong></td><td>60-70%</td><td style="color:var(--green)"><strong>85-93%</strong></td><td>80-90%</td><td>85-90%</td></tr>
+    <tr><td>热失控触发温度</td><td>~200℃</td><td>~200℃</td><td>>250℃</td><td style="color:var(--green)"><strong>>300℃</strong></td></tr>
+  </table>
+</div>
+
+<!-- 第四章：落地路径 -->
+<div class="section">
+  <h2>四、落地路径</h2>
+  
+  <div class="chart-box" style="margin:16px 0;">
+    <canvas id="timelineChart"></canvas>
+  </div>
+
+  <h3>三阶段落地路径</h3>
+  <div class="timeline">
+    <div class="timeline-item"><span class="year">2026-27</span><div class="desc"><strong>LMFP上量 + 半固态破冰</strong><br>国轩锰铁平价→LMFP成本趋LFP；宁德凝聚态Q4装车蔚来ET9；比亚迪/国轩全固态中试冲刺</div></div>
+    <div class="timeline-item"><span class="year">2027-28</span><div class="desc"><strong>全固态量产 + 半固态商用化</strong><br>比亚迪/宁德/国轩三家硫化物全固态量产；半固态成本→1.1-1.5元/Wh；LMFP商用车渗透>30%</div></div>
+    <div class="timeline-item"><span class="year">2028-30</span><div class="desc"><strong>固液同价 + 全固态商用落地</strong><br>全固态0.5-0.7元/Wh实现固液同价；LMFP+全固态双路线互补；快充基建完善</div></div>
+  </div>
+
+  <h3>轻商电池技术选型路径</h3>
+  <table>
+    <tr><th>场景</th><th>日里程</th><th>2026推荐</th><th>2028推荐</th><th>2030推荐</th></tr>
+    <tr><td>城配最后一公里</td><td>≤150km</td><td>LFP/LMFP</td><td>LMFP</td><td>LMFP(成本最优)</td></tr>
+    <tr><td>城际中短途</td><td>150-300km</td><td>LMFP</td><td>LMFP/半固态选项</td><td>LMFP主力+半固态</td></tr>
+    <tr><td>冷链/特种物流</td><td>高能耗+长续航</td><td>LMFP高配</td><td>半固态</td><td>全固态</td></tr>
+    <tr><td>极端工况</td><td>-30℃寒区</td><td>LMFP(改善)</td><td>半固态</td><td>全固态</td></tr>
+  </table>
+</div>
+
+<!-- 第五章：竞品对标 -->
+<div class="section">
+  <h2>五、竞品对标</h2>
+  
+  <div class="chart-row">
+    <div class="chart-box">
+      <canvas id="competitorRadar"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>全球全固态量产时间线</h3>
+      <table>
+        <tr><th>厂商</th><th>量产</th><th>能量密度</th></tr>
+        <tr><td><strong>比亚迪</strong></td><td style="color:var(--accent)">2027</td><td>400-450Wh/kg</td></tr>
+        <tr><td><strong>宁德时代</strong></td><td style="color:var(--accent)">2027</td><td>500Wh/kg</td></tr>
+        <tr><td><strong>国轩高科</strong></td><td>2026-2027</td><td>400Wh/kg</td></tr>
+        <tr><td><strong>丰田</strong></td><td>2027-2028</td><td>620英里</td></tr>
+        <tr><td><strong>Samsung</strong></td><td>2027H2</td><td>900Wh/L</td></tr>
+        <tr><td><strong>LG Energy</strong></td><td>2027 pilot</td><td>—</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h3>六大竞争洞察</h3>
+  <div class="note">① LMFP"锰铁平价"：国轩若成功将LMFP成本趋近LFP，将颠覆商用车电池格局</div>
+  <div class="note">② 全固态"三国杀"：比亚迪/宁德/国轩三条硫化物路线2027量产，首次与丰田并跑</div>
+  <div class="note">③ 亿纬锂能轻商壁垒：LM254专供轻卡(160kWh/400km)，AI驱动电池管理，细分市场先发</div>
+  <div class="note">④ 韩系差异化：Samsung 900Wh/L体积密度、LG双路线——但商用车布局空白</div>
+  <div class="note">⑤ 成本拐点即胜负手：2030全固态0.5-0.7元/Wh固液同价能否兑现，决定商用渗透速度</div>
+  <div class="note">⑥ 商用车场景是试金石：循环>3000次/安全0容忍/宽温域-30~60℃，商用验证通过才算真成熟</div>
+</div>
+
+<!-- FOOTER -->
+<div class="section" style="text-align:center;font-size:0.85em;color:#8899aa;">
+  <p>研究框架：research-team v2.2 | 来源：28条（A10/B13/C5）| 日期：2026-05-21</p>
+  <p>⚠️ 已知局限：半固态/全固态量产时间表存在6-12个月不确定性；韩系厂商以英文媒体为主</p>
+</div>
+
+</div>
+
+<script>
+// Energy density evolution
+new Chart(document.getElementById('energyDensityChart'), {
+  type:'line', data:{
+    labels:['2025','2026','2027','2028','2029','2030'],
+    datasets:[
+      {label:'LMFP电芯(Wh/kg)',data:[200,220,235,250,265,280],borderColor:'#2ecc71',fill:false,tension:0.3},
+      {label:'半固态电芯(Wh/kg)',data:[350,420,470,500,530,550],borderColor:'#f4a261',fill:false,tension:0.3},
+      {label:'全固态电芯(Wh/kg)',data:[400,450,500,530,570,600],borderColor:'#e76f51',fill:false,tension:0.3,borderWidth:3}
+    ]
+  },
+  options:{responsive:true,plugins:{title:{display:true,text:'电芯能量密度演进(Wh/kg)',color:'#d0d8e0'},legend:{labels:{color:'#8899aa'}}},scales:{y:{ticks:{color:'#8899aa'},grid:{color:'#2a3a4a'}},x:{ticks:{color:'#8899aa'},grid:{color:'#2a3a4a'}}}}
+});
+
+// Cost reduction
+new Chart(document.getElementById('costChart'), {
+  type:'line', data:{
+    labels:['2026','2027','2028','2029','2030'],
+    datasets:[
+      {label:'半固态(元/Wh)',data:[1.9,1.6,1.3,0.9,0.7],borderColor:'#f4a261',fill:false,tension:0.3},
+      {label:'全固态(元/Wh)',data:[3.5,2.5,1.3,0.9,0.6],borderColor:'#e76f51',fill:false,tension:0.3,borderWidth:3},
+      {label:'LFP/LMFP基线',data:[0.35,0.33,0.3,0.28,0.25],borderColor:'#2ecc71',fill:false,tension:0.3,borderDash:[5,5]}
+    ]
+  },
+  options:{responsive:true,plugins:{title:{display:true,text:'成本下降路径(元/Wh)',color:'#d0d8e0'}},scales:{y:{ticks:{color:'#8899aa'},grid:{color:'#2a3a4a'}},x:{ticks:{color:'#8899aa'},grid:{color:'#2a3a4a'}}}}
+});
+
+// Charging speed evolution
+new Chart(document.getElementById('chargingChart'), {
+  type:'bar', data:{
+    labels:['2024','2025','2026','2027','2028','2030'],
+    datasets:[
+      {label:'充电倍率(C-rate)',data:[3,4,5,6,7,9],backgroundColor:['#4a2a1a','#6a3a1a','#8a4a2a','#aa5a2a','#e76f51','#ff6b3a']},
+      {label:'10-80%时间(分钟)',data:[20,15,12,10,8,6],backgroundColor:'#1a3a5a',borderColor:'#00b4d8',type:'line',yAxisID:'y1'}
+    ]
+  },
+  options:{responsive:true,plugins:{title:{display:true,text:'充电倍率演进',color:'#d0d8e0'}},scales:{y:{position:'left',ticks:{color:'#e76f51'},grid:{color:'#2a3a4a'},title:{display:true,text:'C-rate',color:'#e76f51'}},y1:{position:'right',ticks:{color:'#00b4d8'},grid:{display:false},title:{display:true,text:'分钟',color:'#00b4d8'}},x:{ticks:{color:'#8899aa'},grid:{color:'#2a3a4a'}}}}
+});
+
+// Technology penetration
+new Chart(document.getElementById('penetrationChart'), {
+  type:'line', data:{
+    labels:['2025','2026','2027','2028','2029','2030'],
+    datasets:[
+      {label:'LMFP商用车渗透率',data:[10,18,25,35,42,55],borderColor:'#2ecc71',fill:true,backgroundColor:'rgba(46,204,113,0.1)',tension:0.3},
+      {label:'半固态商用车渗透率',data:[0,1,3,7,10,18],borderColor:'#f4a261',fill:true,backgroundColor:'rgba(244,162,97,0.1)',tension:0.3},
+      {label:'全固态商用车渗透率',data:[0,0,0.5,2,5,12],borderColor:'#e76f51',fill:true,backgroundColor:'rgba(231,111,81,0.1)',tension:0.3}
+    ]
+  },
+  options:{responsive:true,plugins:{title:{display:true,text:'商用车电池技术渗透率(%)',color:'#d0d8e0'}},scales:{y:{max:60,ticks:{color:'#8899aa'},grid:{color:'#2a3a4a'}},x:{ticks:{color:'#8899aa'},grid:{color:'#2a3a4a'}}}}
+});
+
+// Technology radar
+new Chart(document.getElementById('techRadar'), {
+  type:'radar', data:{
+    labels:['能量密度','成本优势','低温性能','快充能力','安全性','循环寿命','量产成熟度'],
+    datasets:[
+      {label:'LFP',data:[2,5,2,2,4,4.5,5],borderColor:'#8899aa',backgroundColor:'rgba(136,153,170,0.1)'},
+      {label:'LMFP',data:[3,4.5,4,3.5,4,3.5,4],borderColor:'#2ecc71',backgroundColor:'rgba(46,204,113,0.1)'},
+      {label:'半固态',data:[5,2,3.5,4,4,3,3],borderColor:'#f4a261',backgroundColor:'rgba(244,162,97,0.1)'},
+      {label:'全固态(目标)',data:[5,1.5,5,5,5,5,1.5],borderColor:'#e76f51',backgroundColor:'rgba(231,111,81,0.08)',borderDash:[3,3]}
+    ]
+  },
+  options:{responsive:true,plugins:{title:{display:true,text:'四代电池技术雷达图',color:'#d0d8e0'}},scales:{r:{ticks:{display:false},grid:{color:'#2a3a4a'},pointLabels:{color:'#8899aa'}}}}
+});
+
+// Competitor radar - solid state
+new Chart(document.getElementById('competitorRadar'), {
+  type:'radar', data:{
+    labels:['全固态进度','LMFP布局','半固态布局','商用车经验','成本控制','全球化','快充技术'],
+    datasets:[
+      {label:'宁德时代',data:[5,3,5,3,3,5,5],borderColor:'#00b4d8',backgroundColor:'rgba(0,180,216,0.08)'},
+      {label:'比亚迪',data:[5,3,4,4.5,4.5,3,4],borderColor:'#e76f51',backgroundColor:'rgba(231,111,81,0.08)'},
+      {label:'国轩高科',data:[4.5,5,3,4,5,2.5,3.5],borderColor:'#2ecc71',backgroundColor:'rgba(46,204,113,0.08)'},
+      {label:'亿纬锂能',data:[1,4.5,1,5,4,2,3],borderColor:'#f4a261',backgroundColor:'rgba(244,162,97,0.08)',borderDash:[3,3]},
+      {label:'丰田',data:[4.5,1,1,1,2,4,3.5],borderColor:'#8899aa',backgroundColor:'rgba(136,153,170,0.08)',borderDash:[3,3]}
+    ]
+  },
+  options:{responsive:true,plugins:{title:{display:true,text:'轻商电池竞争力雷达(五维对标)',color:'#d0d8e0'}},scales:{r:{ticks:{display:false},grid:{color:'#2a3a4a'},pointLabels:{color:'#8899aa'}}}}
+});
+
+// Timeline
+new Chart(document.getElementById('timelineChart'), {
+  type:'scatter', data:{
+    datasets:[
+      {label:'中国厂商',data:[{x:2024,y:1,l:'国轩L600'},{x:2026,y:3,l:'凝聚态'},{x:2026,y:3,l:'国轩金石'},{x:2027,y:5,l:'比亚迪全固态'},{x:2027,y:6,l:'宁德全固态'}],backgroundColor:'#e76f51',pointRadius:12},
+      {label:'日韩厂商',data:[{x:2027,y:5,l:'Samsung SDI'},{x:2027,y:4,l:'LG pilot'},{x:2028,y:6,l:'丰田量产'}],backgroundColor:'#00b4d8',pointRadius:12},
+      {label:'半固态先行',data:[{x:2026,y:4,l:'全球半固态>15GWh'},{x:2028,y:5,l:'半固态商用'}],backgroundColor:'#f4a261',pointRadius:10,pointStyle:'triangle'}
+    ]
+  },
+  options:{responsive:true,plugins:{title:{display:true,text:'全固态/半固态量产时间轴',color:'#d0d8e0'},tooltip:{callbacks:{label:ctx=>ctx.raw.l}}},scales:{x:{min:2023,max:2031,ticks:{stepSize:1,color:'#8899aa'},grid:{color:'#2a3a4a'},title:{display:true,text:'年份',color:'#8899aa'}},y:{min:0,max:8,ticks:{color:'#8899aa'},grid:{color:'#2a3a4a'},title:{display:true,text:'成熟度(1-7)',color:'#8899aa'}}}}
+});
+</script>
+
+</body>
+</html>
