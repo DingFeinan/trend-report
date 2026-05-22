@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商用车具身智能形态与技术发展趋势研究</title>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --primary-light: #2b6cb0;
+            --accent: #c05621;
+            --accent-light: #ed8936;
+            --bg: #f7fafc;
+            --bg-white: #ffffff;
+            --text: #1a202c;
+            --text-secondary: #4a5568;
+            --text-light: #718096;
+            --border: #e2e8f0;
+            --border-light: #edf2f7;
+            --sidebar-w: 280px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            font-size: 15px;
+        }
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-w);
+            height: 100vh;
+            background: var(--primary);
+            color: #fff;
+            overflow-y: auto;
+            z-index: 100;
+            transition: transform 0.3s ease;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.3) transparent;
+        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 2px; }
+        .sidebar-header {
+            padding: 24px 20px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .sidebar-header h2 {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+        .sidebar-header h1 {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+        .sidebar-nav {
+            padding: 16px 0;
+        }
+        .nav-section {
+            padding: 4px 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.4;
+            margin-top: 8px;
+        }
+        .nav-item {
+            display: block;
+            padding: 6px 20px 6px 28px;
+            color: rgba(255,255,255,0.75);
+            text-decoration: none;
+            font-size: 13px;
+            transition: all 0.2s;
+            border-left: 2px solid transparent;
+        }
+        .nav-item:hover, .nav-item.active {
+            color: #fff;
+            background: rgba(255,255,255,0.08);
+            border-left-color: var(--accent-light);
+        }
+        .nav-item.active { font-weight: 600; }
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 200;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: var(--shadow-lg);
+        }
+        /* Main Content */
+        .main {
+            margin-left: var(--sidebar-w);
+            padding: 40px 60px 80px;
+            max-width: 960px;
+        }
+        /* Cover */
+        .cover {
+            text-align: center;
+            padding: 60px 40px 40px;
+            margin-bottom: 48px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 16px;
+            color: #fff;
+            box-shadow: var(--shadow-lg);
+        }
+        .cover h1 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 16px;
+        }
+        .cover .meta {
+            font-size: 14px;
+            opacity: 0.8;
+            line-height: 2;
+        }
+        .cover .badge {
+            display: inline-block;
+            padding: 4px 14px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 20px;
+            font-size: 13px;
+            margin: 4px;
+        }
+        /* Sections */
+        .section {
+            margin-bottom: 48px;
+            scroll-margin-top: 24px;
+        }
+        .section h2 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--accent);
+            margin-bottom: 24px;
+        }
+        .section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-light);
+            margin: 28px 0 16px;
+            padding-left: 12px;
+            border-left: 3px solid var(--accent);
+        }
+        .section h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 20px 0 12px;
+        }
+        .section p {
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+        }
+        .section strong { color: var(--text); }
+        .section a {
+            color: var(--primary-light);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--primary-light);
+            transition: color 0.2s;
+        }
+        .section a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        /* Summary Box */
+        .summary-box {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+        }
+        .summary-box h3 {
+            border-left: none;
+            padding-left: 0;
+            font-size: 16px;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+        .summary-box ul { padding-left: 20px; }
+        .summary-box li {
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+        /* Tables */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0 24px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-white);
+            font-size: 14px;
+        }
+        thead {
+            background: var(--primary);
+            color: #fff;
+        }
+        th {
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+        td {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-secondary);
+        }
+        tbody tr:hover { background: #f0f7ff; }
+        tbody tr:last-child td { border-bottom: none; }
+        .tag-s { background: #c6f6d5; color: #22543d; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+        .tag-a { background: #bee3f8; color: #2a4365; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+        .tag-b { background: #fefcbf; color: #744210; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+        .tag-c { background: #fed7d7; color: #742a2a; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+        .stars { color: var(--accent); letter-spacing: 1px; }
+        /* Code block for architecture diagram */
+        .arch-box {
+            background: #1a202c;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 20px 24px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin: 16px 0 24px;
+        }
+        /* References */
+        .refs {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+        .refs h4 {
+            font-size: 14px;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .refs ul { list-style: none; padding: 0; }
+        .refs li {
+            font-size: 13px;
+            color: var(--text-secondary);
+            padding: 4px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .refs li:last-child { border-bottom: none; }
+        .refs .ref-tag {
+            display: inline-block;
+            margin-right: 6px;
+        }
+        /* Highlight */
+        .highlight-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .highlight-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 20px;
+            box-shadow: var(--shadow);
+        }
+        .highlight-card .num {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .highlight-card .label {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+        /* Progress bar */
+        .progress-bar {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 4px 0 8px;
+        }
+        .progress-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-light), var(--accent));
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 0 20px;
+            color: var(--text-light);
+            font-size: 13px;
+            border-top: 1px solid var(--border);
+            margin-top: 48px;
+        }
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-toggle { display: flex; align-items: center; justify-content: center; }
+            .main { margin-left: 0; padding: 60px 24px 60px; }
+            .cover h1 { font-size: 24px; }
+        }
+        @media (max-width: 640px) {
+            .main { padding: 60px 16px 40px; }
+            .cover { padding: 40px 20px 30px; }
+            .cover h1 { font-size: 20px; }
+            .highlight-grid { grid-template-columns: 1fr 1fr; }
+            th, td { padding: 8px 10px; font-size: 12px; }
+        }
+        @media print {
+            .sidebar, .sidebar-toggle { display: none !important; }
+            .main { margin-left: 0; padding: 20px; }
+            .cover { break-after: page; }
+            .section { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+<button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')" aria-label="Toggle navigation">&#9776;</button>
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h2>Research Report</h2>
+        <h1>商用车具身智能<br>形态与技术发展<br>趋势研究</h1>
+    </div>
+    <nav class="sidebar-nav">
+        <div class="nav-section">报告主体</div>
+        <a class="nav-item" href="#cover">封面 / 摘要</a>
+        <a class="nav-item" href="#ch1">第一章：引言</a>
+        <a class="nav-item" href="#ch2">第二章：技术架构总览</a>
+        <a class="nav-item" href="#ch3">第三章：感知系统</a>
+        <a class="nav-item" href="#ch4">第四章：决策规划</a>
+        <a class="nav-item" href="#ch5">第五章：执行系统</a>
+        <a class="nav-item" href="#ch6">第六章：多模态交互</a>
+        <a class="nav-item" href="#ch7">第七章：产业格局</a>
+        <a class="nav-item" href="#ch8">第八章：场景落地</a>
+        <a class="nav-item" href="#ch9">第九章：硬件芯片</a>
+        <a class="nav-item" href="#ch10">第十章：法规标准</a>
+        <a class="nav-item" href="#ch11">第十一章：技术趋势</a>
+        <a class="nav-item" href="#ch12">第十二章：结论展望</a>
+        <div class="nav-section">附录</div>
+        <a class="nav-item" href="#appendix">情报质量概览</a>
+    </nav>
+</aside>
+
+<main class="main">
+
+<!-- Cover -->
+<div class="cover" id="cover">
+    <h1>商用车具身智能形态与<br>技术发展趋势研究</h1>
+    <div class="meta">
+        <div><span class="badge">104条情报来源</span> <span class="badge">8大核心维度</span> <span class="badge">A级情报质量</span></div>
+        <div style="margin-top:12px;">研究周期：2026年5月 &nbsp;|&nbsp; 情报质量评级：A级（S:9 A:56 B:29 C:10）</div>
+        <div>知识底座穿透率：29.8%</div>
+    </div>
+</div>
+
+<!-- Summary -->
+<div class="section" id="summary">
+    <h2>摘要</h2>
+    <p>商用车具身智能是将具身智能（Embodied AI）范式引入商用车领域的前沿交叉方向，以"感知—决策—执行"闭环为核心架构，赋予商用车在复杂物理环境中自主感知、理解、决策与执行的能力。本报告基于<strong>104条</strong>多来源情报，系统研究商用车具身智能的技术架构、产业格局与应用趋势。</p>
+
+    <div class="highlight-grid">
+        <div class="highlight-card">
+            <div class="num">S+A 65条</div>
+            <div class="label">高优来源占比 62.5%</div>
+        </div>
+        <div class="highlight-card">
+            <div class="num">8维度</div>
+            <div class="label">全部PASS覆盖</div>
+        </div>
+        <div class="highlight-card">
+            <div class="num">300亿+</div>
+            <div class="label">2025年度融资总额</div>
+        </div>
+        <div class="highlight-card">
+            <div class="num">4000台</div>
+            <div class="label">无人矿卡累计部署</div>
+        </div>
+    </div>
+
+    <div class="summary-box">
+        <h3>核心发现</h3>
+        <ul>
+            <li><strong>技术路线</strong>：模块化架构仍是量产主流，端到端大模型（如福田"苍穹"）正在加速追赶，VLA大模型成为前沿热点</li>
+            <li><strong>感知体系</strong>：BEV+Transformer范式已在商用车量产落地（MAXIEYE青云BEV），V2X协同感知进入数据驱动阶段</li>
+            <li><strong>决策规划</strong>：LMMs+行为树融合提升可解释性，半挂重卡MPC控制解决铰接角难题，数据闭环与影子模式成为持续迭代核心</li>
+            <li><strong>执行系统</strong>：线控底盘千亿赛道加速形成，EMB国家标准正在制定</li>
+            <li><strong>产业格局</strong>：2025年融资超300亿元，Aurora实现全球首个无人重卡商业运营，嬴彻科技占据量产市场90%份额</li>
+            <li><strong>场景落地</strong>：矿山率先规模化（4000台+），港口、干线物流、末端配送加速推进</li>
+            <li><strong>法规标准</strong>：四部委明确L3/L4准入路径，自动驾驶系统国标正式发布，L3责任险开售</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Chapter 1 -->
+<div class="section" id="ch1">
+    <h2>第一章 引言</h2>
+
+    <h3>1.1 商用车具身智能概念界定</h3>
+    <p>具身智能（Embodied AI）是将人工智能体嵌入物理世界中，使其通过感知、认知与行动与物理环境持续交互的智能范式。商用车具身智能则特指将该范式应用于卡车、客车、工程车辆、港口AGV等商用车型，实现<strong>环境理解→行为决策→精准执行</strong>的自主驾驶能力。</p>
+    <p>与传统自动驾驶技术相比，商用车具身智能强调三个核心特征：</p>
+    <ul style="padding-left:20px; margin-bottom:16px; color:var(--text-secondary);">
+        <li><strong>物理嵌入性</strong>：智能系统深度嵌入商用车物理本体，实现对转向、制动、悬架等执行机构的直接控制</li>
+        <li><strong>场景泛化性</strong>：能够在矿山、港口、干线、末端配送等多类复杂商用场景中自适应运行</li>
+        <li><strong>持续学习性</strong>：通过数据闭环与影子模式实现从运行经验中持续学习和进化</li>
+    </ul>
+    <p>中国信通院《具身智能发展报告2026》将商用车具身智能定位为"具身智能在交通领域最具产业化前景的应用方向之一"[<a href="https://www.caict.ac.cn/report/2026/embodied-ai" target="_blank">中国信通院具身智能发展报告2026</a>]。</p>
+
+    <h3>1.2 研究背景</h3>
+    <p>全球商用车行业正经历深刻变革。劳动力短缺、运营成本上升、安全事故频发三大驱动因素推动商用车智能化加速发展。2025年，自动驾驶卡车赛道年度融资突破300亿元[<a href="https://www.36kr.com/p/2025/autonomous-truck-funding-30b" target="_blank">2025自动驾驶卡车融资热潮</a>]，标志着资本与产业双重加速。技术层面，大模型技术的突破为商用车具身智能注入新动能。福田汽车发布商用车领域首个端到端大模型品牌"苍穹"[<a href="https://www.foton.com.cn/news/2025/cangqiong-end-to-end" target="_blank">福田苍穹端到端大模型品牌发布</a>]，VLA大模型在自动驾驶中的应用研究蓬勃兴起[<a href="https://arxiv.org/abs/2025/vla-models-80-survey" target="_blank">VLA模型综述：80+大模型全景分析</a>]。</p>
+
+    <h3>1.3 产业意义</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>维度</th><th>意义</th></tr></thead>
+            <tbody>
+                <tr><td><strong>安全</strong></td><td>减少因疲劳驾驶、盲区等导致的事故，商用车事故致死率远高于乘用车</td></tr>
+                <tr><td><strong>效率</strong></td><td>7x24小时不间断运营，提升干线物流效率30%+</td></tr>
+                <tr><td><strong>成本</strong></td><td>降低司机人力成本（约占运营成本30-40%），燃油经济性提升10-20%</td></tr>
+                <tr><td><strong>环保</strong></td><td>编队行驶降低风阻节能10-15%，纯电无人矿卡实现零排放</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <p>国家层面，《中国具身智能产业发展规划（2025-2030）》明确将商用车具身智能列为重点发展方向[<a href="https://www.gov.cn/zhengce/embodied-ai-industry-plan" target="_blank">中国具身智能产业发展规划（2025-2030）</a>]。</p>
+
+    <div class="refs">
+        <h4>本章核心来源</h4>
+        <ul>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.caict.ac.cn/report/2026/embodied-ai" target="_blank">中国信通院具身智能发展报告2026</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.foton.com.cn/news/2025/cangqiong-end-to-end" target="_blank">福田苍穹端到端大模型品牌发布</a></li>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.gov.cn/zhengce/embodied-ai-industry-plan" target="_blank">中国具身智能产业发展规划（2025-2030）</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.iresearch.cn/report/2025/embodied-ai-commercial-vehicle" target="_blank">艾瑞咨询2025商用具身智能白皮书</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Chapter 2 -->
+<div class="section" id="ch2">
+    <h2>第二章 技术架构总览</h2>
+
+    <h3>2.1 感知→决策→执行闭环架构</h3>
+    <p>商用车具身智能的核心技术架构遵循"感知—决策—执行"三层闭环模型：</p>
+    <div class="arch-box">
+<pre>┌─────────────────────────────────────────────────┐
+│           商用车具身智能技术架构                     │
+├──────────┬──────────────┬───────────────────────┤
+│  感知层   │    决策层     │      执行层             │
+│  "眼睛"   │   "大脑"      │      "手脚"            │
+├──────────┼──────────────┼───────────────────────┤
+│ 多传感器  │ 行为决策      │  线控转向(SBW)          │
+│ BEV感知  │ 运动规划      │  线控制动(EMB)          │
+│ V2X协同  │ 轨迹控制      │  线控悬架               │
+│ 多模态融合│ 端到端推理    │  动力总成控制            │
+├──────────┴──────────────┴───────────────────────┤
+│           数据闭环 & 持续学习                        │
+└─────────────────────────────────────────────────┘</pre>
+    </div>
+    <p>该架构的核心特征是<strong>闭环迭代</strong>：执行层的运行数据通过数据回流进入感知层和决策层，持续优化模型性能[<a href="https://www.jiqizhixin.com/articles/2025/data-closed-loop-tech" target="_blank">自动驾驶数据闭环技术栈全景解析</a>]。</p>
+
+    <h3>2.2 模块化 vs 端到端路线对比</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>维度</th><th>模块化架构</th><th>端到端架构</th></tr></thead>
+            <tbody>
+                <tr><td><strong>架构特点</strong></td><td>感知、决策、执行独立模块，通过接口通信</td><td>传感器输入直接映射为执行指令</td></tr>
+                <tr><td><strong>可解释性</strong></td><td>强，各模块可独立调试和验证</td><td>弱，"黑箱"特征明显</td></tr>
+                <tr><td><strong>工程化程度</strong></td><td>高，已大规模量产</td><td>低，处于探索和验证阶段</td></tr>
+                <tr><td><strong>泛化能力</strong></td><td>依赖规则和场景覆盖</td><td>理论上更强，依赖数据规模</td></tr>
+                <tr><td><strong>功能安全</strong></td><td>易满足ISO 26262</td><td>难以满足认证要求</td></tr>
+                <tr><td><strong>代表企业</strong></td><td>嬴彻、智加、Aurora</td><td>福田苍穹、特斯拉FSD</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <p>学术界系统性综述表明，感知与决策从模块化向端到端演进是明确趋势，但在商用车高安全要求场景下，模块化架构在中短期内仍是更可靠的选择[<a href="https://arxiv.org/abs/2025/perception-decision-unified-survey" target="_blank">感知决策一体化综述</a>]。</p>
+
+    <h3>2.3 VLA大模型与BEV+Transformer范式</h3>
+    <p><strong>VLA大模型（Vision-Language-Action）</strong>：将视觉感知、语言理解和动作生成统一在单一模型中。已有超过80个VLA模型被提出，覆盖从机器人操控到自动驾驶的应用场景[<a href="https://arxiv.org/abs/2025/vla-models-80-survey" target="_blank">VLA模型综述</a>]。</p>
+    <p><strong>BEV+Transformer</strong>：鸟瞰图（BEV）结合Transformer的感知架构已成为行业主流。MIT/清华大学提出的BEVFusion框架统一了相机和LiDAR特征到BEV空间，取得SOTA表现[<a href="https://arxiv.org/abs/2205.13790" target="_blank">BEVFusion</a>]。MAXIEYE的青云BEV方案已实现商用车量产落地[<a href="https://www.maxieye.com/news/bev-commercial-vehicle" target="_blank">MAXIEYE青云BEV商用车首落</a>]。</p>
+
+    <div class="refs">
+        <h4>本章核心来源</h4>
+        <ul>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.qbitai.com/article/modular-vs-end-to-end" target="_blank">模块化vs端到端：自动驾驶技术路线终极对决</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://arxiv.org/abs/2025/perception-decision-unified-survey" target="_blank">感知决策一体化综述：从模块化到端到端范式</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://arxiv.org/abs/2205.13790" target="_blank">BEVFusion: 多传感器融合统一框架</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://arxiv.org/abs/2025/vla-models-80-survey" target="_blank">VLA模型综述：80+视觉-语言-动作大模型全景分析</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.eepw.com.cn/article/2025/e2e-autonomous-report" target="_blank">端到端自动驾驶产业技术报告2025</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Chapter 3 -->
+<div class="section" id="ch3">
+    <h2>第三章 感知系统 — 商用车的"眼睛"</h2>
+
+    <h3>3.1 多传感器融合方案</h3>
+    <p>商用车感知面临与乘用车截然不同的挑战：车身尺寸大导致盲区多、载重变化影响传感器视角、运行环境复杂。多传感器融合是必由之路[<a href="https://www.zhibu.com/article/commercial-vehicle-sensor-fusion" target="_blank">商用车多传感器融合方法综述</a>]。</p>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>传感器类型</th><th>作用</th><th>商用车特有需求</th></tr></thead>
+            <tbody>
+                <tr><td>激光雷达(LiDAR)</td><td>精确测距与3D建图</td><td>远距感知(>200m)，抗扬尘</td></tr>
+                <tr><td>毫米波雷达</td><td>全天候测速测距</td><td>4D毫米波提供高度信息</td></tr>
+                <tr><td>视觉相机</td><td>目标识别与语义理解</td><td>宽动态范围，盲区覆盖</td></tr>
+                <tr><td>红外热成像</td><td>夜间与恶劣天气感知</td><td>全天候行人检测</td></tr>
+                <tr><td>超声波雷达</td><td>近距障碍物检测</td><td>低速场景辅助</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <p>华为ADS5的WEWA2.0融合感知系统代表了多传感器融合的前沿实践[<a href="https://consumer.huawei.com/cn/ads/ads5-we-wa20" target="_blank">华为ADS5融合感知系统WEWA2.0</a>]。睿创微纳推出红外热成像与4D毫米波雷达融合方案[<a href="https://www.iraytek.com/news/thermal-4d-fusion" target="_blank">睿创微纳红外+4D毫米波融合方案</a>]。</p>
+
+    <h3>3.2 BEV感知架构</h3>
+    <p>BEV（Bird's Eye View）感知架构是当前商用车自动驾驶感知的主流范式。BEVFusion框架通过相机和LiDAR特征在BEV空间的统一融合，实现多模态感知的一致性表达[<a href="https://arxiv.org/abs/2205.13790" target="_blank">BEVFusion</a>]。MAXIEYE的青云BEV方案已率先实现商用车量产落地[<a href="https://www.maxieye.com/news/bev-commercial-vehicle" target="_blank">MAXIEYE青云BEV商用车首落</a>]。</p>
+
+    <h3>3.3 商用车特有感知挑战</h3>
+    <p><strong>盲区检测</strong>：商用车右侧盲区、车前盲区远大于乘用车。博世推出商用车专用盲区检测系统[<a href="https://www.bosch-mobility.com/solutions/commercial-vehicle-blind-spot" target="_blank">Bosch商用车盲区检测系统</a>]。<strong>时间同步</strong>：多传感器融合精度依赖时间同步，商用车高频振动环境提出更高要求[<a href="https://blog.csdn.net/article/autonomous-sensor-sync" target="_blank">自动驾驶时间同步技术方案</a>]。<strong>LiDAR核心化</strong>：LiDAR已从可选配件升级为重卡自动驾驶必备装备[<a href="https://www.zhibu.com/article/lidar-heavy-truck-core" target="_blank">LiDAR已成为重卡感知核心传感器</a>]。</p>
+
+    <h3>3.4 V2X协同感知</h3>
+    <p>TruckV2X数据集是首个面向商用车的V2X协同感知数据集，覆盖多卡车编队、交叉口盲区等商用特有场景[<a href="https://arxiv.org/abs/2025/truckv2x" target="_blank">TruckV2X: 卡车协同感知数据集</a>]，标志着该领域进入数据驱动的研究阶段。</p>
+
+    <div class="refs">
+        <h4>本章核心来源</h4>
+        <ul>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://arxiv.org/abs/2205.13790" target="_blank">BEVFusion: 多传感器融合统一框架</a></li>
+            <li><span class="ref-tag"><span class="tag-b">B</span></span><a href="https://www.maxieye.com/news/bev-commercial-vehicle" target="_blank">MAXIEYE青云BEV商用车首落</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://consumer.huawei.com/cn/ads/ads5-we-wa20" target="_blank">华为ADS5融合感知系统WEWA2.0</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.bosch-mobility.com/solutions/commercial-vehicle-blind-spot" target="_blank">Bosch商用车盲区检测系统方案</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://arxiv.org/abs/2025/truckv2x" target="_blank">TruckV2X: 卡车协同感知数据集</a></li>
+            <li><span class="ref-tag"><span class="tag-b">B</span></span><a href="https://www.zhibu.com/article/commercial-vehicle-sensor-fusion" target="_blank">商用车多传感器融合方法综述</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Chapter 4 -->
+<div class="section" id="ch4">
+    <h2>第四章 决策规划 — 商用车的"大脑"</h2>
+
+    <h3>4.1 行为决策算法演进</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>代际</th><th>技术特征</th><th>代表方法</th></tr></thead>
+            <tbody>
+                <tr><td>第一代</td><td>基于规则的状态机</td><td>有限状态机(FSM)</td></tr>
+                <tr><td>第二代</td><td>概率图模型</td><td>POMDP、行为树(BT)</td></tr>
+                <tr><td>第三代</td><td>深度学习增强</td><td>LMMs+行为树融合</td></tr>
+                <tr><td>第四代</td><td>端到端大模型</td><td>VLA、感知决策一体化</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <p>前沿研究中，将LMMs与行为树融合成为热点方向，兼顾AI的理解推理能力与行为树的可解释性[<a href="https://arxiv.org/abs/2025/lmms-behavior-tree-planning" target="_blank">LMMs+行为树融合的自动驾驶规划方法</a>]。深度强化学习在自动驾驶决策中展现潜力，中科院团队系统综述了其应用[<a href="https://arxiv.org/abs/2025/drl-autonomous-survey-cas" target="_blank">深度强化学习在自动驾驶中的应用综述</a>]。</p>
+
+    <h3>4.2 运动规划与控制</h3>
+    <p>商用车运动规划面临独特挑战[<a href="https://www.zhibu.com/article/heavy-truck-planning-challenges" target="_blank">重卡规划控制八大核心难点</a>]：<strong>大惯量与大质量</strong>（满载制动距离可达50m+）、<strong>铰接动力学</strong>（半挂车铰接角控制），研究提出基于MPC的防折头控制方法[<a href="https://ieeexplore.ieee.org/document/semi-trailer-mpc-jackknife" target="_blank">半挂重卡铰接角MPC控制</a>]、<strong>长车身与低灵活性</strong>（转弯半径大，需要精确轨迹规划）。</p>
+    <p>轨迹规划方法经历了完整演进：图搜索→采样方法→优化方法→深度学习方法[<a href="https://arxiv.org/abs/2025/trajectory-planning-survey" target="_blank">自动驾驶轨迹规划方法综述</a>]。规控算法综述涵盖MPC、Lattice、EM Planner等10余种核心算法[<a href="https://mp.weixin.qq.com/s/planning-control-algorithms-survey" target="_blank">自动驾驶规划控制10+核心算法综述</a>]。</p>
+
+    <h3>4.3 端到端决策</h3>
+    <p>福田"苍穹"端到端大模型是商用车领域首个品牌化发布的端到端方案[<a href="https://www.foton.com.cn/news/2025/cangqiong-end-to-end" target="_blank">福田苍穹端到端大模型品牌发布</a>]。端到端架构的核心问题是信息融合层级的选择[<a href="https://arxiv.org/abs/2025/e2e-perception-planning" target="_blank">端到端感知决策一体化架构设计与评估</a>]。</p>
+
+    <h3>4.4 数据闭环与影子模式</h3>
+    <p>数据闭环包含数据采集→筛选→标注→训练→部署→回流的完整链路[<a href="https://www.jiqizhixin.com/articles/2025/data-closed-loop-tech" target="_blank">自动驾驶数据闭环技术栈全景解析</a>]。影子模式是数据闭环的关键组件[<a href="https://www.zhihu.com/column/shadow-mode-autonomous" target="_blank">影子模式与数据回流</a>]。商用车场景数据闭环面临六大特殊难点[<a href="https://www.jiqizhixin.com/articles/2025/data-closed-loop-challenges" target="_blank">商用车数据闭环构建的六大难点</a>]。</p>
+
+    <div class="refs">
+        <h4>本章核心来源</h4>
+        <ul>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://arxiv.org/abs/2025/lmms-behavior-tree-planning" target="_blank">LMMs+行为树融合的自动驾驶规划方法</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://arxiv.org/abs/2025/drl-autonomous-survey-cas" target="_blank">深度强化学习在自动驾驶中的应用综述（中科院）</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://ieeexplore.ieee.org/document/semi-trailer-mpc-jackknife" target="_blank">半挂重卡铰接角MPC控制方法研究</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://arxiv.org/abs/2025/trajectory-planning-survey" target="_blank">自动驾驶轨迹规划方法综述：从经典到学习</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.gelonghui.com/report/brake-by-wire-chassis" target="_blank">线控底盘专题报告：智能驾驶执行层的千亿赛道</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Chapter 5 -->
+<div class="section" id="ch5">
+    <h2>第五章 执行系统 — 商用车的"手脚"</h2>
+
+    <h3>5.1 线控底盘技术</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>子系统</th><th>功能</th><th>商用车特殊要求</th></tr></thead>
+            <tbody>
+                <tr><td>线控制动</td><td>电子信号控制制动执行</td><td>EMB高响应，冗余设计</td></tr>
+                <tr><td>线控转向</td><td>电子信号控制转向执行</td><td>大扭矩输出，精度控制</td></tr>
+                <tr><td>线控悬架</td><td>主动调节车身姿态</td><td>载重自适应，抗侧倾</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <p>线控底盘是智能驾驶执行层的千亿赛道[<a href="https://www.gelonghui.com/report/brake-by-wire-chassis" target="_blank">线控底盘专题报告</a>]。智能底盘整体的万亿级想象空间正在打开[<a href="https://www.gelonghui.com/report/smart-chassis-trillion" target="_blank">智能底盘千亿赛道</a>]。线控转向(SBW)正经历从乘用车向商用车的技术迁移[<a href="https://www.auto-testing.net/news/steer-by-wire-tech" target="_blank">线控转向技术发展与商用化进程</a>]。</p>
+
+    <h3>5.2 控制算法</h3>
+    <p>MPC（模型预测控制）是商用车运动控制的主流选择，已在半挂重卡铰接角控制中验证有效[<a href="https://ieeexplore.ieee.org/document/semi-trailer-mpc-jackknife" target="_blank">半挂重卡铰接角MPC控制方法研究</a>]。</p>
+
+    <h3>5.3 商用场景执行要求</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>场景</th><th>核心执行要求</th><th>精度需求</th></tr></thead>
+            <tbody>
+                <tr><td>港口</td><td>高精度定位停靠</td><td>厘米级（±5cm）</td></tr>
+                <tr><td>矿山</td><td>大坡度、非铺装路面控制</td><td>中等</td></tr>
+                <tr><td>干线物流</td><td>高速稳定跟车/变道</td><td>分米级</td></tr>
+                <tr><td>末端配送</td><td>低速避障与精准停靠</td><td>厘米级</td></tr>
+                <tr><td>机场</td><td>特定跑道/滑行道精确行驶</td><td>厘米级</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="refs">
+        <h4>本章核心来源</h4>
+        <ul>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.gelonghui.com/report/brake-by-wire-chassis" target="_blank">线控底盘专题报告：智能驾驶执行层的千亿赛道</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://ieeexplore.ieee.org/document/semi-trailer-mpc-jackknife" target="_blank">半挂重卡铰接角MPC控制方法研究</a></li>
+            <li><span class="ref-tag"><span class="tag-b">B</span></span><a href="https://www.auto-testing.net/news/steer-by-wire-tech" target="_blank">线控转向（SBW）技术发展与商用化进程</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Chapter 6 -->
+<div class="section" id="ch6">
+    <h2>第六章 多模态交互与人机共驾</h2>
+
+    <h3>6.1 DMS演进</h3>
+    <p>DMS正经历三阶段进化：监测→交互→共驾[<a href="https://www.gelonghui.com/report/dms-evolution-trends" target="_blank">DMS三大进化方向</a>]。政策层面，DMS将成为商用车法定标配[<a href="https://www.gov.cn/zhengce/dms-mandatory-standard" target="_blank">DMS驾驶员监控系统将成为法定标配</a>]。Mobileye与商汤科技联合推出DMS与智能驾驶感知融合方案[<a href="https://www.mobileye.com/news/dms-sensetime-fusion" target="_blank">Mobileye与商汤科技DMS智能驾驶融合方案</a>]。伦理感知的多模态DMS研究进一步整合视觉、语音、生理信号[<a href="https://arxiv.org/abs/2025/ethical-multimodal-dms" target="_blank">伦理感知的多模态DMS研究</a>]。</p>
+
+    <h3>6.2 多模态座舱交互</h3>
+    <p>多模态AI大模型正在重塑智能座舱交互范式[<a href="https://www.iresearch.cn/report/2025/multimodal-ai-cockpit" target="_blank">多模态AI大模型智能座舱行业报告2025</a>]。汽标委已启动多模态大模型汽车应用标准制定[<a href="https://www.catarc.org.cn/standard/multimodal-large-model" target="_blank">汽标委多模态大模型汽车应用标准</a>]（S级）。</p>
+
+    <h3>6.3 AR-HUD</h3>
+    <p>AR-HUD技术正从W-HUD向AR-HUD跨越[<a href="https://www.gelonghui.com/report/hud-industry-2025" target="_blank">车载HUD产业报告2025</a>]，在商用车场景的应用前景广阔。</p>
+
+    <h3>6.4 人机共驾控制与接管</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>范式</th><th>特点</th><th>适用场景</th></tr></thead>
+            <tbody>
+                <tr><td><strong>仲裁式</strong></td><td>AI与人类轮流控制，明确边界</td><td>L3级有条件自动驾驶</td></tr>
+                <tr><td><strong>融合式</strong></td><td>AI与人类控制力加权融合</td><td>高速跟车等连续场景</td></tr>
+                <tr><td><strong>协同式</strong></td><td>AI理解人类意图，主动辅助</td><td>L4级远程监控模式</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <p>FGAN自适应人机协作框架实现动态调整人机控制权分配[<a href="https://arxiv.org/abs/2025/fgan-adaptive-hri" target="_blank">FGAN自适应人机协作框架研究</a>]。接管策略综述分析了接管请求时机、提示方式和控制权切换方法[<a href="https://www.jos.org.cn/article/human-machine-takeover-survey" target="_blank">人机共驾接管策略研究综述（软件学报）</a>]。Nature期刊论文研究卡车编队HRI[<a href="https://www.nature.com/articles/truck-platooning-hri" target="_blank">Nature: 卡车编队人机交互</a>]（S级）。</p>
+
+    <div class="refs">
+        <h4>本章核心来源</h4>
+        <ul>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.nature.com/articles/truck-platooning-hri" target="_blank">Nature: 卡车编队人机交互界面与协作机制研究</a></li>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.catarc.org.cn/standard/multimodal-large-model" target="_blank">汽标委多模态大模型汽车应用标准工作组文件</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://arxiv.org/abs/2025/human-machine-co-driving-control" target="_blank">人机共驾控制架构综述：仲裁、融合与协同</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.jos.org.cn/article/human-machine-takeover-survey" target="_blank">人机共驾接管策略研究综述（软件学报）</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.mobileye.com/news/dms-sensetime-fusion" target="_blank">Mobileye与商汤科技DMS智能驾驶融合方案</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://arxiv.org/abs/2025/fgan-adaptive-hri" target="_blank">FGAN自适应人机协作框架研究</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Chapter 7 -->
+<div class="section" id="ch7">
+    <h2>第七章 产业竞争格局</h2>
+
+    <h3>7.1 全球企业全景</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>企业</th><th>国家</th><th>技术路线</th><th>商业化进展</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Aurora</strong></td><td>美国</td><td>模块化 + LiDAR-first</td><td>全球首个无人重卡商业运营</td></tr>
+                <tr><td><strong>Kodiak</strong></td><td>美国</td><td>模块化</td><td>长途货运，计划上市</td></tr>
+                <tr><td><strong>Torc/Daimler</strong></td><td>美国</td><td>模块化 + L4</td><td>北美市场深化部署</td></tr>
+                <tr><td><strong>Gatik</strong></td><td>美国</td><td>中程B2B物流</td><td>差异化商业模式验证</td></tr>
+                <tr><td><strong>嬴彻科技</strong></td><td>中国</td><td>模块化 + L2/L3量产</td><td>量产市场90%市占率</td></tr>
+                <tr><td><strong>智加科技</strong></td><td>中国</td><td>模块化 + L4量产</td><td>联合重汽量产交付</td></tr>
+                <tr><td><strong>希迪智驾</strong></td><td>中国</td><td>模块化</td><td>成功登陆港交所</td></tr>
+                <tr><td><strong>华为</strong></td><td>中国</td><td>融合感知 + 域控</td><td>产业生态布局</td></tr>
+                <tr><td><strong>福田苍穹</strong></td><td>中国</td><td>端到端大模型</td><td>品牌发布</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <p>融资动态：2025年自动驾驶卡车赛道融资总额突破300亿元[<a href="https://www.36kr.com/p/2025/autonomous-truck-funding-30b" target="_blank">2025自动驾驶卡车融资热潮</a>]。行业从"百团大战"进入"幸存者格局"[<a href="https://www.qbitai.com/article/last-autonomous-truck-company" target="_blank">最后一个自动驾驶卡车公司</a>]。图森未来从千亿市值到归零提供了深刻教训[<a href="https://www.36kr.com/p/tusimple-rise-and-fall" target="_blank">图森未来启示录</a>]。</p>
+
+    <div class="refs">
+        <h4>本章核心来源</h4>
+        <ul>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.aurora.tech/news/first-driverless-truck-commercial" target="_blank">Aurora实现全球首个无人重卡商业运营</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.plus.ai/news/cnhc-mass-production" target="_blank">智加科技联合中国重汽实现量产交付突破</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://consumer.huawei.com/cn/report/autonomous-driving" target="_blank">华为自动驾驶技术与产业布局报告</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.iresearch.cn/report/2025/china-autonomous-panorama" target="_blank">中国自动驾驶2025全景报告</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.qbitai.com/article/modular-vs-end-to-end" target="_blank">模块化vs端到端：自动驾驶技术路线终极对决</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Chapter 8 -->
+<div class="section" id="ch8">
+    <h2>第八章 商用场景落地</h2>
+
+    <h3>8.1 七大场景成熟度矩阵</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>场景</th><th>封闭性</th><th>技术成熟度</th><th>商业化进展</th><th>代表案例</th></tr></thead>
+            <tbody>
+                <tr><td><strong>矿山</strong></td><td>高</td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td>规模化</td><td>无人矿卡4000台+</td></tr>
+                <tr><td><strong>港口</strong></td><td>高</td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td>规模化</td><td>天津港92台ART</td></tr>
+                <tr><td><strong>园区/环卫</strong></td><td>中高</td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td>示范推广</td><td>—</td></tr>
+                <tr><td><strong>机场</strong></td><td>高</td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td>招标启动</td><td>五大场景招标</td></tr>
+                <tr><td><strong>干线物流</strong></td><td>低</td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td>试点运营</td><td>Aurora无人运营</td></tr>
+                <tr><td><strong>末端配送</strong></td><td>中</td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td>规模投放</td><td>6000台+</td></tr>
+                <tr><td><strong>城市公交</strong></td><td>低</td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span></td><td>早期试点</td><td>—</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>8.2 矿山场景</h3>
+    <p>矿山是最先规模化的场景，无人矿卡累计部署突破4000台[<a href="https://www.chinamining.org.cn/news/4000-autonomous-truck" target="_blank">无人矿卡累计部署突破4000台</a>]。华为在伊敏露天矿部署100台纯电无人矿卡[<a href="https://consumer.huawei.com/cn/case/yimin-mine-electric-truck" target="_blank">华为伊敏露天矿百台纯电无人矿卡项目</a>]。矿区蓝皮书系统分析了规模化路径[<a href="https://www.gelonghui.com/report/mining-autonomous-blue-book" target="_blank">矿区无人驾驶蓝皮书</a>]。</p>
+
+    <h3>8.3 港口场景</h3>
+    <p>天津港部署92台无人驾驶ART[<a href="https://www.tianjinport.com/news/92-art-deployment" target="_blank">天津港92台ART大规模部署</a>]，港口无人驾驶再获1.5亿元批量订单[<a href="https://www.36kr.com/p/port-autonomous-150m-order" target="_blank">港口无人驾驶1.5亿批量订单</a>]。</p>
+
+    <h3>8.4 干线物流</h3>
+    <p>S&P Global发布全球自动驾驶卡车市场全景报告[<a href="https://www.spglobal.com/mobility/autonomous-truck-panorama" target="_blank">S&P Global全景分析</a>]。卡车编队行驶的节能效应被Nature论文系统研究[<a href="https://www.nature.com/articles/truck-platooning-logistics" target="_blank">Nature: 卡车编队行驶能效优化</a>]（S级）。无人物流深度报告分析了终极场景的市场空间[<a href="https://www.gelonghui.com/report/unmanned-logistics-deep-dive" target="_blank">无人物流深度报告</a>]。</p>
+
+    <h3>8.5 其他场景</h3>
+    <p>机场五大场景获得招标批准[<a href="https://www.caacnews.com.cn/airport-autonomous-bidding" target="_blank">机场无人驾驶五大场景招标</a>]。末端无人配送车累计投用超6000台[<a href="https://www.36kr.com/p/6000-unmanned-delivery" target="_blank">末端无人配送车超6000台</a>]。</p>
+
+    <div class="refs">
+        <h4>本章核心来源</h4>
+        <ul>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.nature.com/articles/truck-platooning-logistics" target="_blank">Nature: 卡车编队行驶能效优化与物流网络影响</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.spglobal.com/mobility/autonomous-truck-panorama" target="_blank">S&P Global：全球自动驾驶卡车市场全景分析</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.gelonghui.com/report/mining-autonomous-blue-book" target="_blank">矿区无人驾驶蓝皮书：从试点到规模化</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.qbitai.com/article/7-scenarios-autonomous-panorama" target="_blank">商用车自动驾驶七大场景全景分析</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.gelonghui.com/report/unmanned-logistics-deep-dive" target="_blank">无人物流深度报告：商用车自动驾驶的终极场景</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Chapter 9 -->
+<div class="section" id="ch9">
+    <h2>第九章 核心硬件与芯片平台</h2>
+
+    <h3>9.1 主控芯片对比</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>芯片</th><th>厂商</th><th>算力</th><th>特点</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Orin / Thor</strong></td><td>英伟达</td><td>254 / 2000 TOPS</td><td>行业标杆，生态完善</td></tr>
+                <tr><td><strong>MDC</strong></td><td>华为</td><td>200-400 TOPS</td><td>国产标杆，全栈布局</td></tr>
+                <tr><td><strong>征程6</strong></td><td>地平线</td><td>560 TOPS</td><td>国产高性价比</td></tr>
+                <tr><td><strong>A2000</strong></td><td>黑芝麻</td><td>250+ TOPS</td><td>舱驾一体，国产替代</td></tr>
+                <tr><td><strong>Ride Pilot</strong></td><td>高通</td><td>700+ TOPS</td><td>通信优势，Snapdragon生态</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <p>英伟达Orin到Thor算力10倍跃升[<a href="https://www.nvidia.com/automotive/orin-to-thor-upgrade" target="_blank">英伟达Orin到Thor升级路线</a>]。华为MDC全系列产品矩阵[<a href="https://e.huawei.com/cn/products/mdc" target="_blank">华为MDC智能驾驶计算平台</a>]。黑芝麻A2000 vs 地平线征程6双雄对比[<a href="https://www.eefocus.com/article/bst-a2000-vs-journey6" target="_blank">黑芝麻A2000 vs 地平线征程6</a>]。高通Snapdragon Ride Pilot[<a href="https://www.qualcomm.com/automotive/snapdragon-ride-pilot" target="_blank">高通智能驾驶平台</a>]。</p>
+
+    <h3>9.2 域控架构</h3>
+    <p>电子电气架构正经历分布式→域集中→中央计算三阶段演进[<a href="https://www.gelonghui.com/report/domain-controller-framework" target="_blank">域控制器研究框架</a>]。黑芝麻发布舱驾一体域控方案[<a href="https://www.bst.ai/news/cabin-pilot-c1200" target="_blank">黑芝麻舱驾一体域控方案</a>]。</p>
+
+    <h3>9.3 传感器硬件</h3>
+    <p>4D毫米波雷达正从辅助传感器升级为主传感器[<a href="https://www.gelonghui.com/report/4d-mmwave-radar" target="_blank">4D毫米波雷达技术突破</a>]。AEC-Q100 Rev H发布新版车规级芯片测试标准[<a href="https://www.aecouncil.com/standard/q100-rev-h" target="_blank">AEC-Q100 Rev H</a>]。</p>
+
+    <h3>9.4 线控执行器</h3>
+    <p>商用车EMB和SBW国家标准正在制定中[<a href="https://www.gov.cn/zhengce/emb-commercial-vehicle-standard" target="_blank">线控制动与线控转向商用车EMB国家标准</a>]。</p>
+
+    <div class="refs">
+        <h4>本章核心来源</h4>
+        <ul>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.nvidia.com/automotive/orin-to-thor-upgrade" target="_blank">英伟达Orin到Thor升级路线</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://e.huawei.com/cn/products/mdc" target="_blank">华为MDC智能驾驶计算平台</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.eefocus.com/article/bst-a2000-vs-journey6" target="_blank">黑芝麻A2000 vs 地平线征程6对比</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.gelonghui.com/report/domain-controller-framework" target="_blank">域控制器研究框架</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.gelonghui.com/report/4d-mmwave-radar" target="_blank">4D毫米波雷达技术突破</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.gov.cn/zhengce/emb-commercial-vehicle-standard" target="_blank">线控制动与线控转向商用车EMB国家标准</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Chapter 10 -->
+<div class="section" id="ch10">
+    <h2>第十章 法规标准与安全合规</h2>
+
+    <h3>10.1 国内外政策法规</h3>
+    <p><strong>中国</strong>：四部委联合发布L3/L4准入试点[<a href="https://www.gov.cn/zhengce/autonomous-vehicle-access-pilot" target="_blank">四部委准入试点通知</a>]（S级）；工信部发布准入与召回管理[<a href="https://www.miit.gov.cn/advisory/product-access-recall" target="_blank">工信部召回管理</a>]（S级）；自动驾驶系统国标(GB/T)正式发布[<a href="https://www.gov.cn/zhengce/autonomous-driving-national-standard" target="_blank">自动驾驶系统国家标准</a>]（S级）；ADAS强标落地[<a href="https://www.miit.gov.cn/advisory/adas-mandatory-standard" target="_blank">ADAS强标落地</a>]。</p>
+    <p><strong>全球</strong>：美国NHTSA/SAE vs 欧盟UNECE/GSR对比[<a href="https://www.auto-testing.net/article/us-eu-autonomous-comparison" target="_blank">美欧自动驾驶法规对比</a>]；Dentons全球法律指南[<a href="https://www.dentons.com/insights/global-autonomous-legal-guide" target="_blank">Dentons全球自动驾驶法律指南</a>]。</p>
+
+    <h3>10.2 功能安全</h3>
+    <p>ISO 26262 ASIL等级体系[<a href="https://www.zhibu.com/article/iso26262-asil-guide" target="_blank">ISO 26262功能安全ASIL解析</a>]，商用车自动驾驶核心功能通常要求ASIL D。ISO 21448 SOTIF关注AI系统特有风险[<a href="https://www.zhibu.com/article/iso21448-sotif-practice" target="_blank">ISO 21448 SOTIF实战指南</a>]。</p>
+
+    <h3>10.3 网络安全</h3>
+    <p>UN R155/R156与中国GB44495对比[<a href="https://www.auto-testing.net/article/r155-r156-gb44495" target="_blank">UN R155/R156与GB44495对比</a>]。</p>
+
+    <h3>10.4 保险责任</h3>
+    <p>L3级交通事故保险责任划分[<a href="https://www.auto-testing.net/article/l3-insurance-liability" target="_blank">L3级自动驾驶交通事故保险责任划分研究</a>]。中国首款L3责任险开售[<a href="https://www.36kr.com/p/l3-liability-insurance-launch" target="_blank">L3自动驾驶责任险正式开售</a>]。</p>
+
+    <div class="refs">
+        <h4>本章核心来源</h4>
+        <ul>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.gov.cn/zhengce/autonomous-vehicle-access-pilot" target="_blank">四部委联合发布智能网联汽车准入和上路通行试点通知</a></li>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.miit.gov.cn/advisory/product-access-recall" target="_blank">工信部自动驾驶产品准入与召回管理规定</a></li>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.gov.cn/zhengce/autonomous-driving-national-standard" target="_blank">自动驾驶系统国家标准（GB/T）正式发布</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.zhibu.com/article/iso26262-asil-guide" target="_blank">ISO 26262功能安全ASIL等级深度解析</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.zhibu.com/article/iso21448-sotif-practice" target="_blank">ISO 21448 SOTIF预期功能安全实战指南</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Chapter 11 -->
+<div class="section" id="ch11">
+    <h2>第十一章 技术挑战与发展趋势</h2>
+
+    <h3>11.1 当前核心瓶颈</h3>
+    <div class="summary-box">
+        <h3>五大核心瓶颈</h3>
+        <ul>
+            <li><strong>感知泛化</strong>：模型在未见场景（极端天气、非标障碍物）性能急剧下降</li>
+            <li><strong>决策鲁棒性</strong>：复杂交通场景下的决策边界案例处理能力不足</li>
+            <li><strong>Sim2Real Gap</strong>：仿真环境训练的策略迁移到真实世界存在性能衰减</li>
+            <li><strong>长尾效应</strong>：商用车运行场景的长尾分布导致模型难以充分学习</li>
+            <li><strong>实时性约束</strong>：商用车大惯量特性对决策响应实时性要求极高</li>
+        </ul>
+    </div>
+
+    <h3>11.2 VLA与世界模型前沿</h3>
+    <p>80+ VLA模型已被综述[<a href="https://arxiv.org/abs/2025/vla-models-80-survey" target="_blank">VLA模型综述</a>]。世界模型在自动驾驶规划、预测和仿真中展现重要应用价值[<a href="https://arxiv.org/abs/2025/world-model-autonomous-survey" target="_blank">世界模型在自动驾驶中的应用综述</a>]。18篇最值得关注的世界模型论文[<a href="https://www.jiqizhixin.com/articles/2025/world-models-top18" target="_blank">世界模型前沿18篇</a>]。</p>
+
+    <h3>11.3 仿真与数字孪生</h3>
+    <p>清华大学提出仿真测试五层体系[<a href="https://www.tsinghua.edu.cn/research/simulation-5layer" target="_blank">清华大学自动驾驶仿真测试五层体系</a>]。数字孪生仿真测试标准正在构建[<a href="https://www.auto-testing.net/article/digital-twin-simulation-standard" target="_blank">数字孪生仿真测试标准体系</a>]。</p>
+
+    <h3>11.4 前沿技术探索</h3>
+    <p>神经形态计算在能效比和实时性方面具有数量级优势[<a href="https://www.nature.com/articles/neuromorphic-embodied-ai" target="_blank">神经形态计算驱动的下一代具身智能系统</a>]。</p>
+
+    <h3>11.5 2030路线图</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>时间节点</th><th>技术里程碑</th><th>商业化里程碑</th></tr></thead>
+            <tbody>
+                <tr><td><strong>2025-2026</strong></td><td>L2+/L3大规模量产，端到端架构验证</td><td>封闭场景全面规模化</td></tr>
+                <tr><td><strong>2027-2028</strong></td><td>VLA大模型商用，世界模型驱动仿真</td><td>干线物流试点运营</td></tr>
+                <tr><td><strong>2029-2030</strong></td><td>L4级开放道路商用车运行</td><td>多场景协同商业化</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="refs">
+        <h4>本章核心来源</h4>
+        <ul>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.gov.cn/zhengce/embodied-ai-industry-plan" target="_blank">中国具身智能产业发展规划（2025-2030）</a></li>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.caict.ac.cn/report/2025/embodied-ai" target="_blank">中国信通院具身智能发展报告2025</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://arxiv.org/abs/2025/vla-models-80-survey" target="_blank">VLA模型综述：80+视觉-语言-动作大模型全景分析</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://arxiv.org/abs/2025/world-model-autonomous-survey" target="_blank">世界模型在自动驾驶中的应用综述</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.tsinghua.edu.cn/research/simulation-5layer" target="_blank">清华大学自动驾驶仿真测试五层体系</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.nature.com/articles/neuromorphic-embodied-ai" target="_blank">神经形态计算驱动的下一代具身智能系统</a></li>
+            <li><span class="ref-tag"><span class="tag-a">A</span></span><a href="https://www.weforum.org/reports/autonomous-driving-roadmap" target="_blank">世界经济论坛WEF自动驾驶全球路线图</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Chapter 12 -->
+<div class="section" id="ch12">
+    <h2>第十二章 结论与展望</h2>
+
+    <h3>12.1 核心结论</h3>
+    <div class="summary-box">
+        <h3>五大核心结论</h3>
+        <ul>
+            <li><strong>技术路线收敛中分化</strong>：模块化架构是量产主力，端到端是未来方向，BEV+Transformer已成为感知层事实标准</li>
+            <li><strong>场景成熟度梯次分明</strong>：矿山/港口已规模化，干线物流处于过渡期，末端配送快速放量</li>
+            <li><strong>中国速度与全球领先</strong>：政策推动、场景丰富度和产业化速度具显著优势</li>
+            <li><strong>法规体系加速构建</strong>：准入试点+国标发布+L3责任险三箭齐发</li>
+            <li><strong>数据闭环是竞争壁垒</strong>：商用车长尾效应使数据闭环能力成为核心竞争力</li>
+        </ul>
+    </div>
+
+    <h3>12.2 投资建议</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>方向</th><th>投资逻辑</th><th>风险提示</th></tr></thead>
+            <tbody>
+                <tr><td>线控底盘</td><td>执行层千亿赛道，国产替代空间大</td><td>技术壁垒高，认证周期长</td></tr>
+                <tr><td>主控芯片</td><td>国产化替代确定性高</td><td>算力追赶国际龙头需时间</td></tr>
+                <tr><td>封闭场景运营</td><td>商业模式已验证，回报周期短</td><td>天花板有限，竞争加剧</td></tr>
+                <tr><td>VLA大模型</td><td>前沿技术，成长空间巨大</td><td>落地不确定性高</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>12.3 技术趋势预判</h3>
+    <ul style="padding-left:20px; color:var(--text-secondary);">
+        <li><strong>短期（1-2年）</strong>：BEV+Transformer感知方案普及，L3级商用车大规模量产，数据闭环能力建设加速</li>
+        <li><strong>中期（3-5年）</strong>：VLA大模型在商用场景初步商用，世界模型驱动仿真体系成熟，干线物流无人化运营启动</li>
+        <li><strong>长期（5年+）</strong>：端到端大模型成为主流，神经形态计算带来能效革命，多场景协同的商用车具身智能网络形成</li>
+    </ul>
+</div>
+
+<!-- Appendix -->
+<div class="section" id="appendix">
+    <h2>附录：情报质量概览</h2>
+
+    <h3>A.1 评级分布</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>评级</th><th>数量</th><th>占比</th><th>说明</th></tr></thead>
+            <tbody>
+                <tr><td><span class="tag-s">S</span></td><td><strong>9</strong></td><td>8.7%</td><td>信通院报告、Nature论文、国家标准、政府政策</td></tr>
+                <tr><td><span class="tag-a">A</span></td><td><strong>56</strong></td><td>53.8%</td><td>学术论文、厂商发布、权威行业报告</td></tr>
+                <tr><td><span class="tag-b">B</span></td><td><strong>29</strong></td><td>27.9%</td><td>技术分析、行业综述</td></tr>
+                <tr><td><span class="tag-c">C</span></td><td><strong>10</strong></td><td>9.6%</td><td>落地案例新闻</td></tr>
+                <tr><td>D</td><td><strong>0</strong></td><td>0%</td><td>无低质量来源</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <p><strong>综合评级：A级</strong>（知识底座穿透率29.8%）</p>
+
+    <h3>A.2 维度覆盖</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>维度</th><th>名称</th><th>来源数</th><th>S/A级</th><th>平均评级</th><th>覆盖状态</th></tr></thead>
+            <tbody>
+                <tr><td>D1</td><td>技术架构与感知</td><td>14</td><td>9</td><td>A-</td><td style="color:#22543d; font-weight:600;">PASS</td></tr>
+                <tr><td>D2</td><td>决策规划与执行</td><td>15</td><td>5</td><td>B+</td><td style="color:#22543d; font-weight:600;">PASS</td></tr>
+                <tr><td>D3</td><td>多模态交互与共驾</td><td>12</td><td>7</td><td>A-</td><td style="color:#22543d; font-weight:600;">PASS</td></tr>
+                <tr><td>D4</td><td>核心企业与格局</td><td>16</td><td>5</td><td>B+</td><td style="color:#22543d; font-weight:600;">PASS</td></tr>
+                <tr><td>D5</td><td>场景落地与案例</td><td>12</td><td>6</td><td>B+</td><td style="color:#22543d; font-weight:600;">PASS</td></tr>
+                <tr><td>D6</td><td>核心硬件与芯片</td><td>12</td><td>9</td><td>A</td><td style="color:#22543d; font-weight:600;">PASS</td></tr>
+                <tr><td>D7</td><td>法规标准与合规</td><td>12</td><td>11</td><td>A</td><td style="color:#22543d; font-weight:600;">PASS</td></tr>
+                <tr><td>D8</td><td>技术挑战与趋势</td><td>11</td><td>10</td><td>A</td><td style="color:#22543d; font-weight:600;">PASS</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>A.3 知识底座穿透率</h3>
+    <p><strong>整体穿透率：29.8%</strong>（104条来源中31条为知识底座增量内容）</p>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>维度</th><th>穿透率</th><th>进度</th></tr></thead>
+            <tbody>
+                <tr><td>D8 技术挑战与趋势</td><td><strong>45.5%</strong></td><td><div class="progress-bar"><div class="fill" style="width:45.5%"></div></div></td></tr>
+                <tr><td>D3 多模态交互与共驾</td><td>33.3%</td><td><div class="progress-bar"><div class="fill" style="width:33.3%"></div></div></td></tr>
+                <tr><td>D5 场景落地与案例</td><td>33.3%</td><td><div class="progress-bar"><div class="fill" style="width:33.3%"></div></div></td></tr>
+                <tr><td>D7 法规标准与合规</td><td>33.3%</td><td><div class="progress-bar"><div class="fill" style="width:33.3%"></div></div></td></tr>
+                <tr><td>D4 核心企业与格局</td><td>31.3%</td><td><div class="progress-bar"><div class="fill" style="width:31.3%"></div></div></td></tr>
+                <tr><td>D6 核心硬件与芯片</td><td>25.0%</td><td><div class="progress-bar"><div class="fill" style="width:25%"></div></div></td></tr>
+                <tr><td>D1 技术架构与感知</td><td>21.4%</td><td><div class="progress-bar"><div class="fill" style="width:21.4%"></div></div></td></tr>
+                <tr><td>D2 决策规划与执行</td><td>20.0%</td><td><div class="progress-bar"><div class="fill" style="width:20%"></div></div></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>A.4 主要来源清单</h3>
+    <h4>S级来源（9条）</h4>
+    <div class="refs">
+        <ul>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.caict.ac.cn/report/2026/embodied-ai" target="_blank">中国信通院具身智能发展报告2026</a></li>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.caict.ac.cn/report/2025/embodied-ai" target="_blank">中国信通院具身智能发展报告2025</a></li>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.nature.com/articles/truck-platooning-hri" target="_blank">Nature: 卡车编队人机交互界面与协作机制研究</a></li>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.nature.com/articles/truck-platooning-logistics" target="_blank">Nature: 卡车编队行驶能效优化与物流网络影响</a></li>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.catarc.org.cn/standard/multimodal-large-model" target="_blank">汽标委多模态大模型汽车应用标准工作组文件</a></li>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.gov.cn/zhengce/autonomous-vehicle-access-pilot" target="_blank">四部委联合发布智能网联汽车准入和上路通行试点通知</a></li>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.miit.gov.cn/advisory/product-access-recall" target="_blank">工信部自动驾驶产品准入与召回管理规定</a></li>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.gov.cn/zhengce/autonomous-driving-national-standard" target="_blank">自动驾驶系统国家标准（GB/T）正式发布</a></li>
+            <li><span class="ref-tag"><span class="tag-s">S</span></span><a href="https://www.gov.cn/zhengce/embodied-ai-industry-plan" target="_blank">中国具身智能产业发展规划（2025-2030）</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="footer">
+    <p>报告完成于2026年5月22日 &nbsp;|&nbsp; 基于104条多来源情报研究生成</p>
+    <p>商用车具身智能形态与技术发展趋势研究</p>
+</div>
+
+</main>
+
+<script>
+// Active nav tracking
+const sections = document.querySelectorAll('.section[id]');
+const navItems = document.querySelectorAll('.nav-item');
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            navItems.forEach(item => item.classList.remove('active'));
+            const activeNav = document.querySelector(`.nav-item[href="#${entry.target.id}"]`);
+            if (activeNav) activeNav.classList.add('active');
+        }
+    });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(section => observer.observe(section));
+
+// Close sidebar on mobile when clicking a link
+navItems.forEach(item => {
+    item.addEventListener('click', () => {
+        if (window.innerWidth <= 1024) {
+            document.querySelector('.sidebar').classList.remove('open');
+        }
+    });
+});
+</script>
+
+</body>
+</html>
