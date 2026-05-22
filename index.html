@@ -534,7 +534,7 @@ async function buildTree() {
           var itemId = catId + '-' + (idx + 1);
           // Display name: base name without version
           var displayTitle = base;
-          html += '<div class="sub-item" data-id="' + itemId + '" data-cat="' + catId + '" data-dir="' + escapeHtml(dirName) + '" data-file="' + escapeHtml(g.name) + '" data-title="' + escapeHtml(displayTitle) + '" onclick="selectReport(this)">';
+          html += '<div class="sub-item" data-id="' + itemId + '" data-cat="' + catId + '" data-path="' + escapeHtml(g.path) + '" data-title="' + escapeHtml(displayTitle) + '" onclick="selectReport(this)">';
           html += '<span class="dot"></span>';
           html += '<div class="sub-text">';
           html += '<div class="sub-title">' + escapeHtml(displayTitle) + '</div>';
@@ -580,7 +580,10 @@ function selectReport(el) {
   document.getElementById('selectedCount').textContent = '1';
 
   var title = el.dataset.title;
-  var filePath = encodeURI('reports/' + el.dataset.dir + '/' + el.dataset.file);
+  var filePath = encodeURI(el.dataset.path);
+
+  // Debug: show the actual URL in console
+  console.log('Loading report:', filePath);
 
   document.getElementById('welcomeScreen').style.display = 'none';
   document.getElementById('docContainer').classList.add('visible');
@@ -589,6 +592,13 @@ function selectReport(el) {
   document.getElementById('docTitle').textContent = title;
   document.getElementById('btnDownload').href = filePath;
   document.getElementById('docFrame').src = filePath;
+
+  // Debug: verify the URL is reachable
+  fetch(filePath, {method: 'HEAD'}).then(function(r) {
+    console.log('Fetch status for', filePath, ':', r.status);
+  }).catch(function(e) {
+    console.error('Fetch error for', filePath, ':', e.message);
+  });
 
   if (window.innerWidth <= 768) {
     document.getElementById('sidebar').classList.remove('open');
