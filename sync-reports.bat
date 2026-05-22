@@ -7,36 +7,40 @@ echo   报告同步工具
 echo ========================================
 echo.
 
-:: Check for changes in reports/
-git diff --quiet reports/ && git diff --cached --quiet reports/
+:: Stage everything in reports/ (catches new + modified files)
+git add reports/
+
+:: Check if anything was staged
+git diff --cached --quiet
 if %errorlevel% equ 0 (
-    echo [✓] reports 目录没有新文件，无需同步
+    echo [=] 没有新的报告文件，无需同步
     echo.
     pause
     exit /b 0
 )
 
-:: Show what's new
-echo [→] 检测到以下新增/变更:
+:: Show what will be pushed
 echo.
-git status reports/ --short
+echo [v] 检测到以下新文件/变更:
+echo.
+git diff --cached --name-status
 echo.
 
-:: Stage all reports
-git add reports/
-
-:: Commit with timestamp
-for /f "tokens=1-6 delims=/. " %%a in ('echo %date% %time%') do (
-    set ts=%%a-%%b-%%c_%%d:%%e:%%f
-)
-git commit -m "Sync reports - %ts%"
+:: Commit
+git commit -m "Sync reports"
 
 :: Push
-echo.
-echo [→] 正在推送到 GitHub...
+echo [v] 正在推送到 GitHub...
 git push
 
-echo.
-echo [✓] 同步完成！刷新网页后点击"获取最新信息"即可看到新报告。
+if %errorlevel% equ 0 (
+    echo.
+    echo [=] 同步成功！
+    echo     刷新网页 https://dingfeinan.github.io/trend-report/
+    echo     然后点击右上角"获取最新信息"即可看到新报告。
+) else (
+    echo.
+    echo [X] 推送失败，请检查网络连接后重试
+)
 echo.
 pause
