@@ -242,8 +242,84 @@ body {
   backdrop-filter: blur(8px);
 }
 
+/* ===== Floating Action Buttons ===== */
+.floating-actions {
+  position: fixed; top: 20px; right: 20px; z-index: 50;
+  display: flex; flex-direction: column; gap: 10px; align-items: flex-end;
+}
+.update-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 18px;
+  background: rgba(12,18,30,.88);
+  border: 1px solid rgba(0,229,255,.2);
+  border-radius: 8px;
+  color: #00e5ff; font-size: 13px; cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all .2s;
+  font-family: inherit; white-space: nowrap;
+}
+.update-btn:hover {
+  background: rgba(0,229,255,.1);
+  border-color: rgba(0,229,255,.4);
+  box-shadow: 0 0 20px rgba(0,229,255,.12);
+}
+.update-btn:active { transform: scale(.97); }
+.update-btn .spinner {
+  display: none; width: 16px; height: 16px;
+  border: 2px solid rgba(0,229,255,.2);
+  border-top-color: #00e5ff;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+.update-btn.loading .spinner { display: block; }
+.update-btn.loading .btn-icon { display: none; }
+.update-btn.loading { pointer-events: none; opacity: .8; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Version badge on tree items */
+.version-badge {
+  display: none; font-size: 10px; padding: 1px 6px; border-radius: 8px;
+  background: rgba(0,229,255,.12); color: #00e5ff; margin-left: 6px;
+  font-weight: 600; flex-shrink: 0;
+}
+.version-badge.show { display: inline-block; }
+.sub-item.updated { animation: flash .6s ease; }
+@keyframes flash {
+  0%, 100% { background: transparent; }
+  50% { background: rgba(0,229,255,.08); }
+}
+
+/* Toast notification */
+.toast-container {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 200;
+  display: flex; flex-direction: column; gap: 8px; pointer-events: none;
+}
+.toast {
+  padding: 12px 20px;
+  background: rgba(12,22,36,.94);
+  border: 1px solid rgba(0,229,255,.18);
+  border-radius: 8px;
+  color: #c8d6e5; font-size: 13px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  opacity: 0; transform: translateY(10px);
+  transition: all .3s ease;
+  pointer-events: auto;
+  display: flex; align-items: center; gap: 10px;
+  max-width: 480px;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.success { border-color: rgba(0,229,255,.25); }
+.toast .toast-icon { font-size: 18px; flex-shrink: 0; }
+.toast .toast-close {
+  margin-left: auto; background: none; border: none; color: #5a7a9a;
+  cursor: pointer; font-size: 16px; padding: 2px 6px; flex-shrink: 0;
+}
+.toast .toast-close:hover { color: #c8d6e5; }
+
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
+  .floating-actions { top: 12px; right: 12px; }
+  .update-btn { padding: 8px 14px; font-size: 12px; }
   .sidebar {
     position: fixed; left: 0; top: 0; z-index: 99;
     transform: translateX(-100%); transition: transform .3s;
@@ -266,6 +342,18 @@ body {
 <button class="menu-toggle" onclick="toggleSidebar()" title="目录">
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
 </button>
+
+<!-- Floating action buttons -->
+<div class="floating-actions">
+  <button class="update-btn" id="updateBtn" onclick="checkForUpdates()" title="检测报告最新版本">
+    <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    <span class="spinner"></span>
+    获取最新信息
+  </button>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer"></div>
 
 <div class="app">
   <!-- ===== Sidebar ===== -->
@@ -689,9 +777,108 @@ document.addEventListener('click', function(e) {
   }
 });
 
+// ===== Toast Notification =====
+function showToast(msg, type, duration) {
+  var c = document.getElementById('toastContainer');
+  var t = document.createElement('div');
+  var icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+  t.className = 'toast ' + (type || '');
+  t.innerHTML = '<span class="toast-icon">' + icon + '</span><span>' + msg + '</span><button class="toast-close" onclick="this.parentElement.remove()">&times;</button>';
+  c.appendChild(t);
+  requestAnimationFrame(function() { t.classList.add('show'); });
+  setTimeout(function() { t.classList.remove('show'); setTimeout(function() { t.remove(); }, 300); }, duration || 4000);
+}
+
+// ===== Check for Latest Report Versions =====
+async function checkForUpdates(silent) {
+  var btn = document.getElementById('updateBtn');
+  btn.classList.add('loading');
+
+  try {
+    var res = await fetch('https://api.github.com/repos/DingFeinan/trend-report/contents/reports/');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    var files = await res.json();
+    if (!Array.isArray(files)) throw new Error('Unexpected response');
+
+    var pdfFiles = files.filter(function(f) { return f.name.toLowerCase().endsWith('.pdf'); });
+
+    if (pdfFiles.length === 0) {
+      if (!silent) showToast('reports 目录中还没有 PDF 文件', '', 3000);
+      return;
+    }
+
+    var updatedCount = 0;
+    var totalCount = 0;
+
+    document.querySelectorAll('.sub-item').forEach(function(el) {
+      totalCount++;
+      var prefix = el.dataset.pdf.toLowerCase();
+
+      // Find all PDFs whose name starts with this prefix
+      var matches = pdfFiles.filter(function(f) {
+        return f.name.toLowerCase().startsWith(prefix);
+      });
+
+      if (matches.length === 0) return;
+
+      // Pick the file with highest version number (V{n})
+      var best = null;
+      var bestVersion = -1;
+      matches.forEach(function(f) {
+        var vMatch = f.name.match(/[vV](\d+)/);
+        var version = vMatch ? parseInt(vMatch[1]) : 0;
+        if (version > bestVersion) {
+          bestVersion = version;
+          best = f;
+        }
+      });
+
+      if (!best) return;
+
+      var pdfStem = best.name.replace(/\.pdf$/i, '');
+      if (el.dataset.pdf !== pdfStem) {
+        el.dataset.pdf = pdfStem;
+        updatedCount++;
+
+        // Version badge
+        var badge = el.querySelector('.version-badge');
+        if (!badge) {
+          badge = document.createElement('span');
+          badge.className = 'version-badge';
+          el.querySelector('.sub-text').appendChild(badge);
+        }
+        badge.textContent = 'V' + bestVersion;
+        badge.classList.add('show');
+        el.classList.add('updated');
+        setTimeout(function() { el.classList.remove('updated'); }, 700);
+      }
+    });
+
+    if (!silent) {
+      if (updatedCount > 0) {
+        showToast('已更新 ' + updatedCount + '/' + totalCount + ' 篇报告为最新版本', 'success', 4000);
+      } else {
+        showToast('所有报告已是最新版本，无需更新', 'success', 3000);
+      }
+    }
+
+    // Reload PDF if currently active item was updated
+    var activeEl = document.querySelector('.sub-item.active');
+    if (activeEl && activeEl.dataset.pdf !== pdfStem) {
+      // No need to reload - the download link will use updated dataset
+    }
+
+  } catch (err) {
+    if (!silent) showToast('更新失败：' + err.message, 'error', 5000);
+  } finally {
+    btn.classList.remove('loading');
+  }
+}
+
 // ===== Init =====
 buildTree();
 initParticles();
+checkForUpdates(true); // auto-detect latest versions on load
 </script>
 </body>
 </html>
