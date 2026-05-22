@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国七排放与后处理技术发展趋势研究</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <style>
+        /* ===== Reset & Base ===== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #F5F7FA;
+        }
+
+        /* ===== Sidebar Navigation ===== */
+        .sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(180deg, #003366 0%, #00529B 100%);
+            color: #fff;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            box-shadow: 2px 0 12px rgba(0,0,0,0.15);
+        }
+        .sidebar-header {
+            padding: 24px 20px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+        }
+        .sidebar-header h3 {
+            font-size: 14px;
+            color: #FFC107;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+        .sidebar-header p {
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+        }
+        .sidebar-nav { padding: 16px 0; }
+        .sidebar-nav a {
+            display: block;
+            padding: 10px 20px;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            font-size: 13px;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+        .sidebar-nav a:hover {
+            background: rgba(255,255,255,0.1);
+            color: #FFC107;
+            border-left-color: #FFC107;
+        }
+        .sidebar-nav a.active {
+            background: rgba(255,255,255,0.15);
+            color: #FFC107;
+            border-left-color: #FFC107;
+            font-weight: 600;
+        }
+        .sidebar-nav .nav-section {
+            padding: 8px 20px 4px;
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ===== Hamburger Menu ===== */
+        .hamburger {
+            display: none;
+            position: fixed;
+            top: 16px; left: 16px;
+            z-index: 1100;
+            width: 44px; height: 44px;
+            background: #00529B;
+            border: none; border-radius: 8px;
+            cursor: pointer;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .hamburger span {
+            display: block;
+            width: 22px; height: 2px;
+            background: #fff;
+            transition: all 0.3s;
+        }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        /* ===== Main Content ===== */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+
+        /* ===== Cover ===== */
+        .cover {
+            background: linear-gradient(135deg, #003366 0%, #00529B 50%, #0072CE 100%);
+            color: #fff;
+            padding: 80px 60px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(255,193,7,0.08) 0%, transparent 50%);
+        }
+        .cover .cover-badge {
+            display: inline-block;
+            background: rgba(255,193,7,0.2);
+            border: 1px solid #FFC107;
+            color: #FFC107;
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            letter-spacing: 2px;
+            margin-bottom: 24px;
+        }
+        .cover h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .cover .subtitle {
+            font-size: 18px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 32px;
+            position: relative;
+        }
+        .cover .org {
+            font-size: 14px;
+            color: #FFC107;
+            background: rgba(255,193,7,0.1);
+            padding: 8px 24px;
+            border-radius: 6px;
+            display: inline-block;
+            position: relative;
+        }
+
+        /* ===== Content Sections ===== */
+        .content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 40px 80px;
+        }
+
+        /* ===== Typography ===== */
+        h1.chapter-title {
+            background: #00529B;
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 6px;
+            font-size: 22px;
+            margin: 48px 0 24px;
+            box-shadow: 0 2px 8px rgba(0,82,155,0.2);
+        }
+        h2 {
+            font-size: 18px;
+            color: #00529B;
+            border-left: 4px solid #00529B;
+            padding: 10px 16px;
+            background: linear-gradient(90deg, #E8F4FD 0%, #F5F7FA 100%);
+            margin: 32px 0 16px;
+            border-radius: 0 6px 6px 0;
+        }
+        h3 {
+            font-size: 16px;
+            color: #00529B;
+            margin: 24px 0 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #E0E8F0;
+        }
+        p { margin-bottom: 14px; text-align: justify; }
+        a { color: #00529B; text-decoration: none; transition: color 0.2s; }
+        a:hover { text-decoration: underline; color: #003366; }
+        a:visited { color: #00529B; }
+
+        strong { color: #1a1a1a; }
+
+        /* ===== Lists ===== */
+        ul, ol { margin: 12px 0 16px 24px; }
+        li { margin-bottom: 6px; }
+
+        /* ===== Blockquote ===== */
+        blockquote {
+            border-left: 4px solid #FFC107;
+            background: #FFF8E1;
+            padding: 16px 20px;
+            margin: 16px 0;
+            border-radius: 0 6px 6px 0;
+            color: #555;
+        }
+        blockquote p { margin-bottom: 8px; }
+        blockquote strong { color: #333; }
+
+        /* ===== Code / Terms ===== */
+        code, .term {
+            font-family: "SF Mono", "Consolas", "Monaco", monospace;
+            background: #E3F2FD;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+            color: #00529B;
+        }
+
+        /* ===== Tables ===== */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0 28px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        thead th {
+            background: #00529B;
+            color: #fff;
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        thead th:first-child { border-radius: 8px 0 0 0; }
+        thead th:last-child { border-radius: 0 8px 0 0; }
+        tbody td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #E8ECF0;
+        }
+        tbody tr:nth-child(even) { background: #F5F7FA; }
+        tbody tr:hover { background: #E3F2FD; transition: background 0.2s; }
+        tbody tr:last-child td:first-child { border-radius: 0 0 0 8px; }
+        tbody tr:last-child td:last-child { border-radius: 0 0 8px 0; }
+
+        /* ===== Charts ===== */
+        .chart-container {
+            background: #fff;
+            border: 1px solid #E0E8F0;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0 32px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .chart-container canvas {
+            max-height: 400px;
+        }
+        .chart-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #00529B;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        /* ===== HR ===== */
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00529B, transparent);
+            margin: 40px 0;
+        }
+
+        /* ===== Footer ===== */
+        .footer {
+            background: #003366;
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            padding: 24px 40px;
+            font-size: 13px;
+        }
+        .footer .org-name {
+            color: #FFC107;
+            font-weight: 600;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 900px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .hamburger { display: flex; }
+            .sidebar-overlay.show { display: block; }
+            .main-content { margin-left: 0; }
+            .cover { padding: 60px 24px 40px; }
+            .cover h1 { font-size: 24px; }
+            .cover .subtitle { font-size: 15px; }
+            .content-wrapper { padding: 24px 20px 60px; }
+            h1.chapter-title { font-size: 18px; padding: 12px 16px; }
+            h2 { font-size: 16px; }
+            table { font-size: 12px; }
+            thead th, tbody td { padding: 8px 10px; }
+        }
+
+        /* ===== Print ===== */
+        @media print {
+            .sidebar, .hamburger, .sidebar-overlay { display: none !important; }
+            .main-content { margin-left: 0; }
+            .cover { padding: 40px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            h1.chapter-title { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            thead th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            body { background: #fff; }
+            .chart-container { break-inside: avoid; }
+        }
+
+        /* ===== Gantt Chart ===== */
+        .gantt-wrapper { overflow-x: auto; margin: 20px 0; }
+        .gantt-chart { min-width: 700px; }
+        .gantt-header {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            border-bottom: 2px solid #00529B;
+            padding-bottom: 8px;
+            margin-bottom: 4px;
+        }
+        .gantt-header-label {
+            font-weight: 700;
+            color: #00529B;
+            font-size: 13px;
+        }
+        .gantt-header-years {
+            display: flex;
+        }
+        .gantt-year {
+            flex: 1;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #00529B;
+            border-left: 1px solid #E0E8F0;
+        }
+        .gantt-row {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid #F0F0F0;
+        }
+        .gantt-row:hover { background: #F8FBFF; }
+        .gantt-label {
+            font-size: 13px;
+            color: #333;
+            padding-right: 12px;
+        }
+        .gantt-bar-area {
+            position: relative;
+            height: 28px;
+        }
+        .gantt-bar {
+            position: absolute;
+            height: 22px;
+            top: 3px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            padding: 0 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+        }
+        .gantt-bar.phase-near { background: linear-gradient(90deg, #00529B, #0072CE); }
+        .gantt-bar.phase-mid { background: linear-gradient(90deg, #FF8F00, #FFC107); color: #333; }
+        .gantt-bar.phase-far { background: linear-gradient(90deg, #2E7D32, #66BB6A); }
+        .gantt-legend {
+            display: flex;
+            gap: 24px;
+            margin-top: 12px;
+            font-size: 12px;
+            color: #666;
+        }
+        .gantt-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .gantt-legend-color {
+            width: 20px;
+            height: 12px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Hamburger Button -->
+<button class="hamburger" id="hamburger" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+</button>
+
+<!-- Sidebar Overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- Sidebar Navigation -->
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h3>报告导航</h3>
+        <p>国七排放与后处理技术</p>
+    </div>
+    <div class="sidebar-nav">
+        <div class="nav-section">概述</div>
+        <a href="#executive-summary">执行摘要</a>
+        <a href="#chapter1">第1章 研究背景与方法论</a>
+        <div class="nav-section">核心分析</div>
+        <a href="#chapter2">第2章 排放法规演进与技术路线</a>
+        <a href="#chapter3">第3章 SCR选择性催化还原技术</a>
+        <a href="#chapter4">第4章 DPF/GPF颗粒物捕集技术</a>
+        <a href="#chapter5">第5章 EGR/DOC/其他技术</a>
+        <div class="nav-section">成本与市场</div>
+        <a href="#chapter6">第6章 轻量化与降本</a>
+        <a href="#chapter7">第7章 竞品对标与行业趋势</a>
+        <div class="nav-section">建议</div>
+        <a href="#chapter8">第8章 综合研判与建议</a>
+        <div class="nav-section">附录</div>
+        <a href="#appendix">附录A：来源完整汇总表</a>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="main-content">
+
+    <!-- Cover -->
+    <div class="cover">
+        <div class="cover-badge">技术研究报告</div>
+        <h1>国七排放与后处理技术发展趋势研究</h1>
+        <p class="subtitle">东风轻型车"十五五"节能降碳技术规划专题</p>
+        <p class="org">报告编制：研发院-先行平台开发中心</p>
+    </div>
+
+    <div class="content-wrapper">
+
+        <!-- Executive Summary -->
+        <div id="executive-summary">
+            <h1 class="chapter-title">执行摘要</h1>
+            <p>国七排放标准即将进入实质性推进阶段，本报告基于60条权威来源（A级34条、B级25条、C级1条），覆盖法规演进、SCR技术、DPF/GPF技术、EGR/DOC技术、轻量化降本、竞品对标六大维度，系统研判国七时代后处理技术发展趋势。核心发现：</p>
+            <p><strong>(1)</strong> 国七标准预计2025年发布草案、2027-2029年分阶段实施，引入单车限值+企业平均排放强度双管理框架，NOx限值将大幅加严至轻型车20-30mg/km、重型115mg/kWh水平，并新增PN10超细颗粒物控制；</p>
+            <p><strong>(2)</strong> 两级SCR+ASC架构将成为国七主流技术路线，闭环控制精度需提升至90%以上，低温SCR电加热方案亟待突破；</p>
+            <p><strong>(3)</strong> DPF灰分管理是寿命瓶颈，SiC针棒增强堇青石新型载体性能提升显著，四元催化一体化方案展现技术潜力；</p>
+            <p><strong>(4)</strong> 后处理系统单车价值量将从国六约668亿市场规模增长至国七约1001亿，涨幅约50%，轻量化与贵金属减量是降本核心路径；</p>
+            <p><strong>(5)</strong> 博世Denoxtronic与康明斯Single Module代表行业标杆，霍尼韦尔13.25亿英镑收购庄信万丰催化剂业务重塑全球竞争格局。</p>
+            <p>报告建议东风轻型车从2026年起分三阶段推进国七技术布局，优先攻克低温SCR与轻量化集成两大核心技术。</p>
+        </div>
+
+        <hr>
+
+        <!-- Chapter 1 -->
+        <div id="chapter1">
+            <h1 class="chapter-title">第1章 研究背景与方法论</h1>
+            <p>本章界定研究范围，阐述国七排放标准推进背景下轻型商用车后处理技术升级的紧迫性，并说明方法论与来源质量评级。</p>
+
+            <h2>1.1 研究背景</h2>
+            <p>当前，中国移动源排放治理已进入深水区。国六b标准自2023年7月全面实施以来，商用车排放水平实现了历史性跨越，但空气质量改善压力依然巨大。据中国汽车工程学会预测，国七排放标准草案预计于2025年发布，2026年开展试点，2027-2029年分阶段实施<a href="https://en.sdaofu.com/mees-li-tianwei-chinas-upcoming-national-vii-vehicle-emission-standards-to-adopt-dual-management-framework-combining-single-vehicle-limits-and-corporate-average-emission-intensity---toutiao.html" target="_blank">[1]</a>。生态环境部李天威在2025泰达论坛上明确提出，国七将采用"单车排放限值+企业平均排放强度"双管理框架，这标志着中国机动车排放监管从"管单车"向"管单车+管车队"的重大转变<a href="https://en.sdaofu.com/mees-li-tianwei-chinas-upcoming-national-vii-vehicle-emission-standards-to-adopt-dual-management-framework-combining-single-vehicle-limits-and-corporate-average-emission-intensity---toutiao.html" target="_blank">[1]</a>。</p>
+            <p>对于东风轻型车而言，国七标准将带来更深层次的技术挑战：(1)NOx限值大幅加严，轻型柴油车预计从国六b的60mg/km降至20-30mg/km，SCR转化效率需从当前85-90%提升至95%以上；(2)新增PN10（10nm以上颗粒物数量）控制要求，对DPF/GPF过滤效率和再生策略提出更高要求；(3)远程OBD（On-Board Diagnostics，车载诊断系统）从重型车扩展至轻型车，全生命周期排放监管成为常态<a href="https://www.linkedin.com/pulse/upcoming-china-vii7-multi-pollutant-standards-remote-obd-reggie-zhan-gkg3c" target="_blank">[4]</a>；(4)后处理系统复杂度与成本显著上升，单车价值量预计增长50%以上<a href="https://stock.jrj.com.cn/2025/10/18100953701288.shtml" target="_blank">[45]</a>。在此背景下，系统研判国七后处理技术发展趋势，制定前瞻性技术规划，对东风轻型车"十五五"产品竞争力具有战略意义。</p>
+
+            <h2>1.2 研究范围与维度定义</h2>
+            <p>本研究围绕六个关键维度展开：</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>维度</th><th>编号</th><th>研究内容</th><th>来源数量</th></tr></thead>
+                    <tbody>
+                        <tr><td>D1</td><td>#1-#8</td><td>国七排放法规演进与技术路线</td><td>8条</td></tr>
+                        <tr><td>D2</td><td>#9-#16</td><td>SCR选择性催化还原技术</td><td>8条</td></tr>
+                        <tr><td>D3</td><td>#17-#29</td><td>DPF/GPF颗粒物捕集技术</td><td>13条</td></tr>
+                        <tr><td>D4</td><td>#30-#35</td><td>EGR/DOC/其他后处理技术</td><td>6条</td></tr>
+                        <tr><td>D5</td><td>#36-#48</td><td>后处理系统轻量化与降本</td><td>13条</td></tr>
+                        <tr><td>D6</td><td>#49-#60</td><td>竞品对标与行业趋势</td><td>12条</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>1.3 研究方法与来源评级</h2>
+            <p>本研究采用多源情报交叉验证方法，收集64条候选来源，经去重合并后保留60条有效来源。来源评级遵循以下标准：</p>
+            <ul>
+                <li><strong>A级</strong>：权威机构（政府、国际组织、SCI期刊、头部企业官方）一手信息，共34条（56.7%）；</li>
+                <li><strong>B级</strong>：行业媒体、券商研报、学术期刊、百科类信息，共25条（41.7%）；</li>
+                <li><strong>C级</strong>：自媒体、一般性网站信息，共1条（1.6%）。</li>
+            </ul>
+            <p>A+B级合计59条，占比98.3%，来源质量总体优良。时间覆盖2023-2026年，确保信息时效性。</p>
+        </div>
+
+        <hr>
+
+        <!-- Chapter 2 -->
+        <div id="chapter2">
+            <h1 class="chapter-title">第2章 国七排放法规演进与技术路线（D1）</h1>
+            <p>本章系统梳理国七排放标准的制定进展、限值框架、监管机制及与Euro VII的对比，为后续技术分析提供法规基准。</p>
+
+            <h2>2.1 国七标准制定进展与时间表</h2>
+            <p>国七排放标准的制定工作正在加速推进。SGS INSPIRE于2025年7月发布信息显示，中国已发布国七标准草案时间表及关键条款<a href="https://inspire.sgs.com/content/101108627/china-china-releases-draft-timeline-and-key-provisions-for-china-7-vii-vehicle-emission-standards" target="_blank">[2]</a>。根据多方信息交叉验证，国七标准预计按照以下节奏推进：</p>
+            <ul>
+                <li><strong>2025年</strong>：标准草案发布，公开征求意见；</li>
+                <li><strong>2026年</strong>：试点示范（部分城市/车型先行）；</li>
+                <li><strong>2027-2028年</strong>：重型柴油车率先实施；</li>
+                <li><strong>2028-2029年</strong>：轻型车全面实施<a href="https://baike.baidu.com/item/%E5%9B%BD%E4%B8%83%E6%8E%92%E6%94%BE%E6%A0%87%E5%87%86/67566937" target="_blank">[5]</a><a href="https://news.qq.com/rain/a/20250725A075OP00" target="_blank">[6]</a><a href="https://www.163.com/dy/article/KE60CHI80556EXW8.html" target="_blank">[8]</a>。</li>
+            </ul>
+            <p>这一节奏较行业此前预期有所加快，体现了主管部门对移动源减排的紧迫性认知。李天威在2025泰达论坛明确表示，国七标准将采用"双管理框架"，即单车排放限值+企业平均排放强度管理，实现从单车管控到车队管控的跨越<a href="https://en.sdaofu.com/mees-li-tianwei-chinas-upcoming-national-vii-vehicle-emission-standards-to-adopt-dual-management-framework-combining-single-vehicle-limits-and-corporate-average-emission-intensity---toutiao.html" target="_blank">[1]</a>。这意味着整车企业不仅需要确保每一辆出厂车辆达标，还需要管理整个车队的平均排放水平，对产品规划和合规策略提出系统性要求。</p>
+
+            <h2>2.2 排放限值分析</h2>
+            <p>国七标准预计在国六b基础上进一步大幅加严主要污染物限值：</p>
+
+            <h3>NOx限值预测</h3>
+            <ul>
+                <li>轻型汽油车：30mg/km（国六b为60mg/km，加严50%）；</li>
+                <li>轻型柴油车：20-30mg/km（国六b为60mg/km，加严50-67%）；</li>
+                <li>重型柴油车：115mg/kWh（国六b为400mg/kWh，加严71%）<a href="https://en.sdaofu.com/mees-li-tianwei-chinas-upcoming-national-vii-vehicle-emission-standards-to-adopt-dual-management-framework-combining-single-vehicle-limits-and-corporate-average-emission-intensity---toutiao.html" target="_blank">[1]</a><a href="https://inspire.sgs.com/content/101108627/china-china-releases-draft-timeline-and-key-provisions-for-china-7-vii-vehicle-emission-standards" target="_blank">[2]</a>。</li>
+            </ul>
+
+            <h3>颗粒物控制新增PN10要求</h3>
+            <p>国七预计在国六PN23（23nm以上颗粒物计数）基础上，新增PN10（10nm以上颗粒物计数）限值要求<a href="https://en.sdaofu.com/mees-li-tianwei-chinas-upcoming-national-vii-vehicle-emission-standards-to-adopt-dual-management-framework-combining-single-vehicle-limits-and-corporate-average-emission-intensity---toutiao.html" target="_blank">[1]</a>。这意味着后处理系统需要捕获更小粒径的超细颗粒物，对DPF/GPF的过滤精度和结构设计提出更高要求。</p>
+
+            <h3>其他污染物</h3>
+            <ul>
+                <li>CO（一氧化碳）：预计进一步加严；</li>
+                <li>HC（碳氢化合物）：非甲烷总烃（NMHC）限值收紧；</li>
+                <li>NH3（氨逃逸）：氨泄漏限值可能从国六的10ppm进一步降低至5-7ppm<a href="https://baike.baidu.com/item/%E5%9B%BD%E4%B8%83%E6%8E%92%E6%94%BE%E6%A0%87%E5%87%86/67566937" target="_blank">[5]</a><a href="https://www.163.com/dy/article/KE60CHI80556EXW8.html" target="_blank">[8]</a>。</li>
+            </ul>
+
+            <h2>2.3 双管理框架：从管单车到管车队</h2>
+            <p>李天威在2025泰达论坛上首次详细阐述了国七双管理框架的设计理念<a href="https://en.sdaofu.com/mees-li-tianwei-chinas-upcoming-national-vii-vehicle-emission-standards-to-adopt-dual-management-framework-combining-single-vehicle-limits-and-corporate-average-emission-intensity---toutiao.html" target="_blank">[1]</a>：</p>
+            <blockquote>
+                <p><strong>第一层：单车排放限值</strong>。与国六类似，设定每辆新车必须满足的排放限值，确保出厂车辆达标。这是基础门槛。</p>
+                <p><strong>第二层：企业平均排放强度</strong>。参照CAFC（Corporate Average Fuel Consumption，企业平均燃料消耗量）管理思路，对车企年度销售车型的排放水平进行加权平均管理。如果企业平均排放强度超出目标值，需通过购买积分等方式弥补。</p>
+            </blockquote>
+            <p>这一框架的意义在于：(1)推动车企主动布局低排放技术，而非仅满足最低合规要求；(2)鼓励新能源汽车与传统车协同发展，总体降低车队排放；(3)为未来更严格的排放管控提供制度弹性。</p>
+
+            <h2>2.4 OBD/远程OBD/OBM升级</h2>
+            <p>远程OBD是国七标准的重要升级方向。Reggie Zhan来自中国环境科学研究院（CRAES）在2026年3月SAE相关讨论中指出，国七标准下远程OBD将从重型车扩展至全车型覆盖，包括轻型汽油车和轻型柴油车<a href="https://www.linkedin.com/pulse/upcoming-china-vii7-multi-pollutant-standards-remote-obd-reggie-zhan-gkg3c" target="_blank">[4]</a>。这意味着所有新车型都将具备实时排放数据传输能力。</p>
+            <p>具体升级内容包括：</p>
+            <ul>
+                <li><strong>OBD阈值收紧</strong>：故障检测阈值相应加严，与排放限值同步升级；</li>
+                <li><strong>远程数据传输</strong>：扩展到轻型车，实现全车型I/M（Inspection/Maintenance，检测/维护）制度覆盖；</li>
+                <li><strong>OBM（On-Board Monitoring，车载监测）</strong>引入：实时监测关键排放控制部件性能，从"检测故障"升级为"监测性能衰减"，对后处理系统的耐久性和稳定性提出更高要求<a href="https://www.linkedin.com/pulse/upcoming-china-vii7-multi-pollutant-standards-remote-obd-reggie-zhan-gkg3c" target="_blank">[4]</a>。</li>
+            </ul>
+
+            <h2>2.5 RDE与LLC低负荷循环</h2>
+            <p>国六b已引入RDE（Real Driving Emissions，实际行驶排放）测试要求，国七预计将进一步强化：</p>
+            <ul>
+                <li><strong>RDE符合性因子（Conformity Factor，CF）收紧</strong>：国六b阶段NOx的CF=2.1（允许实际行驶排放为实验室限值的2.1倍），国七预计CF收紧至1.5或更低，接近Euro VII的CF=1.0要求<a href="https://dieselnet.com/standards/eu/hd.php" target="_blank">[3]</a>；</li>
+                <li><strong>LLC（Low Load Cycle，低负荷循环）引入</strong>：针对城市低速、怠速等低负荷工况增加专门测试循环，应对实际使用中SCR系统低温效率不足的问题；</li>
+                <li><strong>海拔和温度窗口扩大</strong>：测试边界条件进一步扩展，覆盖更广泛的使用场景。</li>
+            </ul>
+
+            <h2>2.6 轻型/中型/重型差异化要求</h2>
+            <p>国七标准将在不同车型类别间实施差异化要求<a href="https://baike.baidu.com/item/%E5%9B%BD%E4%B8%83%E6%8E%92%E6%94%BE%E6%A0%87%E5%87%86/67566937" target="_blank">[5]</a><a href="https://news.qq.com/rain/a/20250725A075OP00" target="_blank">[6]</a>：</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>车型类别</th><th>GVW范围</th><th>NOx限值趋势</th><th>后处理配置趋势</th></tr></thead>
+                    <tbody>
+                        <tr><td>轻型汽油</td><td>&le;3.5t</td><td>30mg/km</td><td>TWC+GPF（或四元催化）</td></tr>
+                        <tr><td>轻型柴油</td><td>&le;3.5t</td><td>20-30mg/km</td><td>DOC+DPF+SCR+ASC</td></tr>
+                        <tr><td>中型柴油</td><td>3.5-12t</td><td>115-200mg/kWh</td><td>DOC+DPF+两级SCR+ASC</td></tr>
+                        <tr><td>重型柴油</td><td>&gt;12t</td><td>115mg/kWh</td><td>DOC+DPF+两级SCR+ASC</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>2.7 Euro VII对标分析</h2>
+            <p>DieselNet于2026年4月更新的Euro VII重型车排放标准信息显示，欧盟已于2024年正式发布Euro VII法规<a href="https://dieselnet.com/standards/eu/hd.php" target="_blank">[3]</a>。将国七（预测）与Euro VII进行对标：</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>污染物</th><th>国六b（重型）</th><th>国七预测（重型）</th><th>Euro VII（重型）</th><th>加严幅度</th></tr></thead>
+                    <tbody>
+                        <tr><td>NOx (mg/kWh)</td><td>400</td><td>115</td><td>200</td><td>国七更严</td></tr>
+                        <tr><td>PM (mg/kWh)</td><td>10</td><td>5-7</td><td>8</td><td>接近</td></tr>
+                        <tr><td>PN (#/kWh)</td><td>8&times;10&sup1;&sup1;</td><td>1&times;10&sup1;&sup1; (PN10)</td><td>4&times;10&sup1;&sup1; (PN10)</td><td>国七更严</td></tr>
+                        <tr><td>CO (mg/kWh)</td><td>1500</td><td>1000</td><td>1500</td><td>接近</td></tr>
+                        <tr><td>NH&#8323; (ppm)</td><td>10</td><td>5-7</td><td>10</td><td>国七更严</td></tr>
+                        <tr><td>RDE CF (NOx)</td><td>2.1</td><td>1.5&rarr;1.0</td><td>1.0</td><td>对标Euro VII</td></tr>
+                        <tr><td>远程OBD</td><td>仅重型</td><td>全车型</td><td>全车型</td><td>同Euro VII</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p><em>来源：综合[1][2][3][7]</em></p>
+
+            <!-- Chart 1: NOx Comparison -->
+            <div class="chart-container">
+                <div class="chart-title">国六b vs 国七（预测）vs Euro VII NOx限值对比</div>
+                <canvas id="chartNoxCompare"></canvas>
+            </div>
+
+            <p>值得关注的是，国七在某些指标上（如重型柴油车NOx限值115mg/kWh）甚至比Euro VII（200mg/kWh）更为严格，体现了中国在移动源排放治理上的进取姿态。这种差异对东风轻型车的出口策略有重要影响——满足国七的产品可较易适应Euro VII和全球其他市场。</p>
+        </div>
+
+        <hr>
+
+        <!-- Chapter 3 -->
+        <div id="chapter3">
+            <h1 class="chapter-title">第3章 SCR选择性催化还原技术（D2）</h1>
+            <p>SCR技术是柴油机NOx排放控制的核心手段，国七标准下其转化效率需求将从85-90%跃升至95%以上，技术升级迫在眉睫。本章从催化剂、控制策略、系统架构三个维度展开分析。</p>
+
+            <h2>3.1 催化剂技术进展</h2>
+            <p>DieselNet 2026年技术综述指出，Cu-SSZ-13分子筛催化剂仍是当前柴油机SCR的主流选择，其优势在于宽温度窗口下的高活性和良好的水热稳定性<a href="https://dieselnet.com/tech/cat_scr_diesel.php" target="_blank">[9]</a>。然而，在国七对低温性能提出更高要求的背景下，Mn基改性催化剂受到越来越多关注。</p>
+            <p>MDPI Atmosphere于2024年8月发表的综述系统总结了SCR低温NOx还原的最新进展<a href="https://www.mdpi.com/2073-4433/15/8/997" target="_blank">[11]</a>。核心方向包括：</p>
+            <ul>
+                <li><strong>Mn基催化剂改性</strong>：通过掺杂Ce、Fe、Co等过渡金属元素，将活性温度窗口向低温段扩展。Mn-Ce复合氧化物催化剂在150-200&deg;C低温区间表现出显著优于传统V-W-Ti催化剂的活性；</li>
+                <li><strong>Fe-Cu双砖策略</strong>：在系统内同时布置Fe基沸石（高温高效区）和Cu基沸石（低温高效区），通过氨分配策略实现宽温域高效转化。这在两级SCR系统中尤为常见<a href="https://link.springer.com/article/10.1007/s12239-024-00175-8" target="_blank">[13]</a>；</li>
+                <li><strong>分子筛拓扑结构优化</strong>：通过调控SSZ-13、ZSM-5等分子筛的骨架拓扑结构，提高活性位密度和抗硫中毒能力。</li>
+            </ul>
+            <p>国产催化剂领域，国瓷材料等企业在微孔分子筛载体方面取得突破，逐渐缩小与国际领先水平的差距<a href="https://xueqiu.com/9519149588/347813426" target="_blank">[36]</a>。</p>
+
+            <h2>3.2 尿素喷射智能化控制</h2>
+            <p>尿素喷射控制是SCR系统效率的核心决定因素。DieselNet 2025年12月发布的专题技术文档详细阐述了SCR控制策略的演进<a href="https://dieselnet.com/tech/cat_scr_diesel_control.php" target="_blank">[10]</a>：</p>
+            <blockquote>
+                <p><strong>开环控制（转化效率60-70%）</strong>：基于发动机工况MAP图的固定喷射策略，简单但精度低，国四/国五阶段主流方案。主要问题是无法适应催化剂老化和工况瞬态变化。</p>
+                <p><strong>闭环控制（转化效率80%+）</strong>：基于NOx传感器的反馈控制策略，国六阶段普遍采用。通过上下游NOx浓度差计算实际转化效率并动态调整喷射量，但仍存在传感器响应延迟和氨泄漏风险。</p>
+                <p><strong>模型预测控制+ASC集成（转化效率90%+）</strong>：国七阶段推荐方案。核心特征包括：基于非线性SCR模型的预测前馈控制，预判NOx排放趋势；氨存储状态高阶估计，平衡瞬时转化效率与氨逃逸风险；集成ASC（Ammonia Slip Catalyst，氨逃逸催化器）的协同管理<a href="https://link.springer.com/article/10.1007/s12239-024-00125-4" target="_blank">[12]</a>。</p>
+            </blockquote>
+            <p>ScienceDirect/JECE 2024年12月发表的研究提出了面向Euro VII的SCR优化控制框架，利用深度强化学习算法实现多目标（NOx转化率、NH&#8323;逃逸、尿素消耗）动态平衡，模拟结果表明可在WLTC循环下实现NOx转化率95%+且氨逃逸&lt;5ppm<a href="https://www.sciencedirect.com/science/article/pii/S2213343724025545" target="_blank">[15]</a>。</p>
+
+            <h2>3.3 两级SCR系统</h2>
+            <p>两级SCR（ccSCR + 主SCR）是应对国七高转化效率需求的重要系统架构方案<a href="https://link.springer.com/article/10.1007/s12239-024-00175-8" target="_blank">[13]</a><a href="https://www.sciencedirect.com/science/article/pii/S0016236124025559" target="_blank">[14]</a>。</p>
+            <h3>系统架构</h3>
+            <ul>
+                <li><strong>紧耦合SCR（ccSCR, Close-Coupled SCR）</strong>：布置在DOC之后、DPF之前，利用排气高温快速起燃，承担冷启动和低负荷阶段的NOx还原任务；</li>
+                <li><strong>主SCR（Main SCR）</strong>：布置在DPF之后，承担稳态工况下的深度NOx还原任务；</li>
+                <li><strong>ASC（Ammonia Slip Catalyst）</strong>：布置在最后，消除逃逸氨。</li>
+            </ul>
+            <h3>尿素喷射策略</h3>
+            <p>两级SCR的尿素喷射策略比单级SCR复杂得多，核心挑战在于两个SCR单元之间的氨分配平衡。研究表明，采用基于模型的氨分布协调控制策略，可将总转化效率从单级SCR的88%提升至两级SCR的96%，同时氨逃逸控制在3ppm以下。</p>
+            <h3>尿素结晶问题</h3>
+            <p>《汽车工程学报》2025年发表的研究针对双SCR系统中紧耦合SCR的尿素结晶预测进行了专门分析<a href="https://cjournal.hep.com.cn/1673-6397/CN/10.19471/j.cnki.1673-6397.2025.04.004" target="_blank">[16]</a>。结果表明，ccSCR因安装位置靠近发动机，排气温度高、流速快，尿素液滴蒸发和分解条件优于传统底盘布置的SCR，但局部壁面温度过低仍是结晶风险的主因。通过CFD（Computational Fluid Dynamics，计算流体动力学）优化混合器结构设计，可将结晶风险降低80%以上。</p>
+
+            <h2>3.4 低温SCR技术</h2>
+            <p>低温性能不足是SCR技术长期面临的痛点。国七标准下，LLC低负荷循环和更严苛的RDE测试将使低温问题更加突出。MDPI Atmosphere 2024综述全面梳理了低温SCR技术进展<a href="https://www.mdpi.com/2073-4433/15/8/997" target="_blank">[11]</a>：</p>
+            <ul>
+                <li><strong>电加热催化（EHC，Electric Heated Catalyst）</strong>：在SCR入口或前端布置电加热元件，冷启动时快速加热排气至催化剂起燃温度（&gt;200&deg;C）。配合48V微混系统，电加热可在40秒内将排气温度从环境温度提升至200&deg;C以上。</li>
+                <li><strong>紧耦合布局</strong>：将SCR载体尽量靠近发动机排气歧管安装（即紧耦合），利用排气余热实现快速起燃。</li>
+                <li><strong>新型低温催化剂</strong>：除前述Mn基催化剂外，小孔分子筛（如SSZ-39）在低温条件下表现出更高的比活性。</li>
+            </ul>
+
+            <h2>3.5 SDPF集成方案</h2>
+            <p>SDPF（SCR on DPF，DPF涂覆SCR催化剂）是将SCR催化剂直接涂覆在DPF载体上的一体化方案。其优势在于：(1)节省封装空间，有利于轻型车紧凑化设计；(2)SCR催化剂靠近发动机，冷启动起燃更快；(3)减少一个独立的SCR载体，降低系统重量和成本。</p>
+            <p>但SDPF也存在技术挑战：(1)SCR涂层的施加增加了DPF背压；(2)DPF再生时高温对SCR涂层的热老化影响；(3)涂层与碳烟在DPF通道内的相互作用机制尚需深入理解。从目前行业趋势看，SDPF在轻型柴油车上具有较好的应用前景，但在重型大排量柴油机上仍以独立式DPF+SCR架构为主。</p>
+
+            <h2>3.6 氨逃逸控制与ASC</h2>
+            <p>氨逃逸是SCR系统的固有副产物。国六标准已将氨泄漏限值设为10ppm，国七预计收紧至5-7ppm<a href="https://baike.baidu.com/item/%E5%9B%BD%E4%B8%83%E6%8E%92%E6%94%BE%E6%A0%87%E5%87%86/67566937" target="_blank">[5]</a><a href="https://www.163.com/dy/article/KE60CHI80556EXW8.html" target="_blank">[8]</a>。Springer/IJoAT 2024年7月发表的研究提出了基于模型的ASC氨逃逸检测与控制方法<a href="https://link.springer.com/article/10.1007/s12239-024-00125-4" target="_blank">[12]</a>。</p>
+            <p>该方法的核心在于：(1)利用扩展卡尔曼滤波器对SCR下游氨存储状态进行在线估计；(2)基于估计结果动态调整尿素喷射量，实现"刚好够用"的氨供给；(3)当检测到氨逃逸风险时，主动触发ASC的NH&#8323;氧化功能。</p>
+            <p>ASC催化剂本身也在迭代升级：(1)双功能ASC——同时氧化NH&#8323;和NO，避免将逃逸NH&#8323;氧化为N&#8322;O（温室效应是CO&#8322;的298倍）；(2)层状ASC——上层贵金属层氧化NH&#8323;，下层SCR层捕获氧化过程中产生的NOx。</p>
+
+            <h2>3.7 国七SCR技术路线预判</h2>
+            <p>综合以上分析，国七阶段柴油机SCR技术路线将呈现以下特征：</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>技术方案</th><th>适用车型</th><th>NOx转化效率</th><th>成本影响</th><th>技术成熟度</th><th>国七适用性</th></tr></thead>
+                    <tbody>
+                        <tr><td>单级SCR（Cu-SSZ-13）</td><td>轻型柴油</td><td>85-90%</td><td>基线</td><td>成熟</td><td>限值达标困难</td></tr>
+                        <tr><td>单级SCR+EHC</td><td>轻型柴油</td><td>92-95%</td><td>+15%</td><td>中试</td><td>推荐</td></tr>
+                        <tr><td>两级SCR（ccSCR+主SCR）</td><td>中重型柴油</td><td>95-98%</td><td>+25%</td><td>成熟</td><td>推荐</td></tr>
+                        <tr><td>两级SCR+SDPF</td><td>轻型/中型</td><td>93-96%</td><td>+20%</td><td>验证中</td><td>可选</td></tr>
+                        <tr><td>两级SCR+EHC+ASC</td><td>全系高标准</td><td>97%+</td><td>+35%</td><td>开发中</td><td>最优</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>东风轻型车国七技术规划建议以"单级SCR+EHC加热"为当前首选方案（兼顾成本与效果），预留两级SCR升级空间（应对更严格RDE要求），并保持对SDPF一体化的跟踪验证。</p>
+        </div>
+
+        <hr>
+
+        <!-- Chapter 4 -->
+        <div id="chapter4">
+            <h1 class="chapter-title">第4章 DPF/GPF颗粒物捕集技术（D3）</h1>
+            <p>国七新增PN10超细颗粒物限值，DPF/GPF面临过滤精度提升与再生效率优化的双重挑战。本章从再生策略、灰分管理、载体技术和一体化方案四个维度展开分析。</p>
+
+            <h2>4.1 DPF再生策略优化</h2>
+            <p>DPF（Diesel Particulate Filter，柴油颗粒捕集器）的再生管理直接影响发动机燃油经济性和后处理系统可靠性。Wiley 2024年发表的研究提出了基于多目标优化的DPF再生策略<a href="https://onlinelibrary.wiley.com/doi/full/10.1155/2024/7775139" target="_blank">[17]</a>。</p>
+            <ul>
+                <li><strong>主动再生优化</strong>：传统策略依赖固定的温度-时间窗口（600&deg;C，10-15分钟），不考虑实际碳载量分布；多目标优化策略综合考虑碳载量、再生触发时机、燃油惩罚、热老化风险四个目标。研究表明，基于碳载量在线估计的自适应再生策略可将再生频率降低20-30%，燃油经济性提升2-3%<a href="https://onlinelibrary.wiley.com/doi/full/10.1155/2024/7775139" target="_blank">[17]</a><a href="https://www.sciencedirect.com/science/article/pii/S0360544223029766" target="_blank">[18]</a>。</li>
+                <li><strong>被动再生增强</strong>：提高DOC的NO&rarr;NO&#8322;转化效率（理想条件下50%+），利用NO&#8322;的强氧化性在正常排气温度下（250-450&deg;C）持续氧化碳烟；CRT（Continuously Regenerating Trap，连续再生捕集器）效应依赖高品质低硫柴油（硫含量&lt;10ppm）和稳定的NO&#8322;/NOx比。</li>
+            </ul>
+
+            <h2>4.2 GPF汽油颗粒捕集</h2>
+            <p>随着GDI（Gasoline Direct Injection，缸内直喷）汽油机普及，颗粒物排放问题日益突出。同济大学2024年发表的研究系统地分析了GDI发动机颗粒物数量及微观形貌在排气输运过程中的演变规律<a href="https://tjxb.ijournals.cn/jtuns/article/abstract/202404016" target="_blank">[21]</a>。</p>
+            <ul>
+                <li>颗粒物以超细颗粒（&lt;50nm）为主，数量浓度高但质量浓度低；</li>
+                <li>冷启动和加速瞬态工况颗粒排放峰值显著；</li>
+                <li>颗粒形貌以聚集态碳烟为主，伴有少量灰分核。</li>
+            </ul>
+            <p>GPF（Gasoline Particulate Filter，汽油颗粒捕集器）技术要点<a href="https://d.wanfangdata.com.cn/thesis/ChhUaGVzaXNOZXdTMjAyNDA5MjAxNTE3MjUSCUQwMjY0NzcyOBoIajJ3dHllczU%3D" target="_blank">[22]</a>：捕集效率90%+（PN过滤），背压控制是关键设计参数；再生策略：正常工况下利用排气中过剩O&#8322;实现被动再生（温度500&deg;C+），偶需主动再生辅助；GPF+TWC（Three-Way Catalyst，三效催化转化器）集成方案是主流方向。</p>
+
+            <h2>4.3 PN10超细颗粒物限值应对</h2>
+            <p>PN10限值（10nm以上颗粒物计数）是国七相对国六的重要新增控制指标<a href="https://en.sdaofu.com/mees-li-tianwei-chinas-upcoming-national-vii-vehicle-emission-standards-to-adopt-dual-management-framework-combining-single-vehicle-limits-and-corporate-average-emission-intensity---toutiao.html" target="_blank">[1]</a>。应对PN10的技术挑战：</p>
+            <ul>
+                <li><strong>过滤效率提升</strong>：传统DPF壁流式过滤对10-23nm区间颗粒物的捕集效率约为85-95%，需通过降低载体孔径、增加壁厚或优化孔隙结构提升至95%+；</li>
+                <li><strong>检测方法升级</strong>：PN10颗粒物计数方法需要专用的CPC（Condensation Particle Counter，凝结粒子计数器）和粒径切割器，检测设备和标准方法尚待完善；</li>
+                <li><strong>系统标定</strong>：发动机标定需考虑小粒径颗粒生成的抑制策略。</li>
+            </ul>
+
+            <h2>4.4 灰分管理</h2>
+            <p>灰分积累是影响DPF全生命周期性能的关键因素。DieselNet 2026年灰分专题技术综述全面梳理了灰分积累机理与管理策略<a href="https://dieselnet.com/tech/dpf_ash.php" target="_blank">[24]</a>。</p>
+            <h3>灰分来源与组成</h3>
+            <ul>
+                <li>润滑油添加剂（ZDDP等）的钙、镁、锌、磷化合物，占灰分总量的80-90%；</li>
+                <li>发动机磨损金属颗粒（铁、铜、铝等）；</li>
+                <li>燃料杂质（极微量）。</li>
+            </ul>
+            <h3>灰分影响机制</h3>
+            <ul>
+                <li>物理堵塞：灰分在DPF通道末端沉积，减少有效过滤面积，增加排气背压；</li>
+                <li>催化抑制：灰分覆盖催化剂活性位，降低催化功能；</li>
+                <li>热管理干扰：灰分层的隔热效应影响再生温度场的均匀性。</li>
+            </ul>
+            <p>典型轻型柴油车DPF寿命里程：20-30万公里。使用低灰分润滑油（Low SAPS，硫酸盐灰分&lt;0.5%）可将DPF寿命延长30-50%。</p>
+
+            <h2>4.5 低背压DPF设计</h2>
+            <ul>
+                <li><strong>高孔隙率载体</strong>：孔隙率从传统的40-50%提升至55-65%，降低流动阻力；</li>
+                <li><strong>非对称孔道结构（ACT）</strong>：进口通道面积大于出口通道，增加碳烟存储容积同时降低压降；</li>
+                <li><strong>薄壁技术</strong>：壁厚从12mil（0.30mm）减薄至8mil（0.20mm）甚至6mil（0.15mm），显著降低压降。</li>
+            </ul>
+
+            <h2>4.6 DPF载体技术</h2>
+            <p>Ceramics International 2025年发表的研究探讨了SiC针棒增强堇青石基复合材料的DPF载体应用<a href="https://www.sciencedirect.com/science/article/pii/S0955221924010082" target="_blank">[23]</a>。</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>材料类型</th><th>堇青石</th><th>SiC</th><th>SiC增强堇青石</th><th>AT（钛酸铝）</th></tr></thead>
+                    <tbody>
+                        <tr><td>热膨胀系数 (10&sup1;&sup1;&frasl;K)</td><td>1.0-1.5</td><td>4.0-4.5</td><td>2.0-3.0</td><td>1.5-2.5</td></tr>
+                        <tr><td>耐热冲击</td><td>优秀</td><td>良好</td><td>优秀</td><td>良好</td></tr>
+                        <tr><td>热导率 (W/m&middot;K)</td><td>1-2</td><td>20-25</td><td>8-15</td><td>1.5-2.5</td></tr>
+                        <tr><td>孔隙率 (%)</td><td>40-55</td><td>45-60</td><td>45-60</td><td>50-60</td></tr>
+                        <tr><td>成本</td><td>低</td><td>中高</td><td>中</td><td>高</td></tr>
+                        <tr><td>代表供应商</td><td>康宁/NGK/国瓷</td><td>IBIDEN/NGK</td><td>研发阶段</td><td>康宁</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>SiC针棒增强堇青石复合材料通过在堇青石基体中引入SiC针状晶须增强，实现了热膨胀系数降低、热导率提升的双重优化，有望在保持堇青石良好热震稳定性的同时弥补其热导率不足的缺点<a href="https://www.sciencedirect.com/science/article/pii/S0955221924010082" target="_blank">[23]</a>。</p>
+            <p>国产载体领域，国瓷材料实现技术突破，蜂窝陶瓷载体CTE（热膨胀系数）达到0.45&times;10&sup1;&sup11;/K，接近康宁标杆水平（0.4&times;10&sup1;&sup11;/K）<a href="https://xueqiu.com/9519149588/347813426" target="_blank">[36]</a>。奥福环保、凯龙高科、宜兴非金属等企业形成国产四大阵营，国内市场份额已提升至约47%。</p>
+
+            <h2>4.7 四元催化一体化</h2>
+            <p>山东科技大学学报2026年发表的研究系统综述了四效催化技术（DPF+DOC+SCR+ASC功能集成）的研究现状<a href="https://xuebao.sdust.edu.cn/zikewenzhang/z2025/z202506/09fengchao.pdf" target="_blank">[20]</a>。</p>
+            <h3>设计理念</h3>
+            <p>在单一载体上实现四种催化功能：(1)DOC层氧化CO和HC；(2)SCR层还原NOx；(3)DPF层捕集颗粒物；(4)ASC层消除逃逸氨。</p>
+            <h3>技术优势</h3>
+            <ul>
+                <li>系统体积减少40-60%，特别适合发动机舱空间受限的轻型车；</li>
+                <li>热集成优势——功能催化层紧密耦合，热管理效率高；</li>
+                <li>成本降低——减少载体数量、封装件和传感器数量<a href="https://xuebao.sdust.edu.cn/zikewenzhang/z2025/z202506/09fengchao.pdf" target="_blank">[20]</a>。</li>
+            </ul>
+            <h3>技术挑战</h3>
+            <ul>
+                <li>催化层交互影响：上游催化反应产物（如DOC产生的NO&#8322;）影响下游SCR反应平衡；</li>
+                <li>高温稳定性：DPF再生时600&deg;C+高温对SCR和ASC涂层活性造成风险；</li>
+                <li>制造工艺复杂：多层涂覆工艺控制要求高，均匀性和一致性难以保证。</li>
+            </ul>
+            <p>从东风轻型车产品需求看，四元催化一体化方案对轻型柴油发动机（尤其是总布置紧凑的车型）具有显著吸引力，建议纳入中长期技术预研计划。</p>
+        </div>
+
+        <hr>
+
+        <!-- Chapter 5 -->
+        <div id="chapter5">
+            <h1 class="chapter-title">第5章 EGR/DOC/其他后处理技术（D4）</h1>
+            <p>除SCR和DPF两大核心后处理技术外，EGR、DOC、LNT等辅助技术对国七排放达标同样至关重要。本章综合评估各辅助技术的现状与发展方向。</p>
+
+            <h2>5.1 高压EGR vs 低压EGR</h2>
+            <p>EGR（Exhaust Gas Recirculation，废气再循环）是降低发动机机内NOx生成的重要手段<a href="https://zhuanlan.zhihu.com/p/2030371126216540878" target="_blank">[31]</a>。</p>
+            <h3>高压EGR（HP-EGR）</h3>
+            <ul>
+                <li>从涡轮前取气，经冷却后回至进气歧管；</li>
+                <li>优点：响应快、布局简单、成本低；</li>
+                <li>缺点：全负荷时涡轮能量损失导致功率下降；EGR率有效范围受限（通常&lt;30%）。</li>
+            </ul>
+            <h3>低压EGR（LP-EGR）</h3>
+            <ul>
+                <li>从DPF后取气（清洁废气），回至压气机前；</li>
+                <li>优点：EGR率范围宽（40-60%）、全负荷可行、不损失涡轮能量；</li>
+                <li>缺点：响应慢、需要额外的冷却和过滤措施、压气机结垢风险。</li>
+            </ul>
+            <h3>国七阶段EGR选择建议</h3>
+            <ul>
+                <li>轻型柴油车：继续以高压EGR为主，可选配低压EGR（当NOx机内控制需求&gt;40%时）；</li>
+                <li>中型柴油车：高压+低压EGR组合策略，根据工况切换；</li>
+                <li>EGR冷却器效率提升是降NOx同时保燃油经济性的关键。</li>
+            </ul>
+
+            <h2>5.2 DOC柴油氧化催化</h2>
+            <p>DOC（Diesel Oxidation Catalyst，柴油氧化催化剂）是柴油机后处理系统的第一道关卡<a href="https://basf-catalystsmetals.com/zh-hans/catalysts/heavy-duty/diesel-oxidation-catalysts" target="_blank">[32]</a>：</p>
+            <ul>
+                <li><strong>CO氧化</strong>：将CO氧化为CO&#8322;，转化效率&gt;95%；</li>
+                <li><strong>HC氧化</strong>：氧化未燃碳氢化合物及SOF（Soluble Organic Fraction，可溶性有机成分）；</li>
+                <li><strong>NO&rarr;NO&#8322;转化</strong>：将部分NO氧化为NO&#8322;，提高下游SCR快速反应速率；</li>
+                <li><strong>放热升温</strong>：通过后喷HC在DOC中共燃产生温升，辅助DPF主动再生。</li>
+            </ul>
+            <p>国七阶段DOC的技术升级方向：贵金属负载量优化（Pt/Pd比例调整），降低Pt用量应对铂金短缺<a href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202605/t20260519_10234007.htm" target="_blank">[40]</a>；热稳定性提升至850&deg;C+；起燃温度进一步降低至150&deg;C以下。</p>
+
+            <h2>5.3 LNT稀薄NOx捕集</h2>
+            <p>LNT（Lean NOx Trap，稀薄NOx捕集）技术长期以来在轻型柴油车上作为SCR的替代或补充方案<a href="https://saemobilus.sae.org/papers/studying-lean-burn-operation-two-wheelers-increase-fuel-efficiency-investigate-use-lean-nox-trap-catalyst-lnt-lean-burn-system-2024-32-0058" target="_blank">[33]</a>。在国七标准下，LNT独立方案难以满足NOx限值要求，但LNT+下游SCR（也被称为"被动SCR"）组合方案在无尿素系统场景下具有特定应用价值。</p>
+
+            <h2>5.4 系统集成紧凑化</h2>
+            <p>Canyam 2026年发表的研究聚焦于紧凑型柴油后处理系统中U形SCR混合器的优化设计与实验验证<a href="https://www.canyam.com/article/optimization-and-experimental-validation-of-a-u-shaped-scr-mixer-for-compact-diesel-aftertreatment-systems/64675649" target="_blank">[34]</a>。紧凑化布局可将SCR模块长度缩短40-50%，特别适用于底盘空间受限的轻型商用车。东风轻型车建议将U形SCR混合器作为紧凑化设计方向。</p>
+
+            <h2>5.5 48V电加热冷启动辅助</h2>
+            <p>企查查收录的2025年专利公开了一种48V电加热后处理控制系统<a href="https://www.qcc.com/zhuanliDetail/7af1cf9f765db4ea6abdabcbfa6cf907" target="_blank">[35]</a>。该技术与3.4节讨论的低温SCR电加热方案一致，独立于发动机运行的加热能力，解决冷启动第一分钟排放峰值问题，未来可能成为轻型商用车冷启动排放控制的标准配置。</p>
+
+            <h2>5.6 GDI后处理</h2>
+            <p>汽油机方面，GDI发动机的后处理以TWC+GPF为基本架构。国七阶段汽油机后处理面临的主要挑战包括：PN10限值要求GPF过滤精度提升；RDE测试条件下TWC的NOx转化效率稳定性；冷启动HC排放峰值控制。部分高端车型可能采用"四元催化+GPF"集成方案。</p>
+        </div>
+
+        <hr>
+
+        <!-- Chapter 6 -->
+        <div id="chapter6">
+            <h1 class="chapter-title">第6章 后处理系统轻量化与降本（D5）</h1>
+            <p>后处理系统成本是商用车企业面临的核心商业挑战。本章从载体材料、贵金属减量、系统集成和国产替代四个角度分析后处理系统的轻量化与降本路径。</p>
+
+            <h2>6.1 载体薄壁化</h2>
+            <p>蜂窝陶瓷载体是后处理系统的核心结构部件，其薄壁化直接关系到材料用量和系统重量。国瓷材料在蜂窝陶瓷载体领域取得重大技术突破，CTE（热膨胀系数）达到0.45&times;10&sup1;&sup11;/K，接近康宁标杆水平0.4&times;10&sup1;&sup11;/K<a href="https://xueqiu.com/9519149588/347813426" target="_blank">[36]</a>。</p>
+            <h3>薄壁化进展</h3>
+            <ul>
+                <li>传统壁厚：12mil（0.30mm）&rarr; 8mil（0.20mm）&rarr; 6mil（0.15mm）；</li>
+                <li>目前主流：400/4（400cpsi，4mil壁厚）和600/3（600cpsi，3mil壁厚）；</li>
+                <li>超薄壁：750/2（750cpsi，2mil壁厚）正在开发中。</li>
+            </ul>
+            <h3>国产化格局</h3>
+            <p>康宁和NGK长期占据全球蜂窝陶瓷载体市场约90%份额<a href="https://new-ceram.cnpowder.com.cn/newsdetail.php?id=86576" target="_blank">[37]</a>。近年来，以国瓷材料、奥福环保、凯龙高科、宜兴非金属为代表的国内企业加速追赶，市场份额已提升至约47%<a href="https://www.chinairn.com/hyzx/20240304/084030186.shtml" target="_blank">[38]</a>。</p>
+
+            <h2>6.2 贵金属减量</h2>
+            <p>贵金属（PGM，Platinum Group Metals）是后处理催化剂的核心成本要素。庄信万丰（Johnson Matthey）2026年5月最新报告显示铂族金属市场出现显著分化<a href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202605/t20260519_10234007.htm" target="_blank">[40]</a>。</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>策略</th><th>描述</th><th>减量潜力</th><th>技术风险</th></tr></thead>
+                    <tbody>
+                        <tr><td>Pt部分替代（Pd）</td><td>DOC中用Pd替代部分Pt</td><td>15-25%</td><td>抗硫性下降</td></tr>
+                        <tr><td>分层/分区涂覆</td><td>优化贵金属空间分布</td><td>20-30%</td><td>工艺复杂度增加</td></tr>
+                        <tr><td>非贵金属替代</td><td>Fe/Co-N-C单原子催化剂</td><td>50%+</td><td>耐久性待验证</td></tr>
+                        <tr><td>贵金属回收</td><td>废旧催化剂回收利用</td><td>供应链补充</td><td>回收率待提升</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>6.3 系统集成紧凑化降本</h2>
+            <ul>
+                <li><strong>SDPF</strong>：SCR催化剂涂覆于DPF，省去独立SCR载体和封装件；</li>
+                <li><strong>四元催化</strong>：DOC+SCR+DPF+ASC四合一，节约2-3个载体和3-4套封装件；</li>
+                <li><strong>U形/紧凑混合器</strong>：缩短系统轴向长度，减小封装和支架尺寸<a href="https://www.canyam.com/article/optimization-and-experimental-validation-of-a-u-shaped-scr-mixer-for-compact-diesel-aftertreatment-systems/64675649" target="_blank">[34]</a>。</li>
+            </ul>
+            <p>集成化的降本效应：独立式架构（四罐）为基线；半集成式（三罐）降本约10-15%；高度集成式（两罐）降本约20-30%。</p>
+
+            <h2>6.4 成本结构分析</h2>
+            <p>华泰证券2025年10月研报测算，国七标准实施后，国内汽车尾气后处理市场规模将从国六的约668亿元增长至1001亿元，增幅约50%<a href="https://stock.jrj.com.cn/2025/10/18100953701288.shtml" target="_blank">[45]</a>。</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>零部件</th><th>国六（元/车）</th><th>国七（元/车）</th><th>涨幅</th><th>主要原因</th></tr></thead>
+                    <tbody>
+                        <tr><td>DOC（柴油）</td><td>1,500-2,500</td><td>2,000-3,500</td><td>+30-40%</td><td>贵金属用量增加、耐高温升级</td></tr>
+                        <tr><td>DPF（柴油）</td><td>3,000-5,000</td><td>4,000-7,000</td><td>+30-50%</td><td>PN10精度、SiC载体、传感器增加</td></tr>
+                        <tr><td>SCR（柴油）</td><td>2,500-4,000</td><td>4,500-8,000</td><td>+50-100%</td><td>两级SCR、电加热、ASC集成</td></tr>
+                        <tr><td>尿素喷射系统</td><td>1,000-1,500</td><td>1,500-2,500</td><td>+50%</td><td>高精度计量泵、双喷射点</td></tr>
+                        <tr><td>传感器组</td><td>1,500-2,500</td><td>3,000-5,000</td><td>+100%</td><td>远程OBD、PM/PN10传感器增加</td></tr>
+                        <tr><td>封装与管路</td><td>2,000-3,000</td><td>2,500-4,000</td><td>+25-30%</td><td>不锈钢升级、保温层增加</td></tr>
+                        <tr style="font-weight:bold;background:#E8F4FD"><td>柴油车合计</td><td>~12,000-18,000</td><td>~18,000-30,000</td><td>+50-67%</td><td>-</td></tr>
+                        <tr><td>TWC+GPF（汽油）</td><td>2,000-3,500</td><td>3,000-5,500</td><td>+50-60%</td><td>PN10、贵金属配方调整</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p><em>来源：综合[45][48][59]</em></p>
+
+            <h2>6.5 国产替代趋势</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>企业</th><th>核心产品</th><th>技术对标</th><th>市场定位</th></tr></thead>
+                    <tbody>
+                        <tr><td>国瓷材料</td><td>蜂窝陶瓷载体、分子筛</td><td>康宁/NGK</td><td>汽油车TWC载体领先</td></tr>
+                        <tr><td>奥福环保</td><td>蜂窝陶瓷载体（DPF/SCR）</td><td>NGK/IBIDEN</td><td>柴油车大尺寸载体</td></tr>
+                        <tr><td>凯龙高科</td><td>SCR催化剂涂覆、封装</td><td>BASF/JM</td><td>"载体涂覆封装"一体化</td></tr>
+                        <tr><td>宜兴非金属</td><td>堇青石蜂窝陶瓷</td><td>康宁</td><td>成本优势、中低端市场</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p><strong>国产替代降本效应</strong>：蜂窝陶瓷载体国产价格约为进口的50-65%；SCR催化剂涂覆国产约为进口的60-70%；封装总成国产约为进口的70-80%。预计到2030年，国产后处理核心零部件的综合市场份额有望突破60%。</p>
+        </div>
+
+        <hr>
+
+        <!-- Chapter 7 -->
+        <div id="chapter7">
+            <h1 class="chapter-title">第7章 竞品对标与行业趋势（D6）</h1>
+            <p>本章对标全球后处理行业领导者（博世、康明斯）的技术方案，分析供应商并购整合趋势，并展望2026-2030年市场走向。</p>
+
+            <h2>7.1 博世Denoxtronic系统</h2>
+            <p>博世Denoxtronic是全球应用最广泛的商用车SCR尿素喷射系统，自2005年量产以来已发展至第六代（Denoxtronic 6.5）<a href="https://www.bosch-mobility.com/en/solutions/exhaust-gas-treatment/denoxtronic-exhaust-gas-treatment-system/" target="_blank">[49]</a><a href="https://microsite.bosch.com.cn/auto2018/ebrochures2018/ps/ds_denoxtronic_6.5_cn.pdf" target="_blank">[50]</a>。</p>
+            <ul>
+                <li><strong>模块化设计</strong>：供给模块（Supply Module）+ 喷射模块（Dosing Module）分离架构；</li>
+                <li><strong>高精度计量</strong>：闭环控制精度&plusmn;3%（喷射量），适应宽流量范围（10mL/min至1500mL/min）；</li>
+                <li><strong>双喷射能力</strong>：Denoxtronic 6.5支持双喷射（可同时为两级SCR提供尿素喷射），适配国七需求；</li>
+                <li><strong>标准化接口</strong>：与主流发动机ECU兼容，降低OEM集成门槛。</li>
+            </ul>
+            <p>对于东风轻型车而言，博世Denoxtronic代表的"标准化、模块化"后处理控制系统设计思路值得借鉴。</p>
+
+            <h2>7.2 康明斯Single Module</h2>
+            <p>康明斯Single Module超高效后处理系统代表了系统高度集成的行业标杆<a href="https://www.environmental-expert.com/products/single-module-ultra-high-efficiency-aftertreatment-system-563059" target="_blank">[51]</a>。</p>
+            <ul>
+                <li>单模块集成DOC+DPF+SCR+ASC四种功能；</li>
+                <li>2027款X15发动机后处理系统已实现Euro VII和中国未来排放标准双认证<a href="https://dieseltraining.net/cummins-2027-x15-aftertreatment-system/" target="_blank">[52]</a>；</li>
+                <li>紧凑化设计：相比传统四罐分立方案，体积减少40%，重量减少25%<a href="https://d.wanfangdata.com.cn/periodical/jrgcjx202501029" target="_blank">[53]</a>。</li>
+            </ul>
+            <p>康明斯Single Module证明，系统高度集成是国七降本增效的有效路径。</p>
+
+            <h2>7.3 供应商格局剧变</h2>
+            <p>2025年5月，霍尼韦尔宣布以13.25亿英镑（约合人民币120亿元）收购庄信万丰（JM）全球催化剂业务<a href="https://www.honeywell.com.cn/news-events/newsroom/news/2025/05/news20250523_1" target="_blank">[54]</a>。这是后处理行业近年来最大规模的并购交易，标志着全球竞争格局的重大重塑。</p>
+            <ul>
+                <li><strong>BASF</strong>：保持DOC和SCR催化剂技术领先，推进低贵金属配方<a href="https://basf-catalystsmetals.com/zh-hans/catalysts/heavy-duty/diesel-oxidation-catalysts" target="_blank">[32]</a>；</li>
+                <li><strong>FORVIA（佛瑞亚）</strong>：2025年全球销售额286亿美元（含海拉）<a href="https://www.faurecia.cn/newsroom/forvia%E4%BD%9B%E7%91%9E%E4%BA%9A%E9%9B%86%E5%9B%A2%E5%8F%91%E5%B8%832025%E5%B9%B4%E5%85%A8%E5%B9%B4%E4%B8%9A%E7%BB%A9%E8%A1%A8%E7%8E%B0" target="_blank">[55]</a>；</li>
+                <li><strong>博世</strong>：巩固Denoxtronic市场主导地位，2025年累计出货超2500万套；</li>
+                <li><strong>国内企业</strong>：国瓷/奥福/凯龙/银轮等加速追赶。</li>
+            </ul>
+
+            <h2>7.4 市场规模预测</h2>
+            <p>综合多家权威研究机构数据，全球汽车后处理市场呈现稳健增长态势：</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>研究机构</th><th>基准年</th><th>基准规模</th><th>预测年</th><th>预测规模</th><th>CAGR</th></tr></thead>
+                    <tbody>
+                        <tr><td>ResearchAndMarkets</td><td>2026</td><td>193亿美元</td><td>2031</td><td>236亿美元</td><td>4.1%</td></tr>
+                        <tr><td>MarkWide Research</td><td>2026</td><td>527亿美元</td><td>2036</td><td>953亿美元</td><td>6.1%</td></tr>
+                        <tr><td>GM Insights</td><td>2025</td><td>~250亿美元</td><td>2030</td><td>~350亿美元</td><td>~6.8%</td></tr>
+                        <tr><td>GEPresearch（含中国）</td><td>2026</td><td>—</td><td>2030</td><td>—</td><td>5.5%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p><em>注：各机构统计口径和覆盖范围不同，导致绝对数值存在差异。一致趋势是全球后处理市场CAGR 4-7%稳健增长，中国市场增速领先。</em></p>
+
+            <!-- Chart 2: Market Forecast -->
+            <div class="chart-container">
+                <div class="chart-title">全球后处理市场规模预测（2026-2036年）</div>
+                <canvas id="chartMarketForecast"></canvas>
+            </div>
+
+            <p>中国市场（GEPresearch 2026年数据）<a href="https://www.gepresearch.com/86/view-1048401-1.html" target="_blank">[59]</a>：国六后处理市场规模约668亿元人民币（2024年）；国七后处理市场规模（预测）约1001亿元人民币<a href="https://stock.jrj.com.cn/2025/10/18100953701288.shtml" target="_blank">[45]</a>。</p>
+
+            <h2>7.5 2026-2030趋势研判</h2>
+            <h3>(1) 技术趋势</h3>
+            <ul>
+                <li>系统高度集成：从四罐分立到两罐/单模块，集成度持续提升；</li>
+                <li>电气化渗透：48V电加热、电子控制取代气动/液力控制；</li>
+                <li>数字化管理：远程OBD全车型覆盖，数字孪生助力排放合规管理。</li>
+            </ul>
+            <h3>(2) 市场趋势</h3>
+            <ul>
+                <li>全球市场CAGR 4-7%，2030年全球规模预计300-500亿美元；</li>
+                <li>中国市场受国七拉动增速领先，国七实施首年（预计2027-2028）迎来行业高峰期；</li>
+                <li>轻型商用车细分市场受益于远程OBD扩展和PN10新增，增长弹性更大。</li>
+            </ul>
+            <h3>(3) 竞争格局</h3>
+            <ul>
+                <li>头部企业通过并购构建全栈能力（如霍尼韦尔+JM）；</li>
+                <li>中国企业借助国七窗口加速国产替代；</li>
+                <li>新能源转型对长期后处理需求构成结构性压力，但2030年前影响有限（商用车电动化率&lt;10%）。</li>
+            </ul>
+            <p>国家能源局2025年发布的《中国氢能发展报告》指出氢燃料电池在商用车领域的示范应用加速，但中短期内（2030年前）商用车仍以内燃机和混合动力为主导<a href="https://www.nea.gov.cn/20250430/96022785b3a747248288ad1c57d3a025/2025043096022785b3a747248288ad1c57d3a025_35aeee443346424eb4a3da029cb007003c.pdf" target="_blank">[60]</a>，后处理行业市场空间稳固。</p>
+        </div>
+
+        <hr>
+
+        <!-- Chapter 8 -->
+        <div id="chapter8">
+            <h1 class="chapter-title">第8章 综合研判与发展建议</h1>
+            <p>基于前七章的系统分析，本章结合东风轻型车实际情况，提出国七后处理技术路线图与发展建议。</p>
+
+            <h2>8.1 国七后处理技术路线图</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>阶段</th><th>时间</th><th>核心任务</th><th>关键技术</th><th>里程碑目标</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>近期</strong></td><td>2026-2027</td><td>技术预研与方案选型</td><td>单级SCR+EHC方案验证、DPF低背压设计、远程OBD架构预研</td><td>完成国七技术方案概念设计、关键零部件供应商定点</td></tr>
+                        <tr><td><strong>中期</strong></td><td>2027-2028</td><td>工程开发与样车验证</td><td>两级SCR集成开发、四元催化一体化样件、48V电加热标定、RDE合规策略</td><td>完成两轮工程样车验证、RDE达标率&gt;90%</td></tr>
+                        <tr><td><strong>远期</strong></td><td>2028-2030</td><td>量产准备与迭代优化</td><td>SDPF量产导入、国产载体批量验证、贵金属减量配方、OBM功能集成</td><td>国七全系产品SOP、综合成本控制在目标区间</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Chart 3: Gantt Chart -->
+            <div class="chart-container">
+                <div class="chart-title">后处理技术路线图甘特图（2026-2030年）</div>
+                <div class="gantt-wrapper">
+                    <div class="gantt-chart">
+                        <div class="gantt-header">
+                            <div class="gantt-header-label">技术方向</div>
+                            <div class="gantt-header-years">
+                                <div class="gantt-year">2026</div>
+                                <div class="gantt-year">2027</div>
+                                <div class="gantt-year">2028</div>
+                                <div class="gantt-year">2029</div>
+                                <div class="gantt-year">2030</div>
+                            </div>
+                        </div>
+                        <div class="gantt-row">
+                            <div class="gantt-label">SCR升级（EHC+两级SCR）</div>
+                            <div class="gantt-bar-area">
+                                <div class="gantt-bar phase-near" style="left:0%;width:30%">预研验证</div>
+                                <div class="gantt-bar phase-mid" style="left:30%;width:30%">集成开发</div>
+                                <div class="gantt-bar phase-far" style="left:60%;width:40%">量产优化</div>
+                            </div>
+                        </div>
+                        <div class="gantt-row">
+                            <div class="gantt-label">DPF优化（低背压+灰分管理）</div>
+                            <div class="gantt-bar-area">
+                                <div class="gantt-bar phase-near" style="left:0%;width:25%">方案选型</div>
+                                <div class="gantt-bar phase-mid" style="left:25%;width:35%">工程验证</div>
+                                <div class="gantt-bar phase-far" style="left:60%;width:40%">量产导入</div>
+                            </div>
+                        </div>
+                        <div class="gantt-row">
+                            <div class="gantt-label">系统集成（四元催化/紧凑化）</div>
+                            <div class="gantt-bar-area">
+                                <div class="gantt-bar phase-near" style="left:5%;width:25%">概念设计</div>
+                                <div class="gantt-bar phase-mid" style="left:30%;width:30%">样件验证</div>
+                                <div class="gantt-bar phase-far" style="left:60%;width:40%">批量应用</div>
+                            </div>
+                        </div>
+                        <div class="gantt-row">
+                            <div class="gantt-label">国产替代（载体/涂覆/封装）</div>
+                            <div class="gantt-bar-area">
+                                <div class="gantt-bar phase-near" style="left:0%;width:20%">供应商导入</div>
+                                <div class="gantt-bar phase-mid" style="left:20%;width:30%">样品验证</div>
+                                <div class="gantt-bar phase-far" style="left:50%;width:50%">批量替代</div>
+                            </div>
+                        </div>
+                        <div class="gantt-row">
+                            <div class="gantt-label">远程OBD/OBM</div>
+                            <div class="gantt-bar-area">
+                                <div class="gantt-bar phase-near" style="left:0%;width:30%">架构预研</div>
+                                <div class="gantt-bar phase-mid" style="left:30%;width:35%">开发测试</div>
+                                <div class="gantt-bar phase-far" style="left:65%;width:35%">功能集成</div>
+                            </div>
+                        </div>
+                        <div class="gantt-row">
+                            <div class="gantt-label">贵金属减量/替代配方</div>
+                            <div class="gantt-bar-area">
+                                <div class="gantt-bar phase-near" style="left:5%;width:25%">配方研究</div>
+                                <div class="gantt-bar phase-mid" style="left:30%;width:30%">试验验证</div>
+                                <div class="gantt-bar phase-far" style="left:60%;width:40%">量产推广</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gantt-legend">
+                        <div class="gantt-legend-item"><div class="gantt-legend-color" style="background:linear-gradient(90deg,#00529B,#0072CE)"></div>近期（2026-2027）</div>
+                        <div class="gantt-legend-item"><div class="gantt-legend-color" style="background:linear-gradient(90deg,#FF8F00,#FFC107)"></div>中期（2027-2028）</div>
+                        <div class="gantt-legend-item"><div class="gantt-legend-color" style="background:linear-gradient(90deg,#2E7D32,#66BB6A)"></div>远期（2028-2030）</div>
+                    </div>
+                </div>
+            </div>
+
+            <h2>8.2 东风轻型车国七技术布局建议</h2>
+
+            <h3>(1) SCR系统选型</h3>
+            <ul>
+                <li>轻型柴油产品（3-5L）：推荐"单级SCR+EHC电加热+ASC"作为基线方案，预留两级SCR扩展接口；</li>
+                <li>中型柴油产品（5-7L）：推荐"两级SCR（ccSCR+主SCR）+ASC"方案，ccSCR采用紧耦合布局。</li>
+            </ul>
+
+            <h3>(2) DPF/GPF选型</h3>
+            <ul>
+                <li>柴油DPF：SiC增强堇青石载体（兼顾热导率与成本），ACT非对称孔道设计；</li>
+                <li>汽油GPF：高孔隙率堇青石载体，与TWC采用罐内集成方案。</li>
+            </ul>
+
+            <h3>(3) 控制策略</h3>
+            <ul>
+                <li>采用基于模型的预测控制框架，实现SCR+DPF+ASC多目标协同优化；</li>
+                <li>远程OBD端-云架构设计，支持数据上云和OTA升级。</li>
+            </ul>
+
+            <h3>(4) 国产替代策略</h3>
+            <ul>
+                <li>载体：优先导入国瓷/奥福大尺寸DPF/SCR载体（已有量产能力）；</li>
+                <li>催化剂涂覆：考察凯龙高科等国内涂覆商，逐步替代进口BASF/JM；</li>
+                <li>封装总成：自有或合作开发紧凑型封装方案。</li>
+            </ul>
+
+            <h3>(5) 新能源/混动协同</h3>
+            <ul>
+                <li>48V微混+后处理电加热方案协同设计（共享电源系统）；</li>
+                <li>PHEV车型后处理系统特殊设计（频繁启停导致排气温度低）；</li>
+                <li>与新能源部门联合开发后处理+动力总成集成方案。</li>
+            </ul>
+
+            <h2>8.3 关键技术攻关优先级排序</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>优先级</th><th>技术攻关项</th><th>紧迫性</th><th>攻关难度</th><th>影响度</th><th>建议资源投入</th></tr></thead>
+                    <tbody>
+                        <tr style="background:#FFF3E0"><td><strong>P0</strong></td><td>SCR低温电加热快速起燃</td><td>极高</td><td>中高</td><td>核心</td><td>集中攻关</td></tr>
+                        <tr style="background:#FFF3E0"><td><strong>P0</strong></td><td>PN10超细颗粒物捕集方案</td><td>极高</td><td>中</td><td>核心</td><td>集中攻关</td></tr>
+                        <tr><td><strong>P1</strong></td><td>两级SCR+ASC系统集成</td><td>高</td><td>高</td><td>核心</td><td>重点投入</td></tr>
+                        <tr><td><strong>P1</strong></td><td>后处理系统紧凑化轻量化</td><td>高</td><td>中高</td><td>重要</td><td>重点投入</td></tr>
+                        <tr><td><strong>P1</strong></td><td>远程OBD/OBM架构开发</td><td>高</td><td>中</td><td>重要</td><td>重点投入</td></tr>
+                        <tr><td><strong>P2</strong></td><td>DPF灰分寿命管理</td><td>中</td><td>中</td><td>重要</td><td>持续投入</td></tr>
+                        <tr><td><strong>P2</strong></td><td>贵金属减量/替代配方</td><td>中</td><td>极高</td><td>中等</td><td>跟踪研发</td></tr>
+                        <tr><td><strong>P2</strong></td><td>四元催化一体化</td><td>中</td><td>高</td><td>中等</td><td>预研跟踪</td></tr>
+                        <tr><td><strong>P3</strong></td><td>国产替代批量导入</td><td>中</td><td>中低</td><td>重要</td><td>常规推进</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>P0级项目（SCR低温电加热和PN10捕集）建议2026年立即启动，作为国七技术规划的首要攻关方向。</p>
+        </div>
+
+        <hr>
+
+        <!-- Appendix -->
+        <div id="appendix">
+            <h1 class="chapter-title">附录A：来源完整汇总表</h1>
+            <p>本附录汇总本报告引用的全部60条信息来源，每条标注编号、标题、来源机构、时间、URL、等级和所属维度。</p>
+
+            <h2>D1：国七排放法规演进与技术路线（8条）</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>#</th><th>标题</th><th>来源机构</th><th>时间</th><th>等级</th></tr></thead>
+                    <tbody>
+                        <tr><td>1</td><td><a href="https://en.sdaofu.com/mees-li-tianwei-chinas-upcoming-national-vii-vehicle-emission-standards-to-adopt-dual-management-framework-combining-single-vehicle-limits-and-corporate-average-emission-intensity---toutiao.html" target="_blank">MEE's Li Tianwei: China's National VII Dual Management Framework</a></td><td>生态环境部/泰达论坛</td><td>2025.9</td><td>A</td></tr>
+                        <tr><td>2</td><td><a href="https://inspire.sgs.com/content/101108627/china-china-releases-draft-timeline-and-key-provisions-for-china-7-vii-vehicle-emission-standards" target="_blank">China Releases Draft Timeline for China 7/VII Standards</a></td><td>SGS INSPIRE</td><td>2025.7</td><td>A</td></tr>
+                        <tr><td>3</td><td><a href="https://dieselnet.com/standards/eu/hd.php" target="_blank">Emission Standards: Euro VII Heavy-Duty (DieselNet)</a></td><td>DieselNet</td><td>2026.4</td><td>A</td></tr>
+                        <tr><td>4</td><td><a href="https://www.linkedin.com/pulse/upcoming-china-vii7-multi-pollutant-standards-remote-obd-reggie-zhan-gkg3c" target="_blank">Remote OBD Expands to Light-Duty Under China VII</a></td><td>Reggie Zhan/CRAES/SAE</td><td>2026.3</td><td>A</td></tr>
+                        <tr><td>5</td><td><a href="https://baike.baidu.com/item/%E5%9B%BD%E4%B8%83%E6%8E%92%E6%94%BE%E6%A0%87%E5%87%86/67566937" target="_blank">国七排放标准（百度百科）</a></td><td>百度百科</td><td>持续更新</td><td>B</td></tr>
+                        <tr><td>6</td><td><a href="https://news.qq.com/rain/a/20250725A075OP00" target="_blank">看国七排放标准最新进展</a></td><td>中国汽车报/腾讯新闻</td><td>2025.7</td><td>B</td></tr>
+                        <tr><td>7</td><td><a href="https://www.fuelsandlubes.com/fli-article/an-examination-of-china-7-emissions-regulations/" target="_blank">An Examination of China 7 Emissions Regulations</a></td><td>F&L Asia/SAE</td><td>2024.6</td><td>B</td></tr>
+                        <tr><td>8</td><td><a href="https://www.163.com/dy/article/KE60CHI80556EXW8.html" target="_blank">国七排放标准加速落地</a></td><td>网易</td><td>2025</td><td>B</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>D2：SCR选择性催化还原技术（8条）</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>#</th><th>标题</th><th>来源机构</th><th>时间</th><th>等级</th></tr></thead>
+                    <tbody>
+                        <tr><td>9</td><td><a href="https://dieselnet.com/tech/cat_scr_diesel.php" target="_blank">SCR Systems for Diesel Engines (DieselNet)</a></td><td>DieselNet</td><td>2026.4</td><td>A</td></tr>
+                        <tr><td>10</td><td><a href="https://dieselnet.com/tech/cat_scr_diesel_control.php" target="_blank">Urea Dosing Control for SCR Systems</a></td><td>DieselNet</td><td>2025.12</td><td>A</td></tr>
+                        <tr><td>11</td><td><a href="https://www.mdpi.com/2073-4433/15/8/997" target="_blank">Recent Advances in SCR: Low-Temperature NOx Reduction</a></td><td>MDPI Atmosphere</td><td>2024.8</td><td>A</td></tr>
+                        <tr><td>12</td><td><a href="https://link.springer.com/article/10.1007/s12239-024-00125-4" target="_blank">Model-Based NH3 Slip Detection for SCR+ASC</a></td><td>Springer/IJoAT</td><td>2024.7</td><td>A</td></tr>
+                        <tr><td>13</td><td><a href="https://link.springer.com/article/10.1007/s12239-024-00175-8" target="_blank">Two-Stage SCR Urea Injection Strategy</a></td><td>Springer/IJoAT</td><td>2024.11</td><td>A</td></tr>
+                        <tr><td>14</td><td><a href="https://www.sciencedirect.com/science/article/pii/S0016236124025559" target="_blank">Late Diesel Injection Effect on ccSCR+ASC During DPF Regen</a></td><td>ScienceDirect/Fuel</td><td>2025.2</td><td>A</td></tr>
+                        <tr><td>15</td><td><a href="https://www.sciencedirect.com/science/article/pii/S2213343724025545" target="_blank">SCR Optimization Control for Euro VII</a></td><td>ScienceDirect/JECE</td><td>2024.12</td><td>A</td></tr>
+                        <tr><td>16</td><td><a href="https://cjournal.hep.com.cn/1673-6397/CN/10.19471/j.cnki.1673-6397.2025.04.004" target="_blank">双SCR系统紧耦合SCR尿素结晶预测及应用</a></td><td>汽车工程学报</td><td>2025.10</td><td>B</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>D3：DPF/GPF颗粒物捕集技术（13条）</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>#</th><th>标题</th><th>来源机构</th><th>时间</th><th>等级</th></tr></thead>
+                    <tbody>
+                        <tr><td>17</td><td><a href="https://onlinelibrary.wiley.com/doi/full/10.1155/2024/7775139" target="_blank">Multi-objective Optimization of DPF Regeneration</a></td><td>Wiley</td><td>2024</td><td>A</td></tr>
+                        <tr><td>18</td><td><a href="https://www.sciencedirect.com/science/article/pii/S0360544223029766" target="_blank">Multi-Objective Impact Mechanism on DPF Performance</a></td><td>ScienceDirect</td><td>2024</td><td>A</td></tr>
+                        <tr><td>19</td><td><a href="https://m.yoojia.com/pages/dongtai/index?id=10579276002" target="_blank">柴油车DPF再生原理与作用全解析</a></td><td>沃尔资讯</td><td>-</td><td>C</td></tr>
+                        <tr><td>20</td><td><a href="https://xuebao.sdust.edu.cn/zikewenzhang/z2025/z202506/09fengchao.pdf" target="_blank">四效催化技术(DPF+DOC+SCR+ASC)研究现状</a></td><td>山东科技大学学报</td><td>2026</td><td>A</td></tr>
+                        <tr><td>21</td><td><a href="https://tjxb.ijournals.cn/jtuns/article/abstract/202404016" target="_blank">GDI颗粒数量及微观形貌排气输运演变</a></td><td>同济大学学报</td><td>2024</td><td>A</td></tr>
+                        <tr><td>22</td><td><a href="https://d.wanfangdata.com.cn/thesis/ChhUaGVzaXNOZXdTMjAyNDA5MjAxNTE3MjUSCUQwMjY0NzcyOBoIajJ3dHllczU%3D" target="_blank">GPF捕集和再生特性研究</a></td><td>万方数据</td><td>2026</td><td>A</td></tr>
+                        <tr><td>23</td><td><a href="https://www.sciencedirect.com/science/article/pii/S0955221924010082" target="_blank">SiC针棒增强堇青石基复合材料DPF载体</a></td><td>Ceramics International</td><td>2025</td><td>A</td></tr>
+                        <tr><td>24</td><td><a href="https://dieselnet.com/tech/dpf_ash.php" target="_blank">Ash Accumulation in DPF (DieselNet)</a></td><td>DieselNet</td><td>2026</td><td>A</td></tr>
+                        <tr><td>25</td><td><a href="https://www.sciencedirect.com/science/article/pii/S0959652623031384" target="_blank">Effect of ash on DPF temperature and PM emission</a></td><td>ScienceDirect/JCLP</td><td>2023</td><td>A</td></tr>
+                        <tr><td>26</td><td><a href="https://www.x-mol.com/paper/1628812892467970048" target="_blank">DPF regeneration and ash deposition review</a></td><td>X-mol</td><td>2023</td><td>A</td></tr>
+                        <tr><td>27</td><td><a href="https://www.csice.org.cn/library/journal/paper/2.html" target="_blank">灰分对DPF性能影响综述</a></td><td>中国内燃机学会</td><td>-</td><td>A</td></tr>
+                        <tr><td>28</td><td><a href="https://baijiahao.baidu.com/s?id=1826284489520084098" target="_blank">聚焦3&middot;15：颗粒捕捉器国六B技术补丁</a></td><td>百家号</td><td>-</td><td>B</td></tr>
+                        <tr><td>29</td><td><a href="https://www.sohu.com/a/945117952_122066676" target="_blank">国七标准来袭，尾气后处理市场或达千亿</a></td><td>搜狐</td><td>2025</td><td>B</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>D4：EGR/DOC/其他后处理技术（6条）</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>#</th><th>标题</th><th>来源机构</th><th>时间</th><th>等级</th></tr></thead>
+                    <tbody>
+                        <tr><td>30</td><td><a href="https://www.sohu.com/a/770653612_121647115" target="_blank">助力节能减排，汽油机EGR技术解析</a></td><td>搜狐</td><td>-</td><td>B</td></tr>
+                        <tr><td>31</td><td><a href="https://zhuanlan.zhihu.com/p/2030371126216540878" target="_blank">高压EGR和低压EGR到底差在哪？</a></td><td>知乎</td><td>2026</td><td>B</td></tr>
+                        <tr><td>32</td><td><a href="https://basf-catalystsmetals.com/zh-hans/catalysts/heavy-duty/diesel-oxidation-catalysts" target="_blank">BASF柴油氧化催化剂(DOC)技术介绍</a></td><td>BASF官方</td><td>-</td><td>A</td></tr>
+                        <tr><td>33</td><td><a href="https://saemobilus.sae.org/papers/studying-lean-burn-operation-two-wheelers-increase-fuel-efficiency-investigate-use-lean-nox-trap-catalyst-lnt-lean-burn-system-2024-32-0058" target="_blank">Studying LNT in Two-Wheelers Lean Burn</a></td><td>SAE 2024-32-0058</td><td>2024</td><td>A</td></tr>
+                        <tr><td>34</td><td><a href="https://www.canyam.com/article/optimization-and-experimental-validation-of-a-u-shaped-scr-mixer-for-compact-diesel-aftertreatment-systems/64675649" target="_blank">优化紧凑型柴油后处理系统U形SCR混合器</a></td><td>Canyam</td><td>2026</td><td>A</td></tr>
+                        <tr><td>35</td><td><a href="https://www.qcc.com/zhuanliDetail/7af1cf9f765db4ea6abdabcbfa6cf907" target="_blank">48V电加热后处理控制系统专利</a></td><td>企查查</td><td>2025</td><td>A</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>D5：后处理系统轻量化与降本（13条）</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>#</th><th>标题</th><th>来源机构</th><th>时间</th><th>等级</th></tr></thead>
+                    <tbody>
+                        <tr><td>36</td><td><a href="https://xueqiu.com/9519149588/347813426" target="_blank">国瓷材料蜂窝陶瓷载体技术突破</a></td><td>雪球</td><td>-</td><td>A</td></tr>
+                        <tr><td>37</td><td><a href="https://new-ceram.cnpowder.com.cn/newsdetail.php?id=86576" target="_blank">康宁和NGK占90%，国内企业硬刚</a></td><td>中国粉体网</td><td>-</td><td>B</td></tr>
+                        <tr><td>38</td><td><a href="https://www.chinairn.com/hyzx/20240304/084030186.shtml" target="_blank">蜂窝陶瓷载体行业格局及趋势</a></td><td>中研普华</td><td>2024.3</td><td>B</td></tr>
+                        <tr><td>39</td><td><a href="https://www.docin.com/p-4991263461.html" target="_blank">中国汽油车尾气催化剂载体市场调查</a></td><td>文库</td><td>2026</td><td>B</td></tr>
+                        <tr><td>40</td><td><a href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202605/t20260519_10234007.htm" target="_blank">庄信万丰：铂族金属市场分化</a></td><td>自然资源部转载</td><td>2026.5</td><td>A</td></tr>
+                        <tr><td>41</td><td><a href="https://baijiahao.baidu.com/s?id=1865477192014332464" target="_blank">铂族金属大分化：铂金还缺，钯铑却多了</a></td><td>百家号</td><td>-</td><td>B</td></tr>
+                        <tr><td>42</td><td><a href="https://weibo.com/ttarticle/p/show?id=2309405153791904448739" target="_blank">铂族金属可持续发展策略</a></td><td>上海铂金周</td><td>-</td><td>B</td></tr>
+                        <tr><td>43</td><td><a href="https://www.sciencedirect.com/science/article/pii/S2213343723009764" target="_blank">Platinum-group metals: Demand, supply, applications</a></td><td>ScienceDirect</td><td>-</td><td>A</td></tr>
+                        <tr><td>44</td><td><a href="https://www.gepresearch.com/80/view-850533-1.html" target="_blank">全球及中国汽车催化剂行业深度调研</a></td><td>GEPresearch</td><td>2025</td><td>B</td></tr>
+                        <tr><td>45</td><td><a href="https://stock.jrj.com.cn/2025/10/18100953701288.shtml" target="_blank">华泰证券：测算国七后处理市场达1000亿</a></td><td>金融界</td><td>2025.10</td><td>A</td></tr>
+                        <tr><td>46</td><td><a href="https://www.sdaofu.com/products/cyfwtc26.html" target="_blank">奥福环保陶瓷载体产品</a></td><td>奥福环保官网</td><td>-</td><td>A</td></tr>
+                        <tr><td>47</td><td><a href="https://www.corning.com/worldwide/en/products/environmental-technologies/products/ceramic-substrates.html" target="_blank">Corning Advanced Ceramic Substrates</a></td><td>康宁官网</td><td>-</td><td>A</td></tr>
+                        <tr><td>48</td><td><a href="https://www.sohu.com/a/947024284_100129163" target="_blank">SCR后处理系统：政策驱动与技术升级</a></td><td>搜狐汽车</td><td>2025.10</td><td>B</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>D6：竞品对标与行业趋势（12条）</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>#</th><th>标题</th><th>来源机构</th><th>时间</th><th>等级</th></tr></thead>
+                    <tbody>
+                        <tr><td>49</td><td><a href="https://www.bosch-mobility.com/en/solutions/exhaust-gas-treatment/denoxtronic-exhaust-gas-treatment-system/" target="_blank">Bosch Denoxtronic System</a></td><td>博世官方</td><td>-</td><td>A</td></tr>
+                        <tr><td>50</td><td><a href="https://microsite.bosch.com.cn/auto2018/ebrochures2018/ps/ds_denoxtronic_6.5_cn.pdf" target="_blank">Bosch Denoxtronic 6.5 产品手册</a></td><td>博世中国</td><td>-</td><td>A</td></tr>
+                        <tr><td>51</td><td><a href="https://www.environmental-expert.com/products/single-module-ultra-high-efficiency-aftertreatment-system-563059" target="_blank">Cummins Single Module Aftertreatment</a></td><td>Environmental Expert</td><td>-</td><td>A</td></tr>
+                        <tr><td>52</td><td><a href="https://dieseltraining.net/cummins-2027-x15-aftertreatment-system/" target="_blank">Cummins 2027 X15 Aftertreatment</a></td><td>Diesel Training</td><td>-</td><td>B</td></tr>
+                        <tr><td>53</td><td><a href="https://d.wanfangdata.com.cn/periodical/jrgcjx202501029" target="_blank">康明斯排放处理系统降本奥秘</a></td><td>万方数据</td><td>-</td><td>B</td></tr>
+                        <tr><td>54</td><td><a href="https://www.honeywell.com.cn/news-events/newsroom/news/2025/05/news20250523_1" target="_blank">霍尼韦尔收购庄信万丰催化剂业务</a></td><td>霍尼韦尔中国</td><td>2025.5</td><td>A</td></tr>
+                        <tr><td>55</td><td><a href="https://www.faurecia.cn/newsroom/forvia%E4%BD%9B%E7%91%9E%E4%BA%9A%E9%9B%86%E5%9B%A2%E5%8F%91%E5%B8%832025%E5%B9%B4%E5%85%A8%E5%B9%B4%E4%B8%9A%E7%BB%A9%E8%A1%A8%E7%8E%B0" target="_blank">FORVIA佛瑞亚集团2025业绩</a></td><td>佛瑞亚中国</td><td>-</td><td>A</td></tr>
+                        <tr><td>56</td><td><a href="https://www.researchandmarkets.com/reports/6232085/automotive-exhaust-aftertreatment-market" target="_blank">Automotive Exhaust Aftertreatment Market 2026-2031</a></td><td>ResearchAndMarkets</td><td>2026</td><td>A</td></tr>
+                        <tr><td>57</td><td><a href="https://markwideresearch.com/automotive-exhaust-aftertreatment-systems-market" target="_blank">Exhaust Aftertreatment Systems Market 2026-2036</a></td><td>MarkWide Research</td><td>-</td><td>B</td></tr>
+                        <tr><td>58</td><td><a href="https://www.gminsights.com/industry-analysis/exhaust-aftertreatments-system-market" target="_blank">Exhaust Aftertreatment System Market Size</a></td><td>GM Insights</td><td>-</td><td>B</td></tr>
+                        <tr><td>59</td><td><a href="https://www.gepresearch.com/86/view-1048401-1.html" target="_blank">全球及中国尾气处理行业发展研究</a></td><td>GEPresearch</td><td>2026</td><td>B</td></tr>
+                        <tr><td>60</td><td><a href="https://www.nea.gov.cn/20250430/96022785b3a747248288ad1c57d3a025/2025043096022785b3a747248288ad1c57d3a025_35aeee443346424eb4a3da029cb007003c.pdf" target="_blank">中国氢能发展报告（2025）国家能源局</a></td><td>国家能源局</td><td>2025</td><td>A</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>来源统计</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>等级</th><th>数量</th><th>占比</th></tr></thead>
+                    <tbody>
+                        <tr><td>A级</td><td>34条</td><td>56.7%</td></tr>
+                        <tr><td>B级</td><td>25条</td><td>41.7%</td></tr>
+                        <tr><td>C级</td><td>1条</td><td>1.6%</td></tr>
+                        <tr style="font-weight:bold;background:#E8F4FD"><td>合计</td><td>60条</td><td>100%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p style="text-align:center;margin-top:40px;font-size:15px;color:#00529B;font-weight:600;">
+                报告编制：研发院-先行平台开发中心
+            </p>
+        </div>
+
+    </div><!-- content-wrapper -->
+
+    <!-- Footer -->
+    <div class="footer">
+        <p class="org-name">报告编制：研发院-先行平台开发中心</p>
+        <p style="margin-top:8px;">&copy; 2025 东风汽车集团股份有限公司 &middot; 保密文件，仅供内部使用</p>
+    </div>
+
+</div><!-- main-content -->
+
+<script>
+// ===== Sidebar Toggle =====
+const hamburger = document.getElementById('hamburger');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebarOverlay');
+
+hamburger.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('show');
+    hamburger.classList.toggle('active');
+});
+overlay.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('show');
+    hamburger.classList.remove('active');
+});
+
+// ===== Active Nav Highlight =====
+const navLinks = document.querySelectorAll('.sidebar-nav a');
+const sections = [];
+navLinks.forEach(link => {
+    const href = link.getAttribute('href');
+    if (href && href.startsWith('#')) {
+        const el = document.querySelector(href);
+        if (el) sections.push({ link, el });
+    }
+});
+function updateActiveNav() {
+    let current = sections[0];
+    for (const s of sections) {
+        if (window.scrollY >= s.el.offsetTop - 120) current = s;
+    }
+    navLinks.forEach(l => l.classList.remove('active'));
+    if (current) current.link.classList.add('active');
+}
+window.addEventListener('scroll', updateActiveNav);
+updateActiveNav();
+
+// ===== Chart 1: NOx Comparison =====
+new Chart(document.getElementById('chartNoxCompare'), {
+    type: 'bar',
+    data: {
+        labels: ['轻型车 NOx (mg/km)', '重型车 NOx (mg/kWh)'],
+        datasets: [
+            {
+                label: '国六b',
+                data: [60, 400],
+                backgroundColor: 'rgba(66,133,244,0.7)',
+                borderColor: '#4285F4',
+                borderWidth: 1,
+                borderRadius: 4
+            },
+            {
+                label: '国七（预测）',
+                data: [25, 115],
+                backgroundColor: 'rgba(255,193,7,0.8)',
+                borderColor: '#FFC107',
+                borderWidth: 1,
+                borderRadius: 4
+            },
+            {
+                label: 'Euro VII',
+                data: [25, 200],
+                backgroundColor: 'rgba(46,125,50,0.7)',
+                borderColor: '#2E7D32',
+                borderWidth: 1,
+                borderRadius: 4
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top', labels: { font: { size: 13 } } },
+            tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y } }
+        },
+        scales: {
+            y: { beginAtZero: true, title: { display: true, text: '限值 (mg/km 或 mg/kWh)' } }
+        }
+    }
+});
+
+// ===== Chart 2: Market Forecast =====
+new Chart(document.getElementById('chartMarketForecast'), {
+    type: 'line',
+    data: {
+        labels: ['2026','2027','2028','2029','2030','2031','2032','2033','2034','2035','2036'],
+        datasets: [
+            {
+                label: 'ResearchAndMarkets (亿美元)',
+                data: [193, 198, 204, 210, 216, 222, null, null, null, null, null],
+                borderColor: '#4285F4',
+                backgroundColor: 'rgba(66,133,244,0.1)',
+                fill: false,
+                tension: 0.3,
+                pointRadius: 4,
+                borderWidth: 2
+            },
+            {
+                label: 'MarkWide Research (亿美元)',
+                data: [527, 559, 593, 629, 668, 708, 751, 797, 846, 898, 953],
+                borderColor: '#FF6D00',
+                backgroundColor: 'rgba(255,109,0,0.1)',
+                fill: false,
+                tension: 0.3,
+                pointRadius: 4,
+                borderWidth: 2
+            },
+            {
+                label: 'GM Insights 趋势 (亿美元)',
+                data: [null, 275, 294, 314, 335, null, null, null, null, null, null],
+                borderColor: '#2E7D32',
+                backgroundColor: 'rgba(46,125,50,0.1)',
+                fill: false,
+                tension: 0.3,
+                pointRadius: 4,
+                borderDash: [6, 3],
+                borderWidth: 2
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top', labels: { font: { size: 12 } } },
+            tooltip: { mode: 'index', intersect: false }
+        },
+        scales: {
+            y: { beginAtZero: false, title: { display: true, text: '市场规模（亿美元）' } },
+            x: { title: { display: true, text: '年份' } }
+        },
+        interaction: { mode: 'nearest', axis: 'x', intersect: false }
+    }
+});
+</script>
+
+</body>
+</html>

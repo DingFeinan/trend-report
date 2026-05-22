@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>低风阻/低滚阻/低摩擦技术发展趋势 - 研究报告</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+  --primary: #00529B;
+  --primary-light: #1a6db5;
+  --primary-dark: #003d75;
+  --gold: #FFC107;
+  --gold-light: #ffe082;
+  --bg: #f5f7fa;
+  --card-bg: #ffffff;
+  --text: #333333;
+  --text-light: #666666;
+  --border: #e0e4e8;
+  --hover: #e8f0fa;
+  --sidebar-width: 260px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--primary);
+  color: #fff;
+  overflow-y: auto;
+  z-index: 100;
+  transition: transform 0.3s;
+}
+
+.sidebar-header {
+  padding: 24px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.sidebar-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.sidebar-header .subtitle {
+  font-size: 12px;
+  opacity: 0.75;
+  margin-top: 4px;
+}
+
+.sidebar-nav { padding: 12px 0; }
+
+.sidebar-nav a {
+  display: block;
+  padding: 8px 20px;
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  font-size: 13px;
+  border-left: 3px solid transparent;
+  transition: all 0.2s;
+}
+
+.sidebar-nav a:hover, .sidebar-nav a.active {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border-left-color: var(--gold);
+}
+
+.sidebar-nav a.chapter {
+  font-weight: 600;
+  padding-top: 12px;
+  font-size: 14px;
+  color: var(--gold-light);
+}
+
+.sidebar-nav a.sub { padding-left: 36px; font-size: 12px; }
+
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255,255,255,0.15);
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+/* Main */
+.main {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  min-height: 100vh;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 30px 20px; }
+
+/* Header */
+.report-header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.report-header::after {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 200px; height: 200px;
+  border: 3px solid rgba(255,193,7,0.2);
+  border-radius: 50%;
+}
+
+.report-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.report-header .meta {
+  font-size: 13px;
+  opacity: 0.85;
+  margin-bottom: 8px;
+}
+
+.report-header .meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.report-header .badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-a { background: #4caf50; color: #fff; }
+.badge-b { background: #ff9800; color: #fff; }
+.badge-c { background: #f44336; color: #fff; }
+.badge-gold { background: var(--gold); color: var(--primary-dark); }
+
+.report-header .org {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Cards */
+.card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 28px;
+  margin-bottom: 20px;
+}
+
+.card h2 {
+  font-size: 20px;
+  color: var(--primary);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+}
+
+.card h2::before {
+  content: '';
+  display: inline-block;
+  width: 4px; height: 22px;
+  background: var(--gold);
+  margin-right: 10px;
+  border-radius: 2px;
+}
+
+.card h3 {
+  font-size: 16px;
+  color: var(--primary-dark);
+  margin: 20px 0 10px;
+}
+
+.card h4 {
+  font-size: 14px;
+  color: var(--text);
+  margin: 16px 0 8px;
+  font-weight: 600;
+}
+
+.card p { margin-bottom: 12px; text-align: justify; }
+
+.card ul, .card ol { padding-left: 20px; margin-bottom: 12px; }
+.card li { margin-bottom: 6px; }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13px;
+}
+
+thead th {
+  background: var(--primary);
+  color: #fff;
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+thead th:first-child { border-radius: 6px 0 0 0; }
+thead th:last-child { border-radius: 0 6px 0 0; }
+
+tbody td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+tbody tr:nth-child(even) { background: #f8f9fb; }
+tbody tr:hover { background: var(--hover); }
+
+/* Links */
+a {
+  color: var(--primary);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--primary-light);
+  transition: all 0.2s;
+}
+
+a:hover {
+  color: var(--primary-dark);
+  border-bottom-style: solid;
+}
+
+/* Charts */
+.chart-container {
+  position: relative;
+  margin: 20px 0;
+  height: 350px;
+}
+
+.chart-container canvas { width: 100% !important; }
+
+/* Roadmap */
+.roadmap {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.roadmap-phase {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.roadmap-phase:nth-child(2) { background: linear-gradient(135deg, #00529B, #0066b8); }
+.roadmap-phase:nth-child(3) { background: linear-gradient(135deg, #003d75, #00529B); }
+
+.roadmap-phase .phase-number {
+  font-size: 48px;
+  font-weight: 800;
+  opacity: 0.15;
+  position: absolute;
+  right: 12px; top: 0;
+}
+
+.roadmap-phase h4 {
+  color: var(--gold-light);
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.roadmap-phase .saving {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 8px 0;
+}
+
+.roadmap-phase ul {
+  list-style: none;
+  padding: 0;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.roadmap-phase ul li {
+  padding: 3px 0;
+  padding-left: 14px;
+  position: relative;
+}
+
+.roadmap-phase ul li::before {
+  content: '>';
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+}
+
+/* Stats grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.stat-card {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.stat-card .stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.stat-card .stat-label {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+
+/* Highlight box */
+.highlight {
+  background: linear-gradient(135deg, #fff8e1, #fff3cd);
+  border-left: 4px solid var(--gold);
+  padding: 16px 20px;
+  margin: 16px 0;
+  border-radius: 0 8px 8px 0;
+  font-size: 14px;
+}
+
+/* Footer */
+.report-footer {
+  background: var(--primary);
+  color: rgba(255,255,255,0.8);
+  text-align: center;
+  padding: 24px;
+  font-size: 13px;
+  margin-top: 30px;
+  border-radius: 10px;
+}
+
+.report-footer .org-footer {
+  color: var(--gold-light);
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+/* Mobile toggle */
+.mobile-toggle {
+  display: none;
+  position: fixed;
+  top: 12px; left: 12px;
+  z-index: 200;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  width: 40px; height: 40px;
+  border-radius: 8px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .roadmap { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .mobile-toggle { display: flex; align-items: center; justify-content: center; }
+  .container { padding: 20px 12px; }
+  .report-header { padding: 20px; }
+  .report-header h1 { font-size: 20px; }
+  .card { padding: 16px; }
+  table { font-size: 11px; }
+  thead th, tbody td { padding: 6px 8px; }
+  .roadmap-phase .saving { font-size: 18px; }
+}
+</style>
+</head>
+<body>
+
+<button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+
+<!-- Sidebar -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h2>低风阻/低滚阻/低摩擦<br>技术发展趋势</h2>
+    <div class="subtitle">2026年5月 | 38条来源</div>
+  </div>
+  <div class="sidebar-nav">
+    <a href="#section0" class="chapter">0. 执行摘要</a>
+    <a href="#section1" class="chapter">1. 研究背景与方法论</a>
+    <a href="#section1-1" class="sub">1.1 研究范围与目标</a>
+    <a href="#section1-2" class="sub">1.2 维度定义</a>
+    <a href="#section1-3" class="sub">1.3 来源质量评级</a>
+    <a href="#section2" class="chapter">2. 低风阻空气动力学</a>
+    <a href="#section2-1" class="sub">2.1 风阻系数现状与目标</a>
+    <a href="#section2-2" class="sub">2.2 气动外形优化</a>
+    <a href="#section2-3" class="sub">2.3 导流罩/侧裙板/尾翼</a>
+    <a href="#section2-4" class="sub">2.4 底盘平整化</a>
+    <a href="#section2-5" class="sub">2.5 电子后视镜(CMS)</a>
+    <a href="#section3" class="chapter">3. 低滚阻轮胎技术</a>
+    <a href="#section3-1" class="sub">3.1 滚阻系数标准</a>
+    <a href="#section3-2" class="sub">3.2 材料配方技术</a>
+    <a href="#section3-3" class="sub">3.3 花纹与结构优化</a>
+    <a href="#section4" class="chapter">4. 轮毂轻量化与空动</a>
+    <a href="#section4-1" class="sub">4.1 铝合金/锻造技术</a>
+    <a href="#section4-2" class="sub">4.2 碳纤维轮毂</a>
+    <a href="#section4-3" class="sub">4.3 空气动力学轮毂罩</a>
+    <a href="#section5" class="chapter">5. 低摩擦传动与润滑</a>
+    <a href="#section5-1" class="sub">5.1 低粘度机油</a>
+    <a href="#section5-2" class="sub">5.2 EV传动优化</a>
+    <a href="#section5-3" class="sub">5.3 轴承低摩擦化</a>
+    <a href="#section6" class="chapter">6. 综合能耗与协同优化</a>
+    <a href="#section6-1" class="sub">6.1 能耗分解</a>
+    <a href="#section6-2" class="sub">6.2 工况贡献占比</a>
+    <a href="#section6-3" class="sub">6.3 协同节油潜力</a>
+    <a href="#section6-4" class="sub">6.4 成本效益分析</a>
+    <a href="#section7" class="chapter">7. 竞品对标与行业趋势</a>
+    <a href="#section7-1" class="sub">7.1 特斯拉/比亚迪案例</a>
+    <a href="#section7-2" class="sub">7.2 轮胎巨头方案</a>
+    <a href="#section7-3" class="sub">7.3 商用车节能标杆</a>
+    <a href="#section7-4" class="sub">7.4 全球市场趋势</a>
+    <a href="#section8" class="chapter">8. 综合研判与发展建议</a>
+    <a href="#section8-1" class="sub">8.1 分阶段技术路线图</a>
+    <a href="#section8-2" class="sub">8.2 东风轻型车建议</a>
+    <a href="#section8-3" class="sub">8.3 差异化竞争方向</a>
+  </div>
+  <div class="sidebar-footer">
+    报告编制：研发院-先行平台开发中心
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="main" id="mainContent">
+<div class="container">
+
+<!-- Header -->
+<div class="report-header">
+  <h1>低风阻/低滚阻/低摩擦技术发展趋势</h1>
+  <div class="meta">研究时间：2026年5月 | 来源总数：38条 | 健康等级：优秀</div>
+  <div class="meta-row">
+    <span class="badge badge-a">A级 21条 (55.3%)</span>
+    <span class="badge badge-b">B级 16条 (42.1%)</span>
+    <span class="badge badge-c">C级 1条 (2.6%)</span>
+    <span class="badge badge-gold">面向轻型商用车场景</span>
+  </div>
+  <div class="org">报告编制：研发院-先行平台开发中心</div>
+</div>
+
+<!-- Section 0: Executive Summary -->
+<div class="card" id="section0">
+  <h2>0. 执行摘要</h2>
+  <p>
+    本报告系统梳理了低风阻、低滚阻、低摩擦三大核心节能技术领域的最新发展态势。在"双碳"政策与商用车燃料消耗量限值持续加严的双重驱动下，降低车辆行驶阻力已成为商用车节能降耗的关键技术路径。研究发现：气动阻力占商用车高速能耗的50-60%，通过<a href="https://academic.oup.com/tse/article/7/4/tdaf059/8305904">导流罩+侧裙板+尾翼组合方案</a>可降低高速油耗11.5%；低滚阻轮胎通过<a href="https://www.xjishu.com/zhuanli/27/202510975126.html">硅炭黑/白炭黑配方技术</a>可将滚阻系数降至0.005-0.006级别；商用车锻造铝合金轮毂减重30-40%正在规模化应用。面向2026-2030年，建议东风轻型商用车重点突破<strong>底盘平整化+电子后视镜+低滚阻轮胎+轻量化轮毂</strong>四维协同方案，分阶段实现能耗降低12-18%。
+  </p>
+</div>
+
+<!-- Section 1 -->
+<div class="card" id="section1">
+  <h2>1. 研究背景与方法论</h2>
+
+  <h3 id="section1-1">1.1 研究范围与目标</h3>
+  <p>本研究聚焦轻型商用车（N1/N2类）及重型商用车（N3类）的低阻力技术发展，覆盖三大核心维度：低风阻空气动力学优化、低滚阻轮胎技术、低摩擦传动与润滑技术，并延伸至轮毂轻量化与综合能耗协同优化。</p>
+
+  <table>
+    <thead>
+      <tr><th>技术领域</th><th>研究方向</th><th>TRL等级</th><th>预期节能贡献</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>空气动力学优化</td><td>导流罩/侧裙板/尾翼/底盘平整化/CMS</td><td>7-9</td><td>8-16%</td></tr>
+      <tr><td>低滚阻轮胎</td><td>材料配方/花纹设计/结构优化</td><td>7-9</td><td>3-6%</td></tr>
+      <tr><td>轮毂技术</td><td>锻造铝合金/碳纤维/空气动力学罩</td><td>6-9</td><td>1-3%</td></tr>
+      <tr><td>传动润滑</td><td>低粘度油品/轴承优化/齿轮摩擦学</td><td>6-8</td><td>2-4%</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="section1-2">1.2 维度定义</h3>
+  <p>本研究采用六大分析维度：<strong>D1</strong>低风阻空气动力学优化、<strong>D2</strong>低滚阻轮胎技术、<strong>D3</strong>轮毂轻量化与空气动力学、<strong>D4</strong>低摩擦传动与润滑技术、<strong>D5</strong>综合能耗贡献与协同优化、<strong>D6</strong>竞品对标与行业趋势。</p>
+
+  <h3 id="section1-3">1.3 来源质量评级标准</h3>
+  <table>
+    <thead><tr><th>等级</th><th>定义</th><th>数量</th><th>占比</th></tr></thead>
+    <tbody>
+      <tr><td>A级</td><td>学术期刊/国际标准/权威机构/顶级供应商官方资料</td><td>21</td><td>55.3%</td></tr>
+      <tr><td>B级</td><td>行业媒体/专利文献/专业报告/技术博客</td><td>16</td><td>42.1%</td></tr>
+      <tr><td>C级</td><td>自媒体/一般性报道/未验证来源</td><td>1</td><td>2.6%</td></tr>
+    </tbody>
+  </table>
+  <p>本报告共引用38条情报来源，A级占比55.3%，整体来源质量优秀。</p>
+</div>
+
+<!-- Section 2 -->
+<div class="card" id="section2">
+  <h2>2. 低风阻空气动力学优化</h2>
+
+  <h3 id="section2-1">2.1 商用车风阻系数现状与目标</h3>
+  <p>根据<a href="https://link.springer.com/article/10.1007/s00348-026-04180-8">2026年关于地面车辆减阻技术的综述研究</a>，重型卡车在高速公路工况下，气动阻力占总能耗的50-60%，远超乘用车的15-25%。商用车风阻系数普遍在0.5-0.8之间，相比乘用车0.2-0.3的水平仍有巨大优化空间。</p>
+
+  <table>
+    <thead>
+      <tr><th>车型类别</th><th>当前Cd典型值</th><th>行业领先</th><th>2028年目标</th><th>2030年目标</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>重型牵引车</td><td>0.55-0.75</td><td>0.42 (沃尔沃FH Aero)</td><td>0.4</td><td>0.35</td></tr>
+      <tr><td>轻型卡车</td><td>0.5-0.65</td><td>0.38 (三菱Fuso)</td><td>0.36</td><td>0.32</td></tr>
+      <tr><td>厢式货车</td><td>0.45-0.6</td><td>0.33 (福特Transit)</td><td>0.3</td><td>0.28</td></tr>
+      <tr><td>皮卡</td><td>0.4-0.5</td><td>0.34 (特斯拉Cybertruck)</td><td>0.3</td><td>0.28</td></tr>
+    </tbody>
+  </table>
+
+  <p><a href="https://www.360che.com/news/240130/187855.html">沃尔沃FH Aero系列</a>通过全新设计的驾驶室气动外形、电子后视镜及底盘平整化，将风阻降低15%以上，树立了商用车空气动力学新标杆。</p>
+
+  <h3 id="section2-2">2.2 气动外形优化技术</h3>
+  <p>根据<a href="https://f1000research.com/articles/14-821">2025年CFD仿真研究</a>，现代商用车气动优化主要包括驾驶室造型优化（圆角化A柱降阻2-4%）、车顶弧度优化（减少尾部涡流）、前保险杠下部扰流、车身间隙密封（降阻3-5%）以及A柱与前挡风玻璃的平齐安装设计。</p>
+
+  <h3 id="section2-3">2.3 导流罩/侧裙板/尾翼组合方案</h3>
+  <p>根据<a href="https://academic.oup.com/tse/article/7/4/tdaf059/8305904">牛津大学TSE期刊的CFD研究</a>，半挂卡车安装导流罩+侧裙板+尾翼组合后，高速公路工况下油耗降低高达11.5%。<a href="https://www.sohu.com/a/857320391_121124362">某轻型电动卡车研究</a>给出了具体的独立效果数据：导流罩优化降阻12.15%，电子后视镜降3.79%，侧裙板降3.32-7.31%，全方案降16.57%。</p>
+
+  <table>
+    <thead>
+      <tr><th>气动附件</th><th>独立降阻效果</th><th>安装位置</th><th>适用车型</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>顶部导流罩</td><td>8-12%</td><td>驾驶室顶部</td><td>牵引车+半挂车</td></tr>
+      <tr><td>侧裙板</td><td>5-8%</td><td>底盘两侧</td><td>牵引车/挂车</td></tr>
+      <tr><td>尾部导流（尾翼）</td><td>3-6%</td><td>货厢尾部</td><td>厢式/挂车</td></tr>
+      <tr><td>三者协同</td><td><strong>15-20%</strong></td><td>综合安装</td><td>全品类</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="section2-4">2.4 底盘平整化与底部导流</h3>
+  <p>根据<a href="https://link.springer.com/article/10.1007/s00348-026-04180-8">地面车辆减阻综述</a>，底盘区域贡献了商用车总气动阻力的20-30%。底盘平整化技术路线包括：发动机下护板（降阻2-4%）、传动轴通道护板（1-2%）、后桥导流板（2-5%）、全底盘平整护板（8-15%）。电动商用车因取消传动轴和排气系统，底盘平整化难度显著降低。</p>
+
+  <h3 id="section2-5">2.5 电子后视镜（CMS）替代方案</h3>
+  <p>根据<a href="https://www.ithome.com/0/941/954.htm">IT之家报道</a>，中国GB15084与欧盟EU R46于2026年全面落地。<a href="https://www.eet-china.com/mp/a366217.html">行业分析</a>显示：奔驰Actros首款CMS量产卡车节油1.3%，陕汽X6000降阻1.85%。从2026年起CMS将从高端选配走向中低端标配。</p>
+</div>
+
+<!-- Section 3 -->
+<div class="card" id="section3">
+  <h2>3. 低滚阻轮胎技术</h2>
+
+  <h3 id="section3-1">3.1 滚阻系数等级标准与限值</h3>
+  <p>根据<a href="https://www.antpedia.com/standard/1744087485-10.html">GB/T 29042-2020标准</a>，中国采用与欧盟一致的能效分级体系。根据<a href="https://www.pcauto.com.cn/note/866162699280585058.html">专业解读</a>，当前市场主流水平：常规轮胎Crr 8.0-12.0，低滚阻轮胎5.0-7.0，新能源专用轮胎3.0-5.0（低至0.008级别）。</p>
+
+  <table>
+    <thead>
+      <tr><th>能效等级</th><th>轿车轮胎Crr</th><th>轻载轮胎Crr (C1)</th><th>重载轮胎Crr (C2/C3)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>A级（最高）</td><td>≤6.5</td><td>≤6.5</td><td>≤4.0</td></tr>
+      <tr><td>B级</td><td>6.6-7.7</td><td>6.6-7.7</td><td>4.1-5.0</td></tr>
+      <tr><td>C级</td><td>7.8-9.0</td><td>7.8-9.0</td><td>5.1-6.0</td></tr>
+      <tr><td>D级</td><td>9.1-10.5</td><td>9.1-10.5</td><td>6.1-7.0</td></tr>
+      <tr><td>E级（最低）</td><td>≥10.6</td><td>≥10.6</td><td>≥7.1</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="section3-2">3.2 轮胎材料配方技术（硅炭黑/白炭黑）</h3>
+  <p><a href="https://www.xjishu.com/zhuanli/27/202510975126.html">2025年专利技术</a>提出了高填充白炭黑+天然橡胶配方实现商用车轮胎低滚阻。根据<a href="https://www.continental.com/en/press/press-releases/20240905-truck-bus-tires/">大陆集团IAA 2024发布</a>，EfficientPro 5滚阻降10%，Urban NXT降25%。</p>
+
+  <table>
+    <thead>
+      <tr><th>技术路线</th><th>原理</th><th>滚阻降低幅度</th><th>代表产品</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>白炭黑+硅烷偶联剂</td><td>降低填料网络，减少Payne效应</td><td>15-25%</td><td>米其林Energy Saver</td></tr>
+      <tr><td>高分散性白炭黑</td><td>改善填料分散均匀性</td><td>20-30%</td><td>大陆EfficientPro</td></tr>
+      <tr><td>SSBR+白炭黑协同</td><td>末端改性溶聚丁苯橡胶</td><td>25-35%</td><td>普利司通Ecopia</td></tr>
+      <tr><td>双相炭黑+白炭黑</td><td>碳-硅双相填料</td><td>15-20%</td><td>住友橡胶Enasave</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="section3-3">3.3 花纹设计与结构优化</h3>
+  <p><a href="http://www.chinarpte.com/uploads/20251103/ff3ab589b931fb7f47e4732bcf972f5e.pdf">新能源轮胎协同设计研究</a>提出了材料-结构-工艺三方协同的核心路径。<a href="https://www.bridgestone.com/technology_innovation/ologic/">普利司通ologic技术</a>采用大直径窄胎面设计，协同降滚阻与空阻。胎体结构优化包括带束层高强度钢丝帘线减层、单层胎体替代双层（减重10-15%）、三角胶低滞后配方优化。</p>
+</div>
+
+<!-- Section 4 -->
+<div class="card" id="section4">
+  <h2>4. 轮毂轻量化与空气动力学</h2>
+
+  <h3 id="section4-1">4.1 铝合金/锻造轮毂技术路线</h3>
+  <p>根据<a href="https://www.ttbz.org.cn/upload/file/20250602/6388449752104703776363444.pdf">TTMAC团体标准</a>，铝合金轮毂轻量化规范已于2025年发布。<a href="https://www.shangyexinzhi.com/article/28320117.html">产业洞察</a>指出商用车锻造铝合金轮毂市场快速增长，整车簧下质量可降低60-120kg。</p>
+
+  <table>
+    <thead><tr><th>工艺类型</th><th>减重幅度</th><th>强度</th><th>成本</th><th>适用场景</th></tr></thead>
+    <tbody>
+      <tr><td>重力铸造</td><td>基准</td><td>中</td><td>低</td><td>经济型乘用车</td></tr>
+      <tr><td>低压铸造</td><td>5-10%</td><td>中</td><td>中</td><td>主流乘用车</td></tr>
+      <tr><td>旋压铸造</td><td>10-20%</td><td>中高</td><td>中高</td><td>轻量化乘用车</td></tr>
+      <tr><td>锻造</td><td><strong>25-40%</strong></td><td>高</td><td>高</td><td>高端/商用车</td></tr>
+      <tr><td>锻旋复合</td><td>20-35%</td><td>高</td><td>中高</td><td>商用车主选</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="section4-2">4.2 碳纤维轮毂前沿技术</h3>
+  <p><a href="https://www.carbonrev.com/">Carbon Revolution</a>为福特GT、法拉利提供量产碳纤维轮毂，减重40-50%。2025年3月，<a href="http://chinarpte.com/uploads/20250401/7b0854738abd804d54733664a8fd0232.pdf">宁波碳飞新材料投产国内首条年产万只碳纤维轮毂产线</a>，采用RTM工艺单只节拍30分钟，成本较手工铺层降低60%以上。建议2028-2030年待成本降至2000元/只以内后评估量产导入。</p>
+
+  <h3 id="section4-3">4.3 空气动力学轮毂罩</h3>
+  <p>根据<a href="https://link.springer.com/article/10.1007/s00542-024-05669-0">CFD研究</a>，轮毂及轮拱区域在总气动阻力中占比可达10-15%。<a href="https://www.pandaexo.com/zh-hans/how-to-choose-an-aero-wheel-cover-to-maximize-your-ev-range/">轮毂罩选型指南</a>分析了轮毂罩对EV续航的影响机制：全封闭平面罩降阻8-12%，续航增益2-4%，单件成本不足百元，性价比极高。</p>
+</div>
+
+<!-- Section 5 -->
+<div class="card" id="section5">
+  <h2>5. 低摩擦传动与润滑技术</h2>
+
+  <h3 id="section5-1">5.1 低粘度机油与节能标准</h3>
+  <p><a href="https://www.toutiao.com/article/7579120279851467300/">GF-7B 0W-16低粘度机油</a>代表了当前最低粘度等级，通过PAO基础油+纳米陶瓷添加剂在低粘度下维持HTHS保护。商用车CK-4/FA-4标准推动低粘度化，FA-4（10W-30）相比15W-40可节油1-2%。</p>
+
+  <table>
+    <thead><tr><th>粘度等级</th><th>SAE标准</th><th>HTHS最低要求</th><th>适用发动机</th><th>节能幅度</th></tr></thead>
+    <tbody>
+      <tr><td>0W-16</td><td>GF-7B</td><td>≥2.3 mPa·s</td><td>最新汽油机</td><td>2-4%</td></tr>
+      <tr><td>0W-20</td><td>GF-6</td><td>≥2.6 mPa·s</td><td>主流汽油机</td><td>1-3%</td></tr>
+      <tr><td>5W-30</td><td>GF-5</td><td>≥2.9 mPa·s</td><td>传统发动机</td><td>基准</td></tr>
+      <tr><td>10W-30</td><td>API CK-4(FA-4)</td><td>≥3.5 mPa·s</td><td>重型柴油机</td><td>1-2%</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="section5-2">5.2 EV传动系统效率优化</h3>
+  <p><a href="https://saemobilus.sae.org/papers/modern-tools-tribological-optimization-ev-transmissions-e-axles-2024-24-0013">SAE论文2024-24-0013</a>阐述了利用TEHD和CFD仿真优化EV变速箱摩擦学性能的方法。<a href="https://www.tandfonline.com/doi/full/10.1080/10402004.2025.2488799">Tribology Transactions研究</a>建立了系统级传动效率模型。<a href="https://www.sciencedirect.com/science/article/pii/S2590123026021985">实验评估</a>表明最低粘度配方拖曳损失降约22%，但需在2.5-3.5 cSt区间平衡效率与耐久性。</p>
+
+  <h3 id="section5-3">5.3 轴承低摩擦化技术</h3>
+  <p><a href="https://www.sohu.com/a/903264143_624041">轴承低摩擦化分析</a>指出陶瓷滚动体（Si3N4）降摩擦20-30%、DLC涂层降15-25%、微量润滑降30-50%。在EV减速器中以低摩擦深沟球轴承替代圆锥滚子轴承可降传动系统总摩擦损失10-15%。<a href="https://www.licp.cas.cn/sy2018/xwdt/kydt/202412/t20241206_7451824.html">中科院兰化所</a>开发了亚纳米线基油脂润滑剂实现超低摩擦（CoF<0.01）。<a href="https://tech.ifeng.com/c/8mhGC1Mrcxp">超滑工程</a>正为新能源车工况开发国产特种润滑材料。</p>
+</div>
+
+<!-- Section 6 -->
+<div class="card" id="section6">
+  <h2>6. 综合能耗贡献与协同优化</h2>
+
+  <h3 id="section6-1">6.1 车辆能耗分解</h3>
+  <p>根据<a href="https://www.researchgate.net/publication/384487044">重型商用车仿真研究</a>和<a href="https://www.sciencedirect.com/science/article/pii/S259011682500061X">电动车能耗评估</a>，各阻力源在不同工况下占比差异显著。</p>
+
+  <table>
+    <thead>
+      <tr><th>阻力来源</th><th>高速公路</th><th>城市工况</th><th>综合平均</th><th>关键影响因素</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>空气阻力</td><td>50-60%</td><td>10-20%</td><td>30-40%</td><td>车速（平方递增）、迎风面积、Cd</td></tr>
+      <tr><td>滚动阻力</td><td>20-30%</td><td>40-55%</td><td>30-40%</td><td>车重、轮胎Crr、路面</td></tr>
+      <tr><td>传动系统摩擦</td><td>5-10%</td><td>8-15%</td><td>7-12%</td><td>油品粘度、轴承/齿轮效率</td></tr>
+      <tr><td>惯性（加减速）</td><td>3-8%</td><td>15-25%</td><td>10-15%</td><td>车重、驾驶循环</td></tr>
+      <tr><td>附件消耗</td><td>3-5%</td><td>3-5%</td><td>3-5%</td><td>空调、转向泵等</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="section6-2">6.2 不同工况下各因素贡献占比</h3>
+  <div class="chart-container">
+    <canvas id="chartSpeed"></canvas>
+  </div>
+
+  <h3 id="section6-3">6.3 协同节油潜力分析</h3>
+  <p><a href="https://www.researchgate.net/publication/384487044">协同优化研究</a>表明多技术协同的节油效果大于各单项之和。全方案（风阻+滚阻+传动+轻量化）的综合节油与协同增益达9-12%。</p>
+
+  <table>
+    <thead><tr><th>方案组合</th><th>高速节油</th><th>城市节油</th><th>综合节油</th><th>协同增益</th></tr></thead>
+    <tbody>
+      <tr><td>仅低风阻</td><td>7-10%</td><td>1-2%</td><td>4-6%</td><td>-</td></tr>
+      <tr><td>仅低滚阻</td><td>2-3%</td><td>4-6%</td><td>3-4%</td><td>-</td></tr>
+      <tr><td>仅传动优化</td><td>1-2%</td><td>1-2%</td><td>1-2%</td><td>-</td></tr>
+      <tr><td>风阻+滚阻</td><td>8-12%</td><td>5-7%</td><td>7-9%</td><td>+1-2%</td></tr>
+      <tr><td>风阻+滚阻+传动</td><td>9-13%</td><td>6-8%</td><td>8-11%</td><td>+2-3%</td></tr>
+      <tr><td><strong>全方案</strong></td><td><strong>10-15%</strong></td><td><strong>7-10%</strong></td><td><strong>9-12%</strong></td><td><strong>+3-4%</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="section6-4">6.4 成本效益分析</h3>
+  <p><a href="https://www.autohome.com.cn/ask/23318047.html">滚阻对油耗的量化分析</a>表明滚阻占油耗14-17%，降10%可省1-2%油耗。<a href="https://tire.guide/articles/Fuel-Economy-and-Rolling-Restance-The-2026-Master-Guide.php">2026轮胎效率指南</a>指出滚阻占车辆总能耗20-25%。</p>
+
+  <table>
+    <thead><tr><th>技术方案</th><th>单车增量成本</th><th>年节油/节能</th><th>投资回收期</th><th>推荐优先级</th></tr></thead>
+    <tbody>
+      <tr><td>导流罩优化</td><td>500-1000元</td><td>800-1500元/年</td><td>0.5-1年</td><td>★★★★★</td></tr>
+      <tr><td>低滚阻A级轮胎(6条)</td><td>1200-1800元</td><td>1200-2000元/年</td><td>1-1.5年</td><td>★★★★★</td></tr>
+      <tr><td>空气动力学轮毂罩(6只)</td><td>300-600元</td><td>400-600元/年</td><td>0.5-1年</td><td>★★★★★</td></tr>
+      <tr><td>侧裙板</td><td>800-1500元</td><td>500-1000元/年</td><td>1-2年</td><td>★★★★</td></tr>
+      <tr><td>底盘平整化护板</td><td>1000-2000元</td><td>600-1000元/年</td><td>1.5-3年</td><td>★★★★</td></tr>
+      <tr><td>CMS电子后视镜</td><td>3000-5000元</td><td>400-800元/年</td><td>4-6年</td><td>★★★</td></tr>
+      <tr><td>锻造铝合金轮毂(6只)</td><td>3000-5000元</td><td>600-1000元/年</td><td>3-5年</td><td>★★★</td></tr>
+      <tr><td>低粘度变速箱油</td><td>200-400元</td><td>300-500元/年</td><td>0.5-1年</td><td>★★★★★</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Section 7 -->
+<div class="card" id="section7">
+  <h2>7. 竞品对标与行业趋势</h2>
+
+  <h3 id="section7-1">7.1 特斯拉/比亚迪风阻优化案例</h3>
+  <p><a href="https://www.pcauto.com.cn/jxwd/3365/33650418.html">特斯拉Model S Plaid风阻系数0.208Cd</a>采用全封闭底盘、主动进气格栅、隐藏式门把手、气动轮毂罩和后扩散器。<a href="https://www.163.com/dy/article/H73H91CD0527AUL2.html">比亚迪海豹风阻系数0.219Cd</a>通过CTB电池车身一体化降低车身高度，配合全密封导流板实现优秀空气动力学性能。</p>
+
+  <h3 id="section7-2">7.2 轮胎巨头低滚阻方案</h3>
+  <table>
+    <thead><tr><th>品牌</th><th>核心系列</th><th>技术亮点</th><th>Crr水平</th><th>商用车产品</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://www.michelin.com.hk/zh/auto/tyres/michelin-e-primacy">米其林</a></td><td>e.PRIMACY</td><td>EnergyPass技术</td><td>A级</td><td>X Line Energy</td></tr>
+      <tr><td><a href="https://www.bridgestone.com/technology_innovation/ologic/">普利司通</a></td><td>Ecopia</td><td>ologic大直径窄胎面</td><td>A级</td><td>Ecopia H2</td></tr>
+      <tr><td><a href="https://www.continental.com/en/press/press-releases/20240905-truck-bus-tires/">大陆集团</a></td><td>EfficientPro/EcoPlus</td><td>HD Silica</td><td>A级</td><td>EfficientPro 5</td></tr>
+      <tr><td><a href="https://www.toutiao.com/article/7566082586561233417/">玲珑轮胎</a></td><td>新能源专用</td><td>液体黄金技术</td><td>EU AAA</td><td>新能源胎</td></tr>
+      <tr><td><a href="https://www.toutiao.com/article/7566082586561233417/">赛轮轮胎</a></td><td>液体黄金系列</td><td>EVEC橡胶</td><td>EU AAA</td><td>新能源胎</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="section7-3">7.3 商用车节能标杆</h3>
+  <p><a href="https://www.360che.com/news/240130/187855.html">沃尔沃FH Aero系列</a>通过驾驶室加长240mm、全系标配CMS、底盘平整化、气动轮毂和优化导流套件，综合风阻降15%以上，油耗降低8-10%。</p>
+
+  <h3 id="section7-4">7.4 全球低滚阻轮胎市场趋势</h3>
+  <p>根据<a href="https://baijiahao.baidu.com/s?id=1852353857015362579">市场趋势报告</a>，低滚阻轮胎市场快速增长。</p>
+
+  <div class="chart-container">
+    <canvas id="chartMarket"></canvas>
+  </div>
+
+  <div style="margin-top:16px;">
+    <p>根据<a href="https://www.toutiao.com/article/7566082586561233417/">2025全球轮胎深度解码</a>，中国39家轮胎企业正在全球市场强力突围，玲珑、赛轮等品牌的技术水平已接近国际一线。</p>
+  </div>
+</div>
+
+<!-- Section 8 -->
+<div class="card" id="section8">
+  <h2>8. 综合研判与发展建议</h2>
+
+  <h3 id="section8-1">8.1 分阶段技术路线图（2026/2028/2030）</h3>
+
+  <div class="roadmap">
+    <div class="roadmap-phase">
+      <div class="phase-number">01</div>
+      <h4>阶段一：2026-2027</h4>
+      <div class="saving">节能 8-12%</div>
+      <ul>
+        <li>导流罩全系标配</li>
+        <li>A级低滚阻轮胎全系</li>
+        <li>气动轮毂罩电动版标配</li>
+        <li>低粘度变速箱油全系</li>
+        <li>底盘基础平整化电动版</li>
+        <li>成本：3200-5000元</li>
+      </ul>
+    </div>
+    <div class="roadmap-phase">
+      <div class="phase-number">02</div>
+      <h4>阶段二：2027-2028</h4>
+      <div class="saving">节能 12-16%</div>
+      <ul>
+        <li>侧裙板全系标配</li>
+        <li>CMS标配或选装</li>
+        <li>锻造铝轮毂高配标配</li>
+        <li>全底盘平整化电动版</li>
+        <li>新能源专用胎配方OEM</li>
+        <li>A柱密封+门缝优化</li>
+      </ul>
+    </div>
+    <div class="roadmap-phase">
+      <div class="phase-number">03</div>
+      <h4>阶段三：2028-2030</h4>
+      <div class="saving">节能 16-20%</div>
+      <ul>
+        <li>碳纤维轮毂高配选装</li>
+        <li>DLC涂层齿轮组</li>
+        <li>纳米添加剂低摩擦油品</li>
+        <li>主动式气动附件</li>
+        <li>超精研磨轴承组</li>
+        <li>数字孪生能耗优化</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 id="section8-2">8.2 东风轻型车技术建议</h3>
+
+  <div class="highlight">
+    <strong>立即启动（2026年H2）：</strong> 成立跨部门"低阻力工作组"；对主力车型风阻仿真摸底；A级低滚阻轮胎OEM定点；电动版导入气动轮毂罩和底盘护板。
+  </div>
+  <div class="highlight">
+    <strong>平台级规划（2027年）：</strong> 新一代平台风阻目标Cd≤0.38；CMS纳入新平台标配；锻造铝轮毂中高端标配；形成"低阻力节能包"差异化卖点。
+  </div>
+  <div class="highlight">
+    <strong>前瞻性布局（2028-2030）：</strong> 碳纤维轮毂技术储备；DLC涂层齿轮组验证；数字孪生能耗管理系统；超滑工程商用车应用探索。
+  </div>
+
+  <h3 id="section8-3">8.3 差异化竞争方向</h3>
+  <p>
+    <strong>"全系低阻标配"策略</strong>区别于竞品仅高配/电动版搭载，率先在燃油版普及低滚阻轮胎+导流罩+底盘护板套餐。<br>
+    <strong>电动版"超低能耗"版本</strong>打包全底盘平整化+气动轮毂罩+CMS+SSBR低滚阻配方，续航提升10-15%。<br>
+    <strong>城市配送专项优化</strong>针对城配平均40-60km/h工况特点，优化滚阻与风阻平衡点。<br>
+    <strong>TCO营销策略</strong>将低阻力技术购买成本与运营节省进行TCO建模，向物流车队客户传递"3年回本、5年盈利"的经济账。
+  </p>
+</div>
+
+<!-- Source Quality -->
+<div class="card">
+  <h2>来源质量统计</h2>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value">38</div>
+      <div class="stat-label">情报来源总数</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color:#4caf50;">21</div>
+      <div class="stat-label">A级来源 (55.3%)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color:#ff9800;">16</div>
+      <div class="stat-label">B级来源 (42.1%)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color:#f44336;">1</div>
+      <div class="stat-label">C级来源 (2.6%)</div>
+    </div>
+  </div>
+  <p style="text-align:center;color:var(--text-light);font-size:13px;">
+    覆盖学术期刊、国际标准、行业媒体、专利文献、官方资料等多维度来源 | 健康等级：优秀
+  </p>
+</div>
+
+<!-- Footer -->
+<div class="report-footer">
+  <p>本报告基于38条多源情报综合分析而成，A级来源占比55.3%，B级42.1%，C级2.6%，整体来源质量优秀。</p>
+  <p>报告中的技术判断和建议仅供内部参考，具体实施需结合产品规划和技术可行性评估。</p>
+  <div class="org-footer">报告编制：研发院-先行平台开发中心</div>
+</div>
+
+</div><!-- container -->
+</div><!-- main -->
+
+<script>
+// Sidebar toggle
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// Highlight active nav item on scroll
+const sections = document.querySelectorAll('.card[id], .card h3[id]');
+const navLinks = document.querySelectorAll('.sidebar-nav a');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const top = section.offsetTop - 100;
+    if (window.scrollY >= top) current = section.getAttribute('id') || '';
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+  });
+});
+
+// Close sidebar on link click (mobile)
+document.querySelectorAll('.sidebar-nav a').forEach(link => {
+  link.addEventListener('click', () => {
+    if (window.innerWidth <= 768) {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+  });
+});
+
+// Chart 1: Energy contribution by speed
+const ctx1 = document.getElementById('chartSpeed').getContext('2d');
+new Chart(ctx1, {
+  type: 'line',
+  data: {
+    labels: ['30 km/h', '50 km/h', '70 km/h', '80 km/h', '90 km/h', '100 km/h'],
+    datasets: [{
+      label: '滚动阻力占比',
+      data: [62, 47, 33, 28, 22, 18],
+      borderColor: '#FFC107',
+      backgroundColor: 'rgba(255,193,7,0.1)',
+      fill: true,
+      tension: 0.4,
+      pointRadius: 4,
+      pointBackgroundColor: '#FFC107'
+    }, {
+      label: '空气阻力占比',
+      data: [18, 32, 47, 53, 58, 62],
+      borderColor: '#00529B',
+      backgroundColor: 'rgba(0,82,155,0.1)',
+      fill: true,
+      tension: 0.4,
+      pointRadius: 4,
+      pointBackgroundColor: '#00529B'
+    }, {
+      label: '传动摩擦占比',
+      data: [17, 14, 12, 10, 8, 7],
+      borderColor: '#4caf50',
+      backgroundColor: 'rgba(76,175,80,0.05)',
+      fill: true,
+      tension: 0.4,
+      pointRadius: 4,
+      pointBackgroundColor: '#4caf50'
+    }, {
+      label: '惯性/其他占比',
+      data: [3, 7, 8, 9, 12, 13],
+      borderColor: '#9e9e9e',
+      backgroundColor: 'rgba(158,158,158,0.05)',
+      fill: true,
+      tension: 0.4,
+      pointRadius: 4,
+      pointBackgroundColor: '#9e9e9e'
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      title: {
+        display: true,
+        text: '不同车速下各阻力源能耗贡献占比（%）',
+        font: { size: 15, weight: 'bold' },
+        color: '#00529B'
+      },
+      legend: {
+        position: 'bottom',
+        labels: { usePointStyle: true, padding: 20 }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 100,
+        title: { display: true, text: '占比 (%)' },
+        ticks: { callback: v => v + '%' }
+      },
+      x: { title: { display: true, text: '车速' } }
+    }
+  }
+});
+
+// Chart 2: Global low rolling resistance tire market
+const ctx2 = document.getElementById('chartMarket').getContext('2d');
+new Chart(ctx2, {
+  type: 'bar',
+  data: {
+    labels: ['2024', '2025E', '2026E', '2027E', '2029E', '2031E', '2033E'],
+    datasets: [{
+      label: '全球低滚阻轮胎市场规模',
+      data: [205, 235, 270, 310, 390, 465, 540],
+      backgroundColor: [
+        'rgba(0,82,155,0.6)', 'rgba(0,82,155,0.65)',
+        'rgba(0,82,155,0.7)', 'rgba(0,82,155,0.75)',
+        'rgba(255,193,7,0.7)', 'rgba(255,193,7,0.8)',
+        'rgba(255,193,7,0.9)'
+      ],
+      borderColor: '#00529B',
+      borderWidth: 1,
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      title: {
+        display: true,
+        text: '全球低滚动阻力轮胎市场规模预测（亿美元）',
+        font: { size: 15, weight: 'bold' },
+        color: '#00529B'
+      },
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ctx.parsed.y + ' 亿美元'
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 600,
+        title: { display: true, text: '市场规模（亿美元）' },
+        ticks: { callback: v => v + '亿' }
+      },
+      x: { title: { display: true, text: '年份' } }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
