@@ -589,6 +589,12 @@ function selectReport(el) {
   var title = el.dataset.title;
   var filePath = encodeURI(el.dataset.path);
 
+  // On mobile, open in new tab so user can zoom and scroll natively
+  if (window.innerWidth <= 768) {
+    window.open(filePath, '_blank');
+    return;
+  }
+
   document.getElementById('welcomeScreen').style.display = 'none';
   document.getElementById('docToolbar').classList.add('visible');
   document.getElementById('docTitle').textContent = title;
