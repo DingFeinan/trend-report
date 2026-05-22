@@ -582,8 +582,9 @@ function selectReport(el) {
   var title = el.dataset.title;
   var filePath = encodeURI(el.dataset.path);
 
-  // Debug: show the actual URL in console
-  console.log('Loading report:', filePath);
+  // Debug: show raw path and encoded URL in console
+  console.log('Raw path:', el.dataset.path);
+  console.log('Encoded URL:', filePath);
 
   document.getElementById('welcomeScreen').style.display = 'none';
   document.getElementById('docContainer').classList.add('visible');
