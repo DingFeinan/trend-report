@@ -429,188 +429,163 @@ body {
 </div>
 
 <script>
-// ===== Tree Data =====
-const treeData = [
-  {
-    id: 'cat1',
-    num: '一',
-    title: '宏观环境与市场洞察',
-    items: [
-      { id: '1-1', title: '轻型商用车十五五政策法规发展趋势研究', tags: '含国七排放、油耗限值、L3准入、碳足迹、电池护照、欧盟欧七法规', pdf: '轻型商用车十五五政策' },
-      { id: '1-2', title: '2025-2030年轻型商用车TIV预测与EV渗透率研究', tags: '国内轻卡/VAN/出口分市场、区域渗透差异', pdf: '2025-2030年' },
-      { id: '1-3', title: '多式联运与城市群重构下轻型商用车物流场景变革研究', tags: '城配/集疏运/末端配送需求变化', pdf: '多式联运与城市群重构' },
-      { id: '1-4', title: '轻型商用车客户需求演化趋势研究', tags: '司机老龄化、组织客户占比提升、全生命周期服务需求', pdf: '轻型商用车客户需求演' },
-      { id: '1-5', title: '福田轻型商用车技术路线与平台化战略对标研究', tags: '启明星平台、新能源/智驾布局', pdf: '福田轻型商用车技术路' },
-      { id: '1-6', title: '吉利远程轻型商用车技术路线与生态化战略对标研究', tags: 'GXA平台、醇氢+电动双路线', pdf: '吉利远程轻型商用车技' },
-      { id: '1-7', title: '轻型商用车十五五技术发展总趋势研究', tags: '新能源/智能/节能/AI/电子架构五大方向', pdf: '轻型商用车十五五技术' }
-    ]
-  },
-  {
-    id: 'cat2',
-    num: '二',
-    title: '新能源技术规划',
-    items: [
-      { id: '2-1', title: '轻型商用车高集成电驱桥技术发展趋势', tags: '含2026/2030效率/噪声/轻量化指标、双电机/分布式驱动技术', pdf: '轻型商用车高集成电驱' },
-      { id: '2-2', title: '轻型商用车动力电池技术路线演进研究', tags: '磷酸锰铁锂/半固态/固态、能量密度/充电倍率/温域指标', pdf: '轻型商用车动力电池技' },
-      { id: '2-3', title: '轻型商用车 800V/1000V 高压平台技术发展趋势', tags: '含SiC/GaN电控、快充、热管理、线束轻量化', pdf: '轻型商用车 800V' },
-      { id: '2-4', title: '轻型商用车高效驱动电机技术发展趋势', tags: '扁线油冷、功率密度/效率指标、轮边/轮毂电机', pdf: '轻型商用车高效驱动电' },
-      { id: '2-5', title: '轻型商用车整车控制器（MCU/TCU）技术发展趋势', tags: '软硬件解耦、功能安全、国产化率', pdf: '轻型商用车整车控制器' },
-      { id: '2-6', title: '轻型商用车换电模式与标准化接口技术研究', tags: '底盘适配、锁止安全、车-站-云协同、TCO分析', pdf: '轻型商用车换电模式与' },
-      { id: '2-7', title: '氢燃料电池轻型商用车技术发展趋势', tags: '氢电混动控制、低温启动、氢瓶轻量化、氢耗指标', pdf: '氢燃料电池轻型商用车' },
-      { id: '2-8', title: '轻型商用车48V双电源系统技术研究', tags: '车载光伏适配、冷藏/空调供电、能量平衡控制', pdf: '轻型商用车48V双电' },
-      { id: '2-9', title: '轻型商用车低压智能电源管理系统技术发展趋势', tags: '钠离子电池匹配、电量平衡、长停亏电防护', pdf: '轻型商用车低压智能电' }
-    ]
-  },
-  {
-    id: 'cat3',
-    num: '三',
-    title: '智能网联技术规划',
-    items: [
-      { id: '3-1', title: '轻型商用车L2.5~L4自动驾驶技术发展趋势', tags: '高速NOA/城配/园区场景、接管率/安全指标、端到端大模型', pdf: '轻型商用车L2.5~' },
-      { id: '3-2', title: '轻型商用车智能座舱技术发展趋势', tags: '语音识别率/响应延迟指标、舱驾一体、司机状态监测', pdf: '轻型商用车智能座舱技' },
-      { id: '3-3', title: '轻型商用车车路云一体化（C-V2X）技术应用研究', tags: '协同感知/编队/调度、延迟/准确率指标', pdf: '轻型商用车车路云一体' },
-      { id: '3-4', title: '轻型商用车全域OTA与车联网平台技术发展趋势', tags: '数据采集量/调度实时性、远程诊断、SOTA/FOTA', pdf: '轻型商用车全域OTA' },
-      { id: '3-5', title: '轻型商用车信息安全与功能安全技术研究', tags: '加密技术、冗余设计、预期功能安全、合规要求', pdf: '轻型商用车信息安全与' },
-      { id: '3-6', title: '末端无人物流车（环卫/配送）商业化落地路径研究', tags: '场景适配、成本控制、运营模式', pdf: '末端无人物流车（环卫' },
-      { id: '3-7', title: '轻型商用车智能网联数据闭环技术研究', tags: '数据回传、标注大模型、仿真场景库、算法迭代', pdf: '轻型商用车智能网联数' }
-    ]
-  },
-  {
-    id: 'cat4',
-    num: '四',
-    title: '节能降碳技术规划',
-    items: [
-      { id: '4-1', title: '轻型商用车高效柴油/混动动力总成技术发展趋势', tags: '热效率/升功率指标、国七排放、氢发动机', pdf: '轻型商用车高效柴油/' },
-      { id: '4-2', title: '轻型商用车轻量化技术路线与应用研究', tags: '高强钢/铝/复合材料、2026/2030减重目标、能耗贡献', pdf: '轻型商用车轻量化技术' },
-      { id: '4-3', title: '轻型商用车全工况能量流管理与回收技术发展趋势', tags: '能耗降幅指标、预见性巡航、制动能量回收', pdf: '轻型商用车全工况能量' },
-      { id: '4-4', title: '轻型商用车集成式热泵热管理技术研究', tags: '宽温域、低温/高温续航衰减指标、AI热管理控制', pdf: '轻型商用车集成式热泵' },
-      { id: '4-5', title: '轻型商用车低风阻/低滚阻/低摩擦技术发展趋势', tags: '风阻系数、降耗指标、主动减阻控制', pdf: '轻型商用车低风阻/低' },
-      { id: '4-6', title: '轻型商用车国七排放与后处理技术发展趋势', tags: '超低排放、N2O控制、耐久成本', pdf: '轻型商用车国七排放与' },
-      { id: '4-7', title: '轻型商用车全生命周期碳足迹管理与低碳设计技术研究', tags: '材料/制造/使用/回收全链条', pdf: '轻型商用车全生命周期' }
-    ]
-  },
-  {
-    id: 'cat5',
-    num: '五',
-    title: '电子架构与智能底盘',
-    items: [
-      { id: '5-1', title: '轻型商用车DEA4.0/5.0中央集成电子架构发展趋势', tags: '域控数量/通信速率/芯片国产化率指标', pdf: '轻型商用车DEA4.' },
-      { id: '5-2', title: '轻型商用车线控底盘技术发展趋势', tags: 'SBW/EHB/EMB、响应时间/制动距离指标、安全冗余', pdf: '轻型商用车线控底盘技' },
-      { id: '5-3', title: '轻型商用车空气悬架+电控阻尼自适应技术研究', tags: '载重调节、平顺性、能耗优化', pdf: '轻型商用车空气悬架+' },
-      { id: '5-4', title: '轻型商用车滑板底盘平台化与上装解耦技术研究', tags: '集成度、改装灵活性、减重目标', pdf: '轻型商用车滑板底盘平' },
-      { id: '5-5', title: '轻型商用车底盘预测性健康管理技术研究', tags: '传感器布局、AI故障预警、运维降本', pdf: '轻型商用车底盘预测性' },
-      { id: '5-6', title: '轻型商用车动力底盘跨域融合控制技术研究', tags: '驱动/制动/转向/悬架一体化、XYZ三轴协调', pdf: '轻型商用车动力底盘跨' }
-    ]
-  },
-  {
-    id: 'cat6',
-    num: '六',
-    title: '未来技术与AI应用',
-    items: [
-      { id: '6-1', title: 'AI大模型在轻型商用车全链路应用发展趋势', tags: '研发/制造/运营、2026/2030效率提升指标', pdf: 'AI大模型在轻型商用' },
-      { id: '6-2', title: '轻型商用车数字孪生与全链路虚拟验证技术研究', tags: '整车孪生体、虚实融合测试、验证检出率', pdf: '轻型商用车数字孪生与' },
-      { id: '6-3', title: '低空经济与机器人融合轻型商用车物流应用研究', tags: '空地协同调度、无人配送、适航合规', pdf: '低空经济与机器人融合' },
-      { id: '6-4', title: '商用车具身智能形态与技术发展趋势研究', tags: '感知-决策-执行闭环、多模态交互', pdf: '商用车具身智能形态与' }
-    ]
-  },
-  {
-    id: 'cat7',
-    num: '七',
-    title: '试验验证技术规划',
-    items: [
-      { id: '7-1', title: '轻型商用车虚拟试验场（VPG）技术发展趋势', tags: '仿真精度、验证问题检出率、虚实结合测试', pdf: '轻型商用车虚拟试验场' },
-      { id: '7-2', title: '轻型商用车NVH性能正向开发技术研究', tags: '怠速/高速噪声、振动指标、电驱动NVH控制', pdf: '轻型商用车NVH性能' }
-    ]
-  }
-];
-
 // ===== State =====
 let activeItemId = null;
-const BASE_REPORT_URL = 'reports/';
+const API_TREE = 'https://api.github.com/repos/DingFeinan/trend-report/git/trees/master?recursive=1';
 
-// ===== Build Tree =====
-function buildTree() {
-  const wrap = document.getElementById('treeWrap');
-  let html = '';
-  let total = 0;
+// ===== Build Tree from GitHub Directory Structure =====
+async function buildTree() {
+  var wrap = document.getElementById('treeWrap');
+  var noResults = document.getElementById('noResults');
+  wrap.innerHTML = '<div style="padding:40px 24px;text-align:center;color:#3d5068;font-size:13px;">正在加载目录...</div>';
 
-  treeData.forEach(cat => {
-    total += cat.items.length;
-    html += '<div class="cat-item" data-cat="' + cat.id + '">';
-    html += '<div class="cat-header open" data-cat="' + cat.id + '" onclick="toggleCat(this)">';
-    html += '<span class="arrow">▶</span>';
-    html += '<span class="cat-num">' + cat.num + '</span>';
-    html += '<span class="cat-title">' + cat.title + '</span>';
-    html += '<span class="cat-count">' + cat.items.length + '</span>';
-    html += '</div>';
+  try {
+    var res = await fetch(API_TREE);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    var data = await res.json();
+    var allItems = data.tree || [];
 
-    const subHeight = cat.items.length * 54;
-    html += '<div class="sub-list" style="max-height:' + subHeight + 'px" data-cat="' + cat.id + '">';
-    cat.items.forEach(item => {
-      html += '<div class="sub-item" data-id="' + item.id + '" data-cat="' + cat.id + '" data-pdf="' + escapeHtml(item.pdf) + '" data-title="' + escapeHtml(item.title) + '" data-tags="' + escapeHtml(item.tags || '') + '" onclick="selectReport(this)">';
-      html += '<span class="dot"></span>';
-      html += '<div class="sub-text">';
-      html += '<div class="sub-title">' + escapeHtml(item.title) + '</div>';
-      if (item.tags) html += '<div class="sub-tags">' + escapeHtml(item.tags) + '</div>';
+    // Parse directory structure under reports/
+    var cats = {}; // dirName -> { files: [...] }
+    var CHINESE_NUM = ['一','二','三','四','五','六','七','八','九','十'];
+
+    allItems.forEach(function(item) {
+      // Discover category directories from tree entries (including empty ones)
+      var treeMatch = item.path.match(/^reports\/([^\/]+)$/);
+      if (treeMatch && item.type === 'tree') {
+        var dn = treeMatch[1];
+        if (!cats[dn]) cats[dn] = [];
+        return;
+      }
+      // Match: reports/{dirname}/{filename}
+      var m = item.path.match(/^reports\/([^\/]+)\/([^\/]+)$/);
+      if (!m) return;
+      var dirName = m[1];
+      var fileName = m[2];
+      if (!fileName.toLowerCase().endsWith('.html')) return;
+      if (!cats[dirName]) cats[dirName] = [];
+      cats[dirName].push({ name: fileName, path: item.path });
+    });
+
+    // Sort directory names by their number prefix
+    var dirNames = Object.keys(cats).sort(function(a, b) {
+      var na = parseInt(a) || 0;
+      var nb = parseInt(b) || 0;
+      return na - nb;
+    });
+
+    // Build HTML
+    var html = '';
+    var total = 0;
+    var catIndex = 0;
+
+    dirNames.forEach(function(dirName) {
+      catIndex++;
+      var files = cats[dirName];
+
+      // Group files by base name (strip version V{n}) and pick latest
+      var groups = {};
+      files.forEach(function(f) {
+        var stem = f.name.replace(/\.html$/i, '');
+        var vMatch = stem.match(/[vV](\d+)$/);
+        var version = vMatch ? parseInt(vMatch[1]) : 0;
+        var base = vMatch ? stem.substring(0, vMatch.index) : stem;
+        if (!groups[base] || version > groups[base].version) {
+          groups[base] = { name: f.name, path: f.path, version: version };
+        }
+        // Also update if same version but shorter name (prefer non-versioned if v=0)
+        if (version === groups[base].version && !vMatch) {
+          groups[base] = { name: f.name, path: f.path, version: version };
+        }
+      });
+
+      var groupKeys = Object.keys(groups).sort();
+      var numItems = groupKeys.length;
+      total += numItems;
+
+      // Category num
+      var catNum = catIndex <= 10 ? (CHINESE_NUM[catIndex - 1] || catIndex) : catIndex;
+      // Strip number prefix from dir name for display
+      var displayName = dirName.replace(/^\d+_/, '');
+
+      var catId = 'cat' + catIndex;
+      html += '<div class="cat-item" data-cat="' + catId + '">';
+      html += '<div class="cat-header open" data-cat="' + catId + '" onclick="toggleCat(this)">';
+      html += '<span class="arrow">▶</span>';
+      html += '<span class="cat-num">' + catNum + '</span>';
+      html += '<span class="cat-title">' + escapeHtml(displayName) + '</span>';
+      html += '<span class="cat-count">' + numItems + '</span>';
       html += '</div>';
-      html += '<span class="doc-icon">HTML</span>';
+
+      var subHeight = Math.max(numItems, 1) * 54;
+      html += '<div class="sub-list" style="max-height:' + subHeight + 'px" data-cat="' + catId + '">';
+
+      if (numItems === 0) {
+        html += '<div class="sub-item" style="cursor:default;color:#3d5068;font-size:12px;padding-left:44px;">（暂无报告）</div>';
+      } else {
+        groupKeys.forEach(function(base, idx) {
+          var g = groups[base];
+          var itemId = catId + '-' + (idx + 1);
+          // Display name: base name without version
+          var displayTitle = base;
+          // Full path for the link
+          var fullPath = 'reports/' + encodeURIComponent(dirName) + '/' + encodeURIComponent(g.name);
+          html += '<div class="sub-item" data-id="' + itemId + '" data-cat="' + catId + '" data-path="' + escapeHtml(fullPath) + '" data-title="' + escapeHtml(displayTitle) + '" onclick="selectReport(this)">';
+          html += '<span class="dot"></span>';
+          html += '<div class="sub-text">';
+          html += '<div class="sub-title">' + escapeHtml(displayTitle) + '</div>';
+          html += '</div>';
+          html += '<span class="doc-icon">HTML</span>';
+          html += '</div>';
+        });
+      }
+
+      html += '</div>';
       html += '</div>';
     });
-    html += '</div>';
-    html += '</div>';
-  });
 
-  html += '<div class="no-results" id="noResults">未找到匹配的报告</div>';
-  wrap.innerHTML = html;
-  document.getElementById('totalCount').textContent = total;
-}
-
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
+    html += '<div class="no-results" id="noResults">未找到匹配的报告</div>';
+    wrap.innerHTML = html;
+    document.getElementById('totalCount').textContent = total;
+  } catch (err) {
+    wrap.innerHTML = '<div style="padding:40px 24px;text-align:center;color:#e74c3c;font-size:13px;">加载失败：' + err.message + '</div>';
+  }
 }
 
 // ===== Toggle Category =====
 function toggleCat(header) {
-  const catId = header.dataset.cat;
-  const subList = document.querySelector('.sub-list[data-cat="' + catId + '"]');
-  const isOpen = header.classList.contains('open');
-
+  var catId = header.dataset.cat;
+  var subList = document.querySelector('.sub-list[data-cat="' + catId + '"]');
+  var isOpen = header.classList.contains('open');
   if (isOpen) {
     header.classList.remove('open');
     subList.classList.add('collapsed');
   } else {
     header.classList.add('open');
     subList.classList.remove('collapsed');
-    // Recalculate height for dynamic content
-    const items = subList.querySelectorAll('.sub-item:not(.hidden)');
-    subList.style.maxHeight = (items.length * 54) + 'px';
+    var items = subList.querySelectorAll('.sub-item:not(.hidden)');
+    subList.style.maxHeight = (Math.max(items.length, 1) * 54) + 'px';
   }
 }
 
 // ===== Select Report =====
 function selectReport(el) {
-  // Update active state
-  document.querySelectorAll('.sub-item.active').forEach(e => e.classList.remove('active'));
+  document.querySelectorAll('.sub-item.active').forEach(function(e) { e.classList.remove('active'); });
   el.classList.add('active');
   activeItemId = el.dataset.id;
   document.getElementById('selectedCount').textContent = '1';
 
-  const title = el.dataset.title;
-  const docName = el.dataset.pdf;
-  const docPath = BASE_REPORT_URL + encodeURIComponent(docName) + '.html';
+  var title = el.dataset.title;
+  var filePath = el.dataset.path;
 
-  // Show report viewer
   document.getElementById('welcomeScreen').style.display = 'none';
   document.getElementById('docContainer').classList.add('visible');
   document.getElementById('docFallback').classList.remove('visible');
   document.getElementById('docToolbar').classList.add('visible');
   document.getElementById('docTitle').textContent = title;
-  document.getElementById('btnDownload').href = docPath;
-  document.getElementById('docFrame').src = docPath;
+  document.getElementById('btnDownload').href = filePath;
+  document.getElementById('docFrame').src = filePath;
 
-  // Close sidebar on mobile
   if (window.innerWidth <= 768) {
     document.getElementById('sidebar').classList.remove('open');
   }
@@ -624,55 +599,44 @@ function closeReport() {
   document.getElementById('welcomeScreen').style.display = 'flex';
   document.getElementById('docFrame').src = '';
   document.getElementById('selectedCount').textContent = '0';
-
-  document.querySelectorAll('.sub-item.active').forEach(e => e.classList.remove('active'));
+  document.querySelectorAll('.sub-item.active').forEach(function(e) { e.classList.remove('active'); });
   activeItemId = null;
 }
 
 // ===== Search =====
 function filterTree() {
-  const query = document.getElementById('searchInput').value.trim().toLowerCase();
-  const clearBtn = document.getElementById('searchClear');
-  const noResults = document.getElementById('noResults');
-  let visibleCount = 0;
-
+  var query = document.getElementById('searchInput').value.trim().toLowerCase();
+  var clearBtn = document.getElementById('searchClear');
+  var noResults = document.getElementById('noResults');
+  var visibleCount = 0;
   clearBtn.style.display = query ? 'block' : 'none';
 
-  treeData.forEach(cat => {
-    const subList = document.querySelector('.sub-list[data-cat="' + cat.id + '"]');
-    const header = document.querySelector('.cat-header[data-cat="' + cat.id + '"]');
-    let catVisible = 0;
+  document.querySelectorAll('.cat-item').forEach(function(catItem) {
+    var catId = catItem.dataset.cat;
+    var subList = document.querySelector('.sub-list[data-cat="' + catId + '"]');
+    var header = document.querySelector('.cat-header[data-cat="' + catId + '"]');
+    var catVisible = 0;
 
-    subList.querySelectorAll('.sub-item').forEach(el => {
-      const title = (el.dataset.title || '').toLowerCase();
-      const tags = (el.dataset.tags || '').toLowerCase();
-      const match = !query || title.includes(query) || tags.includes(query);
-      el.classList.toggle('hidden', !match);
-      if (match) catVisible++;
-    });
+    if (subList) {
+      subList.querySelectorAll('.sub-item').forEach(function(el) {
+        var title = (el.dataset.title || '').toLowerCase();
+        var match = !query || title.includes(query);
+        el.classList.toggle('hidden', !match);
+        if (match) catVisible++;
+      });
 
-    // Auto expand matching categories
-    if (query && catVisible > 0) {
-      header.classList.add('open');
-      subList.classList.remove('collapsed');
-    }
-    if (!query) {
-      // Restore open state (default all open)
-      header.classList.add('open');
-      subList.classList.remove('collapsed');
-    }
-
-    // Update sublist height
-    subList.style.maxHeight = (catVisible * 54) + 'px';
-
-    // Show/hide category
-    const catItem = document.querySelector('.cat-item[data-cat="' + cat.id + '"]');
-    if (query && catVisible === 0) {
-      catItem.style.display = 'none';
-    } else {
-      catItem.style.display = '';
+      if (query && catVisible > 0) {
+        header.classList.add('open');
+        subList.classList.remove('collapsed');
+      }
+      if (!query) {
+        header.classList.add('open');
+        subList.classList.remove('collapsed');
+      }
+      subList.style.maxHeight = (Math.max(catVisible, 1) * 54) + 'px';
     }
 
+    catItem.style.display = (query && catVisible === 0) ? 'none' : '';
     visibleCount += catVisible;
   });
 
@@ -693,10 +657,10 @@ function toggleSidebar() {
 
 // ===== Particle Background =====
 function initParticles() {
-  const canvas = document.getElementById('particles');
-  const ctx = canvas.getContext('2d');
-  let particles = [];
-  const maxParticles = 50;
+  var canvas = document.getElementById('particles');
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var maxParticles = 50;
 
   function resize() {
     canvas.width = window.innerWidth;
@@ -705,43 +669,38 @@ function initParticles() {
   resize();
   window.addEventListener('resize', resize);
 
-  class Particle {
-    constructor() {
-      this.reset();
-      this.y = Math.random() * canvas.height;
-    }
-    reset() {
-      this.x = Math.random() * canvas.width;
-      this.y = -10;
-      this.size = Math.random() * 1.5 + 0.5;
-      this.speed = Math.random() * 0.3 + 0.1;
-      this.opacity = Math.random() * 0.4 + 0.1;
-    }
-    update() {
-      this.y += this.speed;
-      if (this.y > canvas.height + 10) this.reset();
-    }
-    draw() {
-      ctx.fillStyle = 'rgba(0,229,255,' + this.opacity + ')';
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fill();
-    }
+  function Particle() {
+    this.reset();
+    this.y = Math.random() * canvas.height;
   }
+  Particle.prototype.reset = function() {
+    this.x = Math.random() * canvas.width;
+    this.y = -10;
+    this.size = Math.random() * 1.5 + 0.5;
+    this.speed = Math.random() * 0.3 + 0.1;
+    this.opacity = Math.random() * 0.4 + 0.1;
+  };
+  Particle.prototype.update = function() {
+    this.y += this.speed;
+    if (this.y > canvas.height + 10) this.reset();
+  };
+  Particle.prototype.draw = function() {
+    ctx.fillStyle = 'rgba(0,229,255,' + this.opacity + ')';
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+  };
 
-  for (let i = 0; i < maxParticles; i++) {
-    particles.push(new Particle());
-  }
+  for (var i = 0; i < maxParticles; i++) particles.push(new Particle());
 
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach(p => { p.update(); p.draw(); });
-    // Draw connections
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+    particles.forEach(function(p) { p.update(); p.draw(); });
+    for (var i = 0; i < particles.length; i++) {
+      for (var j = i + 1; j < particles.length; j++) {
+        var dx = particles[i].x - particles[j].x;
+        var dy = particles[i].y - particles[j].y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < 100) {
           ctx.strokeStyle = 'rgba(0,229,255,' + (0.04 * (1 - dist / 100)) + ')';
           ctx.lineWidth = 0.5;
@@ -768,8 +727,8 @@ document.addEventListener('keydown', function(e) {
 
 // ===== Click outside sidebar to close on mobile =====
 document.addEventListener('click', function(e) {
-  const sidebar = document.getElementById('sidebar');
-  const toggle = document.querySelector('.menu-toggle');
+  var sidebar = document.getElementById('sidebar');
+  var toggle = document.querySelector('.menu-toggle');
   if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
     if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
       sidebar.classList.remove('open');
@@ -789,85 +748,15 @@ function showToast(msg, type, duration) {
   setTimeout(function() { t.classList.remove('show'); setTimeout(function() { t.remove(); }, 300); }, duration || 4000);
 }
 
-// ===== Check for Latest Report Versions =====
+// ===== Check for Updates (rebuild tree from GitHub) =====
 async function checkForUpdates(silent) {
   var btn = document.getElementById('updateBtn');
   btn.classList.add('loading');
 
   try {
-    var res = await fetch('https://api.github.com/repos/DingFeinan/trend-report/contents/reports/');
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    var files = await res.json();
-    if (!Array.isArray(files)) throw new Error('Unexpected response');
-
-    var htmlFiles = files.filter(function(f) { return f.name.toLowerCase().endsWith('.html'); });
-
-    if (htmlFiles.length === 0) {
-      if (!silent) showToast('reports 目录中还没有报告文件', '', 3000);
-      return;
-    }
-
-    var updatedCount = 0;
-    var totalCount = 0;
-
-    document.querySelectorAll('.sub-item').forEach(function(el) {
-      totalCount++;
-      var prefix = el.dataset.pdf.toLowerCase();
-
-      // Find all HTML files whose name contains this prefix
-      var matches = htmlFiles.filter(function(f) {
-        return f.name.toLowerCase().includes(prefix);
-      });
-
-      if (matches.length === 0) return;
-
-      // Pick the file with highest version number (V{n})
-      var best = null;
-      var bestVersion = -1;
-      matches.forEach(function(f) {
-        var vMatch = f.name.match(/[vV](\d+)/);
-        var version = vMatch ? parseInt(vMatch[1]) : 0;
-        if (version > bestVersion) {
-          bestVersion = version;
-          best = f;
-        }
-      });
-
-      if (!best) return;
-
-      var docStem = best.name.replace(/\.html$/i, '');
-      if (el.dataset.pdf !== docStem) {
-        el.dataset.pdf = docStem;
-        updatedCount++;
-
-        // Version badge
-        var badge = el.querySelector('.version-badge');
-        if (!badge) {
-          badge = document.createElement('span');
-          badge.className = 'version-badge';
-          el.querySelector('.sub-text').appendChild(badge);
-        }
-        badge.textContent = 'V' + bestVersion;
-        badge.classList.add('show');
-        el.classList.add('updated');
-        setTimeout(function() { el.classList.remove('updated'); }, 700);
-      }
-    });
-
-    if (!silent) {
-      if (updatedCount > 0) {
-        showToast('已更新 ' + updatedCount + '/' + totalCount + ' 篇报告为最新版本', 'success', 4000);
-      } else {
-        showToast('所有报告已是最新版本，无需更新', 'success', 3000);
-      }
-    }
-
-    // Reload if currently active item was updated
-    var activeEl = document.querySelector('.sub-item.active');
-    if (activeEl && activeEl.dataset.pdf !== docStem) {
-      // No need to reload - the download link will use updated dataset
-    }
-
+    oldTree = document.getElementById('treeWrap').innerHTML;
+    await buildTree();
+    if (!silent) showToast('目录已更新为最新状态', 'success', 3000);
   } catch (err) {
     if (!silent) showToast('更新失败：' + err.message, 'error', 5000);
   } finally {
@@ -878,7 +767,6 @@ async function checkForUpdates(silent) {
 // ===== Init =====
 buildTree();
 initParticles();
-checkForUpdates(true); // auto-detect latest versions on load
 </script>
 </body>
 </html>
