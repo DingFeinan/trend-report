@@ -814,9 +814,9 @@ async function checkForUpdates(silent) {
       totalCount++;
       var prefix = el.dataset.pdf.toLowerCase();
 
-      // Find all HTML files whose name starts with this prefix
+      // Find all HTML files whose name contains this prefix
       var matches = htmlFiles.filter(function(f) {
-        return f.name.toLowerCase().startsWith(prefix);
+        return f.name.toLowerCase().includes(prefix);
       });
 
       if (matches.length === 0) return;
