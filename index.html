@@ -163,11 +163,11 @@ body {
   font-size: 10px; color: #3d5068; margin-top: 3px;
   line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
 }
-.sub-item .pdf-icon {
-  flex-shrink: 0; font-size: 14px; color: #3d5068; margin-top: 2px;
-  transition: color .15s;
+.sub-item .doc-icon {
+  flex-shrink: 0; font-size: 12px; color: #3d5068; margin-top: 2px;
+  font-weight: 600; transition: color .15s;
 }
-.sub-item:hover .pdf-icon { color: #e74c3c; }
+.sub-item:hover .doc-icon { color: #00e5ff; }
 
 /* No results */
 .no-results {
@@ -198,40 +198,40 @@ body {
 .welcome h2 { font-size: 22px; color: #b8ccdf; font-weight: 500; margin-bottom: 8px; }
 .welcome p { font-size: 14px; color: #3d5068; max-width: 400px; line-height: 1.6; }
 
-/* PDF Toolbar */
-.pdf-toolbar {
+/* Doc Toolbar */
+.doc-toolbar {
   display: none; align-items: center; gap: 12px;
   padding: 12px 20px;
   background: rgba(12,18,30,.85); border-bottom: 1px solid rgba(0,229,255,.08);
 }
-.pdf-toolbar.visible { display: flex; }
-.pdf-toolbar .doc-title {
+.doc-toolbar.visible { display: flex; }
+.doc-toolbar .doc-title {
   font-size: 14px; font-weight: 500; color: #b8ccdf;
   flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.pdf-toolbar .btn {
+.doc-toolbar .btn {
   padding: 6px 14px; border-radius: 5px; font-size: 12px; cursor: pointer;
   border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.04);
   color: #c8d6e5; transition: all .15s; display: flex; align-items: center; gap: 6px;
   white-space: nowrap;
 }
-.pdf-toolbar .btn:hover { background: rgba(0,229,255,.08); border-color: rgba(0,229,255,.25); }
-.pdf-toolbar .btn.download { background: rgba(0,229,255,.1); border-color: rgba(0,229,255,.2); color: #00e5ff; }
-.pdf-toolbar .btn.download:hover { background: rgba(0,229,255,.18); }
-.pdf-toolbar .btn.back { color: #5a7a9a; }
+.doc-toolbar .btn:hover { background: rgba(0,229,255,.08); border-color: rgba(0,229,255,.25); }
+.doc-toolbar .btn.download { background: rgba(0,229,255,.1); border-color: rgba(0,229,255,.2); color: #00e5ff; }
+.doc-toolbar .btn.download:hover { background: rgba(0,229,255,.18); }
+.doc-toolbar .btn.back { color: #5a7a9a; }
 
-/* PDF iframe */
-.pdf-container { flex: 1; display: none; position: relative; }
-.pdf-container.visible { display: flex; }
-.pdf-container iframe {
-  width: 100%; height: 100%; border: none;
+/* Doc container + iframe */
+.doc-container { flex: 1; display: none; position: relative; }
+.doc-container.visible { display: flex; }
+.doc-container iframe {
+  width: 100%; height: 100%; border: none; background: #fff;
 }
-.pdf-fallback {
+.doc-fallback {
   display: none; flex-direction: column; align-items: center; justify-content: center;
   flex: 1; padding: 40px; text-align: center;
 }
-.pdf-fallback.visible { display: flex; }
-.pdf-fallback p { color: #3d5068; font-size: 14px; margin-bottom: 16px; }
+.doc-fallback.visible { display: flex; }
+.doc-fallback p { color: #3d5068; font-size: 14px; margin-bottom: 16px; }
 
 /* ===== Mobile Toggle ===== */
 .menu-toggle {
@@ -328,7 +328,7 @@ body {
   .sidebar.open { transform: translateX(0); }
   .menu-toggle { display: flex; align-items: center; justify-content: center; }
   .content { padding-left: 0; }
-  .pdf-toolbar { padding: 12px 12px 12px 56px; }
+  .doc-toolbar { padding: 12px 12px 12px 56px; }
 }
 </style>
 </head>
@@ -388,28 +388,28 @@ body {
 
   <!-- ===== Main Content ===== -->
   <main class="content" id="mainContent">
-    <!-- PDF Toolbar -->
-    <div class="pdf-toolbar" id="pdfToolbar">
-      <button class="btn back" onclick="closePdf()">
+    <!-- Doc Toolbar -->
+    <div class="doc-toolbar" id="docToolbar">
+      <button class="btn back" onclick="closeReport()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
         返回目录
       </button>
       <span class="doc-title" id="docTitle"></span>
-      <a class="btn download" id="btnDownload" href="#" target="_blank" download>
+      <a class="btn download" id="btnDownload" href="#" target="_blank">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        下载PDF
+        新窗口打开
       </a>
     </div>
 
-    <!-- PDF viewer -->
-    <div class="pdf-container" id="pdfContainer">
-      <iframe id="pdfFrame" src="" title="PDF Viewer"></iframe>
+    <!-- Report viewer -->
+    <div class="doc-container" id="docContainer">
+      <iframe id="docFrame" src="" title="报告内容"></iframe>
     </div>
 
-    <!-- PDF fallback (when PDF not found) -->
-    <div class="pdf-fallback" id="pdfFallback">
-      <p>PDF 文件尚未上传</p>
-      <button class="btn" onclick="closePdf()" style="padding:8px 20px;">返回目录</button>
+    <!-- Fallback -->
+    <div class="doc-fallback" id="docFallback">
+      <p>报告文件尚未上传</p>
+      <button class="btn" onclick="closeReport()" style="padding:8px 20px;">返回目录</button>
     </div>
 
     <!-- Welcome screen -->
@@ -553,7 +553,7 @@ function buildTree() {
       html += '<div class="sub-title">' + escapeHtml(item.title) + '</div>';
       if (item.tags) html += '<div class="sub-tags">' + escapeHtml(item.tags) + '</div>';
       html += '</div>';
-      html += '<span class="pdf-icon">PDF</span>';
+      html += '<span class="doc-icon">HTML</span>';
       html += '</div>';
     });
     html += '</div>';
@@ -598,17 +598,17 @@ function selectReport(el) {
   document.getElementById('selectedCount').textContent = '1';
 
   const title = el.dataset.title;
-  const pdfName = el.dataset.pdf;
-  const pdfPath = BASE_REPORT_URL + encodeURIComponent(pdfName) + '.pdf';
+  const docName = el.dataset.pdf;
+  const docPath = BASE_REPORT_URL + encodeURIComponent(docName) + '.html';
 
-  // Show PDF viewer
+  // Show report viewer
   document.getElementById('welcomeScreen').style.display = 'none';
-  document.getElementById('pdfContainer').classList.add('visible');
-  document.getElementById('pdfFallback').classList.remove('visible');
-  document.getElementById('pdfToolbar').classList.add('visible');
+  document.getElementById('docContainer').classList.add('visible');
+  document.getElementById('docFallback').classList.remove('visible');
+  document.getElementById('docToolbar').classList.add('visible');
   document.getElementById('docTitle').textContent = title;
-  document.getElementById('btnDownload').href = pdfPath;
-  document.getElementById('pdfFrame').src = pdfPath;
+  document.getElementById('btnDownload').href = docPath;
+  document.getElementById('docFrame').src = docPath;
 
   // Close sidebar on mobile
   if (window.innerWidth <= 768) {
@@ -616,13 +616,13 @@ function selectReport(el) {
   }
 }
 
-// ===== Close PDF =====
-function closePdf() {
-  document.getElementById('pdfContainer').classList.remove('visible');
-  document.getElementById('pdfFallback').classList.remove('visible');
-  document.getElementById('pdfToolbar').classList.remove('visible');
+// ===== Close Report =====
+function closeReport() {
+  document.getElementById('docContainer').classList.remove('visible');
+  document.getElementById('docFallback').classList.remove('visible');
+  document.getElementById('docToolbar').classList.remove('visible');
   document.getElementById('welcomeScreen').style.display = 'flex';
-  document.getElementById('pdfFrame').src = '';
+  document.getElementById('docFrame').src = '';
   document.getElementById('selectedCount').textContent = '0';
 
   document.querySelectorAll('.sub-item.active').forEach(e => e.classList.remove('active'));
@@ -759,7 +759,7 @@ function initParticles() {
 
 // ===== Keyboard Shortcuts =====
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closePdf();
+  if (e.key === 'Escape') closeReport();
   if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
     e.preventDefault();
     document.getElementById('searchInput').focus();
@@ -800,10 +800,10 @@ async function checkForUpdates(silent) {
     var files = await res.json();
     if (!Array.isArray(files)) throw new Error('Unexpected response');
 
-    var pdfFiles = files.filter(function(f) { return f.name.toLowerCase().endsWith('.pdf'); });
+    var htmlFiles = files.filter(function(f) { return f.name.toLowerCase().endsWith('.html'); });
 
-    if (pdfFiles.length === 0) {
-      if (!silent) showToast('reports 目录中还没有 PDF 文件', '', 3000);
+    if (htmlFiles.length === 0) {
+      if (!silent) showToast('reports 目录中还没有报告文件', '', 3000);
       return;
     }
 
@@ -814,8 +814,8 @@ async function checkForUpdates(silent) {
       totalCount++;
       var prefix = el.dataset.pdf.toLowerCase();
 
-      // Find all PDFs whose name starts with this prefix
-      var matches = pdfFiles.filter(function(f) {
+      // Find all HTML files whose name starts with this prefix
+      var matches = htmlFiles.filter(function(f) {
         return f.name.toLowerCase().startsWith(prefix);
       });
 
@@ -835,9 +835,9 @@ async function checkForUpdates(silent) {
 
       if (!best) return;
 
-      var pdfStem = best.name.replace(/\.pdf$/i, '');
-      if (el.dataset.pdf !== pdfStem) {
-        el.dataset.pdf = pdfStem;
+      var docStem = best.name.replace(/\.html$/i, '');
+      if (el.dataset.pdf !== docStem) {
+        el.dataset.pdf = docStem;
         updatedCount++;
 
         // Version badge
@@ -862,9 +862,9 @@ async function checkForUpdates(silent) {
       }
     }
 
-    // Reload PDF if currently active item was updated
+    // Reload if currently active item was updated
     var activeEl = document.querySelector('.sub-item.active');
-    if (activeEl && activeEl.dataset.pdf !== pdfStem) {
+    if (activeEl && activeEl.dataset.pdf !== docStem) {
       // No need to reload - the download link will use updated dataset
     }
 
