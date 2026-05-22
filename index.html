@@ -433,6 +433,12 @@ body {
 let activeItemId = null;
 const API_TREE = 'https://api.github.com/repos/DingFeinan/trend-report/git/trees/master?recursive=1';
 
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
+}
+
 // ===== Build Tree from GitHub Directory Structure =====
 async function buildTree() {
   var wrap = document.getElementById('treeWrap');
