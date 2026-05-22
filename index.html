@@ -222,7 +222,7 @@ body {
 .doc-toolbar .btn.back { color: #5a7a9a; }
 
 /* Doc container + iframe */
-.doc-container { flex: 1; display: none; position: relative; overflow: auto; -webkit-overflow-scrolling: touch; }
+.doc-container { flex: 1; display: none; position: relative; overflow-x: scroll; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .doc-container.visible { display: flex; }
 .doc-container iframe {
   width: 100%; height: 100%; border: none; background: #fff;
@@ -332,7 +332,7 @@ body {
   .content { padding-left: 0; }
   .doc-toolbar { padding: 12px 12px 12px 56px; }
   .doc-container iframe {
-    width: 768px; min-width: 768px;
+    width: 768px; min-width: 768px; flex-shrink: 0;
   }
 }
 </style>
