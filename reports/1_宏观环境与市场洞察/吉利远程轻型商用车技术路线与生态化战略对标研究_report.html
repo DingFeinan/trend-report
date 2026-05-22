@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>吉利远程轻型商用车技术路线与生态化战略对标研究报告</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;line-height:1.7;}
+  .container{max-width:1200px;margin:0 auto;padding:20px;}
+  .cover{background:linear-gradient(135deg,#0a1628 0%,#162544 40%,#1e4078 100%);color:#fff;padding:60px 40px;border-radius:16px;margin-bottom:30px;position:relative;overflow:hidden;}
+  .cover::before{content:'';position:absolute;top:-50%;right:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(34,197,94,0.12) 0%,transparent 70%);border-radius:50%;}
+  .cover h1{font-size:2.2em;font-weight:800;margin-bottom:12px;letter-spacing:1px;}
+  .cover .subtitle{font-size:1.1em;color:#94a3b8;margin-bottom:24px;}
+  .cover .meta{display:flex;gap:20px;flex-wrap:wrap;font-size:0.9em;color:#64748b;}
+  .cover .meta span{background:rgba(255,255,255,0.06);padding:6px 16px;border-radius:20px;border:1px solid rgba(255,255,255,0.08);}
+  .section{background:#fff;border-radius:12px;padding:32px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
+  .section-title{font-size:1.5em;font-weight:700;color:#0a1628;margin-bottom:20px;padding-bottom:12px;border-bottom:3px solid #16a34a;display:flex;align-items:center;gap:10px;}
+  .section-title .num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;background:#16a34a;color:#fff;border-radius:8px;font-size:0.9em;font-weight:700;}
+  .sub-title{font-size:1.15em;font-weight:600;color:#1e3a5f;margin:20px 0 12px;padding-left:12px;border-left:4px solid #22c55e;}
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin:16px 0;}
+  .kpi-card{background:linear-gradient(135deg,#f0fdf4,#f8fafc);border:1px solid #e2e8f0;border-radius:10px;padding:16px;text-align:center;transition:transform 0.2s,box-shadow 0.2s;}
+  .kpi-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(22,163,74,0.12);}
+  .kpi-value{font-size:1.8em;font-weight:800;color:#16a34a;}
+  .kpi-label{font-size:0.85em;color:#64748b;margin-top:4px;}
+  .kpi-change{font-size:0.8em;color:#16a34a;font-weight:600;}
+  .kpi-change.blue{color:#2563eb;}
+  .table-wrap{overflow-x:auto;margin:16px 0;border-radius:8px;border:1px solid #e5e7eb;}
+  table{width:100%;border-collapse:collapse;font-size:0.9em;}
+  th{background:#1e3a5f;color:#fff;padding:12px 14px;text-align:left;font-weight:600;white-space:nowrap;}
+  td{padding:10px 14px;border-bottom:1px solid #f1f5f9;vertical-align:top;}
+  tr:nth-child(even){background:#f8fafc;}
+  tr:hover{background:#f0fdf4;}
+  .highlight{background:#dcfce7 !important;font-weight:600;}
+  .highlight-blue{background:#dbeafe !important;font-weight:600;}
+  .timeline{position:relative;padding-left:30px;margin:20px 0;}
+  .timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,#16a34a,#059669);}
+  .tl-item{position:relative;margin-bottom:20px;padding:14px 18px;background:#f8fafc;border-radius:8px;border-left:3px solid #22c55e;}
+  .tl-item.milestone{background:#f0fdf4;border-left-color:#059669;}
+  .tl-year{font-weight:700;color:#16a34a;font-size:1.05em;margin-bottom:4px;}
+  .tl-year.dark{color:#1e3a5f;}
+  .tl-desc{color:#475569;font-size:0.9em;}
+  .tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin:16px 0;}
+  .tech-card{background:linear-gradient(135deg,#f8fafc,#fff);border:1px solid #e2e8f0;border-radius:10px;padding:20px;transition:all 0.2s;}
+  .tech-card:hover{border-color:#22c55e;box-shadow:0 4px 16px rgba(22,163,74,0.1);}
+  .tech-card h4{color:#1e3a5f;font-size:1em;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+  .tech-card h4 .icon{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:#dcfce7;color:#16a34a;border-radius:6px;font-size:0.85em;}
+  .tech-card ul{color:#475569;font-size:0.85em;padding-left:16px;margin-top:6px;}
+  .tech-card li{margin-bottom:3px;}
+  .conclusion{background:linear-gradient(135deg,#14532d,#052e16);color:#fff;border-radius:12px;padding:28px;margin:20px 0;}
+  .conclusion h3{font-size:1.2em;margin-bottom:16px;color:#86efac;}
+  .conclusion ol{padding-left:20px;}
+  .conclusion li{margin-bottom:12px;font-size:0.95em;line-height:1.7;color:#d1fae5;}
+  .conclusion li strong{color:#86efac;}
+  .limitation{background:#fffbeb;border:1px solid #fbbf24;border-radius:8px;padding:16px 20px;margin:20px 0;font-size:0.85em;color:#92400e;}
+  .limitation strong{color:#b45309;}
+  .phase-tag{display:inline-block;padding:3px 10px;border-radius:12px;font-size:0.8em;font-weight:600;margin-right:6px;}
+  .phase-2026{background:#dcfce7;color:#16a34a;}
+  .phase-2028{background:#fef3c7;color:#d97706;}
+  .phase-2030{background:#fce7f3;color:#be185d;}
+  .compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:16px 0;}
+  .compare-card{border:2px solid #e2e8f0;border-radius:10px;padding:18px;}
+  .compare-card.best{border-color:#16a34a;background:#f0fdf4;}
+  .compare-card .brand{font-weight:700;font-size:1.1em;color:#1e3a5f;margin-bottom:8px;}
+  .compare-card .tag{display:inline-block;font-size:0.75em;padding:2px 8px;border-radius:10px;margin-left:6px;}
+  .compare-card .tag.leader{background:#dcfce7;color:#16a34a;}
+  .compare-card .tag.challenger{background:#fef3c7;color:#d97706;}
+  @media(max-width:768px){
+    .cover{padding:30px 20px;}
+    .cover h1{font-size:1.6em;}
+    .section{padding:20px 16px;}
+    .kpi-grid{grid-template-columns:repeat(2,1fr);}
+    .tech-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="cover">
+  <h1>吉利远程轻型商用车技术路线与生态化战略对标研究</h1>
+  <div class="subtitle">GXA平台 · 醇氢+电动双路线 · 30111战略对标</div>
+  <div class="meta">
+    <span>复杂主题 · 深度研究级</span>
+    <span>情报来源 38条（A级20/B级14/C级4）</span>
+    <span>健康等级 🟢优秀</span>
+    <span>2026年5月22日</span>
+  </div>
+</div>
+
+<!-- Section 1 -->
+<div class="section">
+  <div class="section-title"><span class="num">1</span>现状基线</div>
+  <div class="sub-title">远程新能源商用车核心经营数据</div>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kpi-value">50万+</div><div class="kpi-label">累计销量</div><div class="kpi-change">连续4年销冠</div></div>
+    <div class="kpi-card"><div class="kpi-value">3.47万</div><div class="kpi-label">2025新能源轻卡</div><div class="kpi-change">细分市场#1</div></div>
+    <div class="kpi-card"><div class="kpi-value">26万</div><div class="kpi-label">2026年目标</div><div class="kpi-change blue">全榜单第一</div></div>
+    <div class="kpi-card"><div class="kpi-value">100万</div><div class="kpi-label">2030年目标</div><div class="kpi-change blue">全球新能源第一</div></div>
+    <div class="kpi-card"><div class="kpi-value">120%+</div><div class="kpi-label">5年CAGR</div><div class="kpi-change">爆发式增长</div></div>
+    <div class="kpi-card"><div class="kpi-value">44月</div><div class="kpi-label">连续月度销冠</div><div class="kpi-change">行业纪录</div></div>
+  </div>
+
+  <div class="sub-title">GXA平台架构基线</div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>架构</th><th>定位</th><th>核心特征</th></tr>
+      <tr class="highlight"><td>GXA-T</td><td>卡车专属（重卡/轻卡）</td><td>1200V高压平台、i-MPS多电机驱动链、醇氢兼容</td></tr>
+      <tr><td>GXA-M</td><td>VAN类专属</td><td>线控智能架构、模块化设计</td></tr>
+      <tr><td>GXA-V</td><td>面向VAN车（3.0升级）</td><td>全域AI赋能、中央计算架构演进</td></tr>
+      <tr><td>GXA-D</td><td>面向无人车（3.0新增）</td><td>干线/城配/出行全场景</td></tr>
+    </table>
+  </div>
+
+  <div class="sub-title">醇氢电动技术基线</div>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kpi-value">20年</div><div class="kpi-label">醇氢研发积累</div></div>
+    <div class="kpi-card"><div class="kpi-value">50.3%</div><div class="kpi-label">热效率</div></div>
+    <div class="kpi-card"><div class="kpi-value">2000km</div><div class="kpi-label">续航极限</div></div>
+    <div class="kpi-card"><div class="kpi-value">5min</div><div class="kpi-label">补能速度</div></div>
+    <div class="kpi-card"><div class="kpi-value">-30℃</div><div class="kpi-label">无衰减</div></div>
+    <div class="kpi-card"><div class="kpi-value">1000+</div><div class="kpi-label">醇氢加注站</div></div>
+  </div>
+
+  <div class="sub-title">新能源轻卡市场格局（2025年）</div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>排名</th><th>品牌</th><th>新能源轻卡销量</th><th>核心优势</th><th>技术路线特色</th></tr>
+      <tr class="highlight"><td>1</td><td>远程</td><td>3.47万辆</td><td>醇氢差异化+生态运营+44月销冠</td><td>纯电+醇氢电动</td></tr>
+      <tr class="highlight-blue"><td>2</td><td>福田</td><td>2.96万辆（+133%）</td><td>启明星平台+全品类</td><td>纯电/混动/氢燃料</td></tr>
+      <tr><td>3</td><td>比亚迪</td><td>快速追赶（T5+385%）</td><td>刀片电池+技术平权</td><td>纯电+混动</td></tr>
+      <tr><td>4</td><td>江淮</td><td>稳健增长（+119%）</td><td>混动1号领先</td><td>纯电+混动</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- Section 2 -->
+<div class="section">
+  <div class="section-title"><span class="num">2</span>2026 / 2028 / 2030 分阶段技术指标</div>
+  <div class="sub-title">总体战略目标路线图</div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>指标维度</th><th><span class="phase-tag phase-2026">2026年</span></th><th><span class="phase-tag phase-2028">2028年</span></th><th><span class="phase-tag phase-2030">2030年</span></th></tr>
+      <tr><td>年销量目标</td><td>26万辆</td><td>~50万辆</td><td><strong>100万辆</strong></td></tr>
+      <tr><td>市场地位</td><td>新能源商用车第一</td><td>全商用车赛道前列</td><td><strong>国内第一+全球新能源第一</strong></td></tr>
+      <tr><td>醇氢加注站</td><td>1000+座</td><td>2500+座</td><td>4000+座</td></tr>
+      <tr><td>海外覆盖</td><td>30+国</td><td>40+国</td><td>60+国</td></tr>
+      <tr><td>行业新能源渗透率</td><td>~40%</td><td>~55%</td><td>~70%</td></tr>
+    </table>
+  </div>
+
+  <div class="sub-title">GXA平台分阶段技术指标</div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>技术维度</th><th><span class="phase-tag phase-2026">2026年</span></th><th><span class="phase-tag phase-2028">2028年</span></th><th><span class="phase-tag phase-2030">2030年</span></th></tr>
+      <tr><td>架构代际</td><td>3.0代GXA-T/V/D全面落地</td><td>中央计算架构演进</td><td>全域中央计算+AI原生</td></tr>
+      <tr><td>高压平台</td><td>800V量产，迈向2C</td><td>2C标配，突破4C</td><td>4C+超充普及</td></tr>
+      <tr><td>醇氢热效率</td><td>50.3%</td><td>53%+</td><td>55%+</td></tr>
+      <tr><td>醇氢续航（重卡）</td><td>1500-2000km</td><td>2500km+</td><td>3000km+</td></tr>
+      <tr><td>纯电续航（轻卡）</td><td>200-300km</td><td>400km+</td><td>500km+</td></tr>
+      <tr><td>智驾等级</td><td>L4示范（星际C6E）</td><td>L4城配规模化</td><td>干线L4+城配L4</td></tr>
+    </table>
+  </div>
+
+  <div class="sub-title">醇氢电动分阶段技术指标</div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>技术维度</th><th><span class="phase-tag phase-2026">2026年</span></th><th><span class="phase-tag phase-2028">2028年</span></th><th><span class="phase-tag phase-2030">2030年</span></th></tr>
+      <tr><td>热效率</td><td>50.3%</td><td>53%+</td><td>55%+</td></tr>
+      <tr><td>醇电转换比</td><td>2.2kWh/L</td><td>2.5kWh/L</td><td>2.8kWh/L</td></tr>
+      <tr><td>低温适应</td><td>-30℃无衰减</td><td>-35℃无衰减</td><td>-40℃无衰减</td></tr>
+      <tr><td>加注网络</td><td>1000+座</td><td>2500+座</td><td>4000+座</td></tr>
+      <tr><td>绿色甲醇占比</td><td>逐步提升</td><td>≥50%</td><td>≥80%</td></tr>
+      <tr><td>TCO优势</td><td>较柴油省1元/km</td><td>进一步扩大</td><td>与柴油持平或更优</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- Section 3 -->
+<div class="section">
+  <div class="section-title"><span class="num">3</span>核心关键技术</div>
+  <div class="sub-title">GXA超感架构体系</div>
+  <div class="tech-grid">
+    <div class="tech-card">
+      <h4><span class="icon">🏗️</span>GXA-T 卡车专属架构</h4>
+      <ul>
+        <li>国内首个正向研发新能源商用车数智架构</li>
+        <li>1200V高压平台，IGBT芯片已流片</li>
+        <li>i-MPS多电机灵活扭矩中央驱动链</li>
+        <li>兼容纯电/醇氢电动/醇氢电一体</li>
+        <li>支持超充+4分钟底部换电</li>
+      </ul>
+    </div>
+    <div class="tech-card">
+      <h4><span class="icon">⚡</span>3.0代轻卡X平台</h4>
+      <ul>
+        <li>全球首个3.0代新能源轻卡平台</li>
+        <li>总质量4.5-14吨，续航200-1500km</li>
+        <li>动力120-235kW</li>
+        <li>纯电优于行业5%+，醇氢优于燃油40%+</li>
+        <li>星智T 17.99万起售</li>
+      </ul>
+    </div>
+    <div class="tech-card">
+      <h4><span class="icon">🤖</span>GXA-D 无人车架构</h4>
+      <ul>
+        <li>干线物流：星瀚H无座舱重卡</li>
+        <li>城市出行：Robotaxi/Robobus</li>
+        <li>城配物流：Robovan神童T6（26000台大单）</li>
+        <li>星际C6E客车搭载L4级无人驾驶</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-title">醇氢电动核心技术</div>
+  <div class="tech-grid">
+    <div class="tech-card">
+      <h4><span class="icon">🧪</span>甲醇电动动力系统</h4>
+      <ul>
+        <li>热效率50.3%，醇电转换比2.2kWh/L</li>
+        <li>260kW级/170kW级多功率段</li>
+        <li>1.8L-15L排量，100-600马力全矩阵</li>
+        <li>PM降低98%、CO降低88%、NOx降低82%</li>
+        <li>核心专利400+件</li>
+      </ul>
+    </div>
+    <div class="tech-card">
+      <h4><span class="icon">🌍</span>醇氢全链路生态</h4>
+      <ul>
+        <li>醇（绿色甲醇制备，消纳1.375吨CO₂/吨）</li>
+        <li>运（6万辆运营，250亿公里验证）</li>
+        <li>站（远醇1000+站，2027年4000座）</li>
+        <li>车（重卡/轻卡/客车/船舶/工程机械）</li>
+        <li>非道路：矿机/船舶/发电机组</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-title">生态化战略核心技术</div>
+  <div class="tech-grid">
+    <div class="tech-card">
+      <h4><span class="icon">📊</span>三级数智架构</h4>
+      <ul>
+        <li>YHIC→EPOS→远程慧联APP</li>
+        <li>数智商城S2B2C交易链路</li>
+        <li>500+生态伙伴，200+数智门店</li>
+        <li>运营车辆16万台，注册38万+</li>
+      </ul>
+    </div>
+    <div class="tech-card">
+      <h4><span class="icon">🛡️</span>科技降险系统</h4>
+      <ul>
+        <li>云控平台+星汉算法</li>
+        <li>1.5亿次风险预警，75万次AEB干预</li>
+        <li>万公里出险率降低10%</li>
+        <li>试点区域出险频度下降20%</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Section 4 -->
+<div class="section">
+  <div class="section-title"><span class="num">4</span>落地路径</div>
+  <div class="sub-title">技术落地时间线</div>
+  <div class="timeline">
+    <div class="tl-item milestone">
+      <div class="tl-year">2025年（已完成）</div>
+      <div class="tl-desc">新能源轻卡销冠（3.47万）→ 50万辆累计 → 醇氢运营6万辆/250亿公里 → 出海暴涨500%（26国）→ 吉尼斯世界纪录（1522.9km）→ 星瀚H醇氢重卡发布</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2026年（进行中）</div>
+      <div class="tl-desc">"30111"战略发布 → 3.0代X平台量产 → 星智T上市（17.99万）→ 26万辆目标 → 远程德法发布 → 240亿金融计划启动</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year dark">2028年</div>
+      <div class="tl-desc">全赛道产品矩阵成熟 → 中央计算架构落地 → 醇氢加注2500+站 → L4城配规模化 → 海外40+国</div>
+    </div>
+    <div class="tl-item milestone">
+      <div class="tl-year dark">2030年</div>
+      <div class="tl-desc">百万辆年销 → 国内第一+全球新能源第一 → 醇氢4000+站 → 全域AI原生架构 → 干线L4+城配L4</div>
+    </div>
+  </div>
+
+  <div class="sub-title">"30111"战略四大升级路径</div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>升级路径</th><th>核心内容</th><th>关键举措</th></tr>
+      <tr><td><strong>3.0技术</strong></td><td>动力+AI+架构</td><td>GXA全架构落地+中央计算演进+醇氢AI云控</td></tr>
+      <tr><td><strong>3.0产品</strong></td><td>全赛道覆盖</td><td>轻卡/重卡/VAN/客车/无人车/非道路全矩阵</td></tr>
+      <tr><td><strong>3.0生态</strong></td><td>全生命周期服务</td><td>三级生态+240亿金融+科技降险+数智商城</td></tr>
+      <tr><td><strong>全球化</strong></td><td>拓展增长空间</td><td>2026年26国→2030年60+国，德法核心市场</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- Section 5 -->
+<div class="section">
+  <div class="section-title"><span class="num">5</span>竞品对标</div>
+  <div class="sub-title">技术路线对标</div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>对标维度</th><th class="highlight">远程</th><th class="highlight-blue">福田</th><th>比亚迪</th><th>江淮</th></tr>
+      <tr><td>核心路线</td><td>醇氢电动+纯电</td><td>纯电/混动/氢燃料</td><td>纯电+混动</td><td>纯电+混动</td></tr>
+      <tr><td>独特技术</td><td>醇氢电动（20年独家）</td><td>启明星专属平台</td><td>刀片电池+技术平权</td><td>混动1号</td></tr>
+      <tr><td>续航极限</td><td>2000km（醇氢）</td><td>500km+（纯电）</td><td>400km（纯电）</td><td>混动续航长</td></tr>
+      <tr><td>补能速度</td><td>5分钟（甲醇）</td><td>10min60%（800V）</td><td>30min80%（2C）</td><td>传统充电</td></tr>
+      <tr><td>低温性能</td><td>-30℃无衰减</td><td>-30℃热泵+20%</td><td>未公开</td><td>未公开</td></tr>
+    </table>
+  </div>
+
+  <div class="sub-title">市场表现对标</div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>维度</th><th class="highlight">远程</th><th class="highlight-blue">福田</th><th>比亚迪商用车</th><th>江淮</th></tr>
+      <tr><td>2025新能源轻卡</td><td>3.47万（#1）</td><td>2.96万（#2）</td><td>快速追赶</td><td>稳健增长</td></tr>
+      <tr><td>增速</td><td>稳健</td><td>+133%</td><td>T5+385%/月</td><td>+119%</td></tr>
+      <tr><td>总体规模</td><td>50万累计（新能源）</td><td>65万（全品类/年）</td><td>5.7万（商用车）</td><td>未公开</td></tr>
+      <tr><td>连续优势</td><td>44月新能源销冠</td><td>全品类第一</td><td>乘用车全球冠军</td><td>轻卡传统优势</td></tr>
+      <tr><td>2030目标</td><td>100万辆</td><td>新能源渗透率50%</td><td>未公开</td><td>未公开</td></tr>
+    </table>
+  </div>
+
+  <div class="sub-title">远程核心优劣势矩阵</div>
+  <div class="table-wrap">
+    <table>
+      <tr><th style="width:100px">维度</th><th>核心优势</th><th>劣势/风险</th></tr>
+      <tr><td>技术路线</td><td>醇氢电动20年独家积累，差异化最强</td><td>醇氢非行业共识，政策依赖性强</td></tr>
+      <tr><td>续航/补能</td><td>2000km+5分钟，解决纯电核心痛点</td><td>醇氢加注网络尚未全国覆盖</td></tr>
+      <tr><td>生态闭环</td><td>醇运站车全链路+240亿金融</td><td>生态建设投入巨大，短期盈利承压</td></tr>
+      <tr><td>全赛道</td><td>唯一全品类新能源商用车集团</td><td>多赛道同时发力资源分散</td></tr>
+      <tr><td>出海</td><td>出口+500%，英西比澳第一</td><td>海外品牌认知度需长期建设</td></tr>
+      <tr><td>竞品威胁</td><td>44月新能源销冠</td><td>福田+133%追赶、比亚迪T5爆发、传统轻卡转型</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- Section 6 -->
+<div class="section">
+  <div class="section-title"><span class="num">6</span>关键结论与建议</div>
+  <div class="conclusion">
+    <h3>三大核心判断</h3>
+    <ol>
+      <li><strong>醇氢电动是远程最核心的差异化护城河，也是最大的战略赌注。</strong>20年研发、6万辆运营、2000km续航、5分钟补能、-30℃无衰减——在商用车新能源化领域无出其右。但醇氢路线尚未成为行业共识，加注网络从1000到4000座的扩张速度将决定其能否从"差异化优势"升级为"主流替代"。</li>
+      <li><strong>"30111"百万辆目标雄心勃勃，但26万到100万的跨越充满挑战。</strong>过去5年CAGR超120%的增速是否可持续存疑。全赛道覆盖（轻卡/重卡/VAN/客车/无人车/非道路）虽展现全面性，但也意味着资源高度分散。</li>
+      <li><strong>生态化战略领先行业半个身位，但短期盈利压力显著。</strong>240亿金融支持、16万运营车辆、科技降险1.5亿次预警——远程正在从"卖车"转型为"卖服务+卖生态"。短期生态建设巨额投入将对利润表形成压力。</li>
+    </ol>
+  </div>
+
+  <div class="sub-title">分阶段战略建议</div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>时间节点</th><th>战略重点</th><th>关键举措</th></tr>
+      <tr><td><span class="phase-tag phase-2026">2026年</span></td><td>26万辆冲刺+醇氢网络加速</td><td>星智T/X平台规模化；远醇加注1500+站；德法市场扎根</td></tr>
+      <tr><td><span class="phase-tag phase-2028">2028年</span></td><td>全赛道领先+生态变现</td><td>L4城配规模化；醇氢2500+站；生态金融开始贡献利润</td></tr>
+      <tr><td><span class="phase-tag phase-2030">2030年</span></td><td>百万辆+全球第一</td><td>醇氢成为主流；AI原生架构全面落地；海外占比30%+</td></tr>
+    </table>
+  </div>
+
+  <div class="limitation">
+    <strong>⚠️ 局限声明</strong><br>
+    覆盖度局限：远程非上市公司，财务数据披露有限，部分经营指标无法获取<br>
+    时效性局限：所有数据截止至2026年5月22日，30111战略为2026年1月最新发布<br>
+    来源可信度：部分竞品数据来自媒体而非官方公告，需交叉验证<br>
+    偏见风险：醇氢路线评估需更多第三方独立验证数据
+  </div>
+</div>
+
+</div>
+</body>
+</html>
